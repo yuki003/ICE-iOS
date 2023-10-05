@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ice-dev-92829-authRole",
+      "UnauthRoleArn": "arn:aws:iam::008965067649:role/amplify-ice-dev-92829-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::008965067649:role/amplify-ice-dev-92829-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-ice-dev-92829-deployment",
+      "UnauthRoleName": "amplify-ice-dev-92829-unauthRole",
+      "StackName": "amplify-ice-dev-92829",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:008965067649:stack/amplify-ice-dev-92829/1b956530-6316-11ee-ac48-0e8e872514fb",
+      "AmplifyAppId": "dh37cf7foqj7o"
+    },
+    "categories": {
+      "api": {
+        "ice": {}
+      },
+      "auth": {
+        "ice80e099bc": {}
+      }
+    }
+  }
+}

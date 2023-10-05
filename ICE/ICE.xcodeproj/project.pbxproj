@@ -436,7 +436,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yuki-s-e.ICE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
 				PRODUCT_NAME = "$(TARGET_NAME)${SAMPLE_DISPLAY_NAME_PREFIX}";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -465,7 +465,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yuki-s-e.ICE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
 				PRODUCT_NAME = "$(TARGET_NAME)${SAMPLE_DISPLAY_NAME_PREFIX}";
 				SAMPLE_DISPLAY_NAME_PREFIX = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -560,7 +560,7 @@
 				B61E20892AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B61E208A2AC9247100EF3CEB /* Build configuration list for PBXNativeTarget "ICE" */ = {
 			isa = XCConfigurationList;
@@ -569,7 +569,7 @@
 				B61E208C2AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B61E208D2AC9247100EF3CEB /* Build configuration list for PBXNativeTarget "ICETests" */ = {
 			isa = XCConfigurationList;
@@ -578,7 +578,7 @@
 				B61E208F2AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B61E20902AC9247100EF3CEB /* Build configuration list for PBXNativeTarget "ICEUITests" */ = {
 			isa = XCConfigurationList;
@@ -587,7 +587,7 @@
 				B61E20922AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
