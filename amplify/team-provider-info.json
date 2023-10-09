@@ -16,7 +16,26 @@
         "ice": {}
       },
       "auth": {
-        "ice80e099bc": {}
+        "ice80e099bc": {},
+        "ice72e80027": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ice-prod-64513-authRole",
+      "UnauthRoleArn": "arn:aws:iam::008965067649:role/amplify-ice-prod-64513-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::008965067649:role/amplify-ice-prod-64513-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-ice-prod-64513-deployment",
+      "UnauthRoleName": "amplify-ice-prod-64513-unauthRole",
+      "StackName": "amplify-ice-prod-64513",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:008965067649:stack/amplify-ice-prod-64513/bcc0dd70-634a-11ee-94dd-066a0b5aff35",
+      "AmplifyAppId": "dh37cf7foqj7o"
+    },
+    "categories": {
+      "auth": {
+        "ice72e80027": {}
       }
     }
   }
