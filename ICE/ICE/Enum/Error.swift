@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+enum ConfigurationError: Error {
+    case missingConfig
+}

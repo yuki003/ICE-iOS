@@ -14,6 +14,14 @@
 		B61E207B2AC9247100EF3CEB /* ICETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61E207A2AC9247100EF3CEB /* ICETests.swift */; };
 		B61E20852AC9247100EF3CEB /* ICEUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61E20842AC9247100EF3CEB /* ICEUITests.swift */; };
 		B61E20872AC9247100EF3CEB /* ICEUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61E20862AC9247100EF3CEB /* ICEUITestsLaunchTests.swift */; };
+		B64E1CC02AD38B5B00A876CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64E1CBF2AD38B5B00A876CC /* AppDelegate.swift */; };
+		B64E1CC92AD38BD700A876CC /* amplifyconfiguration_dev.json in Resources */ = {isa = PBXBuildFile; fileRef = B64E1CC42AD38BCE00A876CC /* amplifyconfiguration_dev.json */; };
+		B64E1CCA2AD38BD700A876CC /* amplifyconfiguration_prod.json in Resources */ = {isa = PBXBuildFile; fileRef = B64E1CC62AD38BD700A876CC /* amplifyconfiguration_prod.json */; };
+		B64E1CCD2AD38CC500A876CC /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CCC2AD38CC500A876CC /* AWSAPIPlugin */; };
+		B64E1CCF2AD38CC500A876CC /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CCE2AD38CC500A876CC /* AWSCognitoAuthPlugin */; };
+		B64E1CD12AD38CC500A876CC /* AWSPluginsCore in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CD02AD38CC500A876CC /* AWSPluginsCore */; };
+		B64E1CD32AD38CC500A876CC /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CD22AD38CC500A876CC /* Amplify */; };
+		B64E1CD72AD3923E00A876CC /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64E1CD62AD3923E00A876CC /* Error.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B61E20662AC9247000EF3CEB /* ICEdev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ICEdev.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B61E20662AC9247000EF3CEB /* ICE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ICE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61E20692AC9247000EF3CEB /* ICEApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICEApp.swift; sourceTree = "<group>"; };
 		B61E206B2AC9247000EF3CEB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B61E206D2AC9247100EF3CEB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -44,6 +52,11 @@
 		B61E20802AC9247100EF3CEB /* ICEUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ICEUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61E20842AC9247100EF3CEB /* ICEUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICEUITests.swift; sourceTree = "<group>"; };
 		B61E20862AC9247100EF3CEB /* ICEUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICEUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B64E1CBF2AD38B5B00A876CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B64E1CC42AD38BCE00A876CC /* amplifyconfiguration_dev.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = amplifyconfiguration_dev.json; path = ../../../../../Documents/amplifyconfiguration_dev.json; sourceTree = "<group>"; };
+		B64E1CC62AD38BD700A876CC /* amplifyconfiguration_prod.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = amplifyconfiguration_prod.json; path = ../../../../../Documents/amplifyconfiguration_prod.json; sourceTree = "<group>"; };
+		B64E1CD42AD3916600A876CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B64E1CD62AD3923E00A876CC /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +64,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B64E1CCD2AD38CC500A876CC /* AWSAPIPlugin in Frameworks */,
+				B64E1CD32AD38CC500A876CC /* Amplify in Frameworks */,
+				B64E1CCF2AD38CC500A876CC /* AWSCognitoAuthPlugin in Frameworks */,
+				B64E1CD12AD38CC500A876CC /* AWSPluginsCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +101,7 @@
 		B61E20672AC9247000EF3CEB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B61E20662AC9247000EF3CEB /* ICEdev.app */,
+				B61E20662AC9247000EF3CEB /* ICE.app */,
 				B61E20762AC9247100EF3CEB /* ICETests.xctest */,
 				B61E20802AC9247100EF3CEB /* ICEUITests.xctest */,
 			);
@@ -94,9 +111,14 @@
 		B61E20682AC9247000EF3CEB /* ICE */ = {
 			isa = PBXGroup;
 			children = (
+				B64E1CD42AD3916600A876CC /* Info.plist */,
+				B64E1CC42AD38BCE00A876CC /* amplifyconfiguration_dev.json */,
+				B64E1CC62AD38BD700A876CC /* amplifyconfiguration_prod.json */,
 				B61E20692AC9247000EF3CEB /* ICEApp.swift */,
+				B64E1CBF2AD38B5B00A876CC /* AppDelegate.swift */,
 				B61E206B2AC9247000EF3CEB /* ContentView.swift */,
 				B61E206D2AC9247100EF3CEB /* Assets.xcassets */,
+				B64E1CD52AD3923000A876CC /* Enum */,
 				B61E206F2AC9247100EF3CEB /* Preview Content */,
 			);
 			path = ICE;
@@ -127,6 +149,14 @@
 			path = ICEUITests;
 			sourceTree = "<group>";
 		};
+		B64E1CD52AD3923000A876CC /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				B64E1CD62AD3923E00A876CC /* Error.swift */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,8 +173,14 @@
 			dependencies = (
 			);
 			name = ICE;
+			packageProductDependencies = (
+				B64E1CCC2AD38CC500A876CC /* AWSAPIPlugin */,
+				B64E1CCE2AD38CC500A876CC /* AWSCognitoAuthPlugin */,
+				B64E1CD02AD38CC500A876CC /* AWSPluginsCore */,
+				B64E1CD22AD38CC500A876CC /* Amplify */,
+			);
 			productName = ICE;
-			productReference = B61E20662AC9247000EF3CEB /* ICEdev.app */;
+			productReference = B61E20662AC9247000EF3CEB /* ICE.app */;
 			productType = "com.apple.product-type.application";
 		};
 		B61E20752AC9247100EF3CEB /* ICETests */ = {
@@ -215,6 +251,9 @@
 				Base,
 			);
 			mainGroup = B61E205D2AC9247000EF3CEB;
+			packageReferences = (
+				B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */,
+			);
 			productRefGroup = B61E20672AC9247000EF3CEB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -232,6 +271,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B61E20712AC9247100EF3CEB /* Preview Assets.xcassets in Resources */,
+				B64E1CCA2AD38BD700A876CC /* amplifyconfiguration_prod.json in Resources */,
+				B64E1CC92AD38BD700A876CC /* amplifyconfiguration_dev.json in Resources */,
 				B61E206E2AC9247100EF3CEB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,6 +298,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B64E1CD72AD3923E00A876CC /* Error.swift in Sources */,
+				B64E1CC02AD38B5B00A876CC /* AppDelegate.swift in Sources */,
 				B61E206C2AC9247000EF3CEB /* ContentView.swift in Sources */,
 				B61E206A2AC9247000EF3CEB /* ICEApp.swift in Sources */,
 			);
@@ -299,6 +342,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				AMPLIFY_CONFIG_FILE = amplifyconfiguration_dev;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -349,8 +393,8 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "";
-				SAMPLE_BUNDLE_PREFIX = "";
 				SAMPLE_DISPLAY_NAME_PREFIX = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -362,6 +406,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				AMPLIFY_CONFIG_FILE = amplifyconfiguration_prod;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -406,7 +451,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
-				SAMPLE_BUNDLE_PREFIX = "";
 				SAMPLE_DISPLAY_NAME_PREFIX = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -418,6 +462,7 @@
 		B61E208B2AC9247100EF3CEB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AMPLIFY_CONFIG_FILE = amplifyconfiguration_dev;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -426,6 +471,7 @@
 				DEVELOPMENT_TEAM = GJ2499U42D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ICE/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -437,7 +483,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
-				PRODUCT_NAME = "$(TARGET_NAME)${SAMPLE_DISPLAY_NAME_PREFIX}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -447,6 +493,7 @@
 		B61E208C2AC9247100EF3CEB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AMPLIFY_CONFIG_FILE = amplifyconfiguration_prod;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -455,6 +502,7 @@
 				DEVELOPMENT_TEAM = GJ2499U42D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ICE/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -466,7 +514,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
-				PRODUCT_NAME = "$(TARGET_NAME)${SAMPLE_DISPLAY_NAME_PREFIX}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SAMPLE_DISPLAY_NAME_PREFIX = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -550,6 +598,139 @@
 			};
 			name = Release;
 		};
+		B64E1CBB2AD38AC200A876CC /* ProdDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				AMPLIFY_CONFIG_FILE = amplifyconfiguration_prod;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				SAMPLE_DISPLAY_NAME_PREFIX = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PROD;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = ProdDebug;
+		};
+		B64E1CBC2AD38AC200A876CC /* ProdDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AMPLIFY_CONFIG_FILE = amplifyconfiguration_prod;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ICE/Preview Content\"";
+				DEVELOPMENT_TEAM = GJ2499U42D;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ICE/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = ProdDebug;
+		};
+		B64E1CBD2AD38AC200A876CC /* ProdDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GJ2499U42D;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yuki-s-e.ICETests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ICE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ICE";
+			};
+			name = ProdDebug;
+		};
+		B64E1CBE2AD38AC200A876CC /* ProdDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GJ2499U42D;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yuki-s-e.ICEUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ICE;
+			};
+			name = ProdDebug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -557,6 +738,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B61E20882AC9247100EF3CEB /* Debug */,
+				B64E1CBB2AD38AC200A876CC /* ProdDebug */,
 				B61E20892AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -566,6 +748,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B61E208B2AC9247100EF3CEB /* Debug */,
+				B64E1CBC2AD38AC200A876CC /* ProdDebug */,
 				B61E208C2AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -575,6 +758,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B61E208E2AC9247100EF3CEB /* Debug */,
+				B64E1CBD2AD38AC200A876CC /* ProdDebug */,
 				B61E208F2AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -584,12 +768,47 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B61E20912AC9247100EF3CEB /* Debug */,
+				B64E1CBE2AD38AC200A876CC /* ProdDebug */,
 				B61E20922AC9247100EF3CEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/amplify-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.19.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B64E1CCC2AD38CC500A876CC /* AWSAPIPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSAPIPlugin;
+		};
+		B64E1CCE2AD38CC500A876CC /* AWSCognitoAuthPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSCognitoAuthPlugin;
+		};
+		B64E1CD02AD38CC500A876CC /* AWSPluginsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSPluginsCore;
+		};
+		B64E1CD22AD38CC500A876CC /* Amplify */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = Amplify;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B61E205E2AC9247000EF3CEB /* Project object */;
 }
