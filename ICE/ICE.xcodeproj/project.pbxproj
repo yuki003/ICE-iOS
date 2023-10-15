@@ -20,6 +20,12 @@
 		B64E1CD12AD38CC500A876CC /* AWSPluginsCore in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CD02AD38CC500A876CC /* AWSPluginsCore */; };
 		B64E1CD32AD38CC500A876CC /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CD22AD38CC500A876CC /* Amplify */; };
 		B64E1CD72AD3923E00A876CC /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64E1CD62AD3923E00A876CC /* Error.swift */; };
+		B6A951442ADBA0D00099CB06 /* amplifyconfiguration_prod.json in Resources */ = {isa = PBXBuildFile; fileRef = B6A951422ADBA0D00099CB06 /* amplifyconfiguration_prod.json */; };
+		B6A951452ADBA0D00099CB06 /* amplifyconfiguration_dev.json in Resources */ = {isa = PBXBuildFile; fileRef = B6A951432ADBA0D00099CB06 /* amplifyconfiguration_dev.json */; };
+		B6A9514B2ADBA1060099CB06 /* AmplifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A951472ADBA1060099CB06 /* AmplifyModels.swift */; };
+		B6A9514C2ADBA1060099CB06 /* User+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A951482ADBA1060099CB06 /* User+Schema.swift */; };
+		B6A9514D2ADBA1060099CB06 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A951492ADBA1060099CB06 /* User.swift */; };
+		B6A9514E2ADBA1060099CB06 /* AccountType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A9514A2ADBA1060099CB06 /* AccountType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +59,12 @@
 		B64E1CBF2AD38B5B00A876CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B64E1CD42AD3916600A876CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B64E1CD62AD3923E00A876CC /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		B6A951422ADBA0D00099CB06 /* amplifyconfiguration_prod.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration_prod.json; sourceTree = "<group>"; };
+		B6A951432ADBA0D00099CB06 /* amplifyconfiguration_dev.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration_dev.json; sourceTree = "<group>"; };
+		B6A951472ADBA1060099CB06 /* AmplifyModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmplifyModels.swift; sourceTree = "<group>"; };
+		B6A951482ADBA1060099CB06 /* User+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+Schema.swift"; sourceTree = "<group>"; };
+		B6A951492ADBA1060099CB06 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B6A9514A2ADBA1060099CB06 /* AccountType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				B64E1CD42AD3916600A876CC /* Info.plist */,
+				B6A951432ADBA0D00099CB06 /* amplifyconfiguration_dev.json */,
+				B6A951422ADBA0D00099CB06 /* amplifyconfiguration_prod.json */,
 				B61E20692AC9247000EF3CEB /* ICEApp.swift */,
 				B64E1CBF2AD38B5B00A876CC /* AppDelegate.swift */,
 				B61E206B2AC9247000EF3CEB /* ContentView.swift */,
@@ -117,6 +131,7 @@
 				B64E1CD52AD3923000A876CC /* Enum */,
 				B6275D5C2ADA2A1700EEB151 /* Extentions */,
 				B61E206F2AC9247100EF3CEB /* Preview Content */,
+				B6A951462ADBA1060099CB06 /* AmplifyModels */,
 			);
 			path = ICE;
 			sourceTree = "<group>";
@@ -166,6 +181,17 @@
 			children = (
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B6A951462ADBA1060099CB06 /* AmplifyModels */ = {
+			isa = PBXGroup;
+			children = (
+				B6A951472ADBA1060099CB06 /* AmplifyModels.swift */,
+				B6A951482ADBA1060099CB06 /* User+Schema.swift */,
+				B6A951492ADBA1060099CB06 /* User.swift */,
+				B6A9514A2ADBA1060099CB06 /* AccountType.swift */,
+			);
+			path = AmplifyModels;
 			sourceTree = "<group>";
 		};
 		B6FF08022AD82C470090D2DB /* Components */ = {
@@ -289,6 +315,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B61E20712AC9247100EF3CEB /* Preview Assets.xcassets in Resources */,
+				B6A951452ADBA0D00099CB06 /* amplifyconfiguration_dev.json in Resources */,
+				B6A951442ADBA0D00099CB06 /* amplifyconfiguration_prod.json in Resources */,
 				B61E206E2AC9247100EF3CEB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -314,10 +342,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6A9514B2ADBA1060099CB06 /* AmplifyModels.swift in Sources */,
+				B6A9514C2ADBA1060099CB06 /* User+Schema.swift in Sources */,
 				B64E1CD72AD3923E00A876CC /* Error.swift in Sources */,
+				B6A9514E2ADBA1060099CB06 /* AccountType.swift in Sources */,
 				B64E1CC02AD38B5B00A876CC /* AppDelegate.swift in Sources */,
 				B61E206C2AC9247000EF3CEB /* ContentView.swift in Sources */,
 				B61E206A2AC9247000EF3CEB /* ICEApp.swift in Sources */,
+				B6A9514D2ADBA1060099CB06 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
