@@ -10,6 +10,8 @@
 		B61BE95D2ADCBD79003BC55B /* ToolbarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE95C2ADCBD79003BC55B /* ToolbarModifier.swift */; };
 		B61BE95F2ADCBE69003BC55B /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE95E2ADCBE69003BC55B /* Toolbar.swift */; };
 		B61BE9622ADD29E0003BC55B /* AmplifyAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE9612ADD29E0003BC55B /* AmplifyAuthService.swift */; };
+		B61BE9672AE00FC8003BC55B /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE9662AE00FC8003BC55B /* LoadingState.swift */; };
+		B61BE96A2AE0B6C2003BC55B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE9692AE0B6C2003BC55B /* HomeView.swift */; };
 		B61E206A2AC9247000EF3CEB /* ICEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61E20692AC9247000EF3CEB /* ICEApp.swift */; };
 		B61E206C2AC9247000EF3CEB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61E206B2AC9247000EF3CEB /* ContentView.swift */; };
 		B61E206E2AC9247100EF3CEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B61E206D2AC9247100EF3CEB /* Assets.xcassets */; };
@@ -62,6 +64,8 @@
 		B61BE95C2ADCBD79003BC55B /* ToolbarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarModifier.swift; sourceTree = "<group>"; };
 		B61BE95E2ADCBE69003BC55B /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		B61BE9612ADD29E0003BC55B /* AmplifyAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplifyAuthService.swift; sourceTree = "<group>"; };
+		B61BE9662AE00FC8003BC55B /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
+		B61BE9692AE0B6C2003BC55B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B61E20662AC9247000EF3CEB /* ICE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ICE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61E20692AC9247000EF3CEB /* ICEApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICEApp.swift; sourceTree = "<group>"; };
 		B61E206B2AC9247000EF3CEB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -136,6 +140,14 @@
 				B61BE9612ADD29E0003BC55B /* AmplifyAuthService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		B61BE9682AE0B67D003BC55B /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				B61BE9692AE0B6C2003BC55B /* HomeView.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		B61E205D2AC9247000EF3CEB = {
@@ -218,6 +230,7 @@
 			children = (
 				B64E1CD62AD3923E00A876CC /* Error.swift */,
 				B6F2C04D2ADC225000960084 /* FocusField.swift */,
+				B61BE9662AE00FC8003BC55B /* LoadingState.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -226,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				B6F2C03B2ADC220C00960084 /* Auth */,
+				B61BE9682AE0B67D003BC55B /* Home */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -431,6 +445,7 @@
 				B6F2C0512ADC225900960084 /* TextField.swift in Sources */,
 				B6F2C0522ADC225900960084 /* Button.swift in Sources */,
 				B6F2C0492ADC222700960084 /* SignUpViewModel.swift in Sources */,
+				B61BE9672AE00FC8003BC55B /* LoadingState.swift in Sources */,
 				B64E1CC02AD38B5B00A876CC /* AppDelegate.swift in Sources */,
 				B61E206C2AC9247000EF3CEB /* ContentView.swift in Sources */,
 				B61BE95F2ADCBE69003BC55B /* Toolbar.swift in Sources */,
@@ -441,6 +456,7 @@
 				B6F2C04C2ADC224600960084 /* View+.swift in Sources */,
 				B6A9514D2ADBA1060099CB06 /* User.swift in Sources */,
 				B61BE95D2ADCBD79003BC55B /* ToolbarModifier.swift in Sources */,
+				B61BE96A2AE0B6C2003BC55B /* HomeView.swift in Sources */,
 				B6F2C04E2ADC225000960084 /* FocusField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

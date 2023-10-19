@@ -85,3 +85,26 @@ struct PasswordTextField: View {
         .frame(width: textFieldWidth())
     }
 }
+
+struct ConfirmationCodeTextField: View {
+    @Binding var code: String
+    @FocusState var focused: AuthField?
+    var isFocused: Bool {
+        return focused == .confirmationCode
+    }
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            TextField("Email", text: $code)
+                .font(.footnote.bold())
+                .focused($focused, equals: .confirmationCode)
+                .autocapitalization(.none)
+                .keyboardType(.emailAddress)
+            
+            ClearButton(text: $code)
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(isFocused ? Color(.indigo) : Color.gray))
+        .frame(width: textFieldWidth())
+    }
+}

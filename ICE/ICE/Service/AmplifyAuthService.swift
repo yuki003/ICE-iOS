@@ -12,6 +12,7 @@ import UIKit
 
 class AmplifyAuthService: ObservableObject {
     @AppStorage("isSignedIn") var isSignedIn = false
+    @AppStorage("userID") var userID: String = ""
     
 //    @StateObject var router: AuthRouter = .shared
     
@@ -70,6 +71,69 @@ class AmplifyAuthService: ObservableObject {
             default:
                 break
             }
+        }
+    }
+    
+    func signUp(username: String, password: String, email: String) async throws -> AuthSignUpResult {
+        let userAttributes = [AuthUserAttribute(.email, value: email)]
+        let options = AuthSignUpRequest.Options(userAttributes: userAttributes)
+        do {
+            let signUpResult = try await Amplify.Auth.signUp(
+                username: username,
+                password: password,
+                options: options
+            )
+            if case let .confirmUser(deliveryDetails, _, userId) = signUpResult.nextStep {
+                print("Delivery details \(String(describing: deliveryDetails)) for userId: \(String(describing: userId))")
+                return signUpResult
+            } else {
+                print("SignUp Complete")
+                return signUpResult
+            }
+        } catch let error as AuthError {
+            print("An error occurred while registering a user \(error)")
+            throw error
+        } catch {
+            print("Unexpected error: \(error)")
+            throw error
+        }
+    }
+    
+    func confirmSignUp(for username: String, with confirmationCode: String) async throws -> AuthSignUpResult {
+        do {
+            let confirmSignUpResult = try await Amplify.Auth.confirmSignUp(
+                for: username,
+                confirmationCode: confirmationCode
+            )
+            print("Confirm sign up result completed: \(confirmSignUpResult.isSignUpComplete)")
+            return confirmSignUpResult
+        } catch let error as AuthError {
+            print("An error occurred while confirming sign up \(error)")
+            throw error
+        } catch {
+            print("Unexpected error: \(error)")
+            throw error
+        }
+    }
+    
+    func signIn(username: String, password: String) async throws -> AuthSignInResult {
+        do {
+            let signInResult = try await Amplify.Auth.signIn(
+                username: username,
+                password: password
+                )
+            if signInResult.isSignedIn {
+                print("Sign in succeeded")
+                return signInResult
+            } else {
+                return signInResult
+            }
+        } catch let error as AuthError {
+            print("Sign in failed \(error)")
+            throw error
+        } catch {
+            print("Unexpected error: \(error)")
+            throw error
         }
     }
 }

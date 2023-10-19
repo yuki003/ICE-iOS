@@ -11,4 +11,5 @@ enum AuthField: Hashable {
     case username
     case password
     case email
+    case confirmationCode
 }

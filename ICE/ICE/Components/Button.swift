@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Amplify
 
 struct ClearButton: View {
     @Binding var text: String
@@ -51,11 +52,11 @@ struct LoginAsGuestButton: View {
 }
 
 struct SignInButton: View {
-    @Binding var navSignIn: Bool
+    var vm: AuthViewModel
     var body: some View {
         Button(action: {
-            withAnimation(.easeIn) {
-                navSignIn = true
+            Task {
+                try await vm.signIn()
             }
         })
         {
@@ -70,11 +71,30 @@ struct SignInButton: View {
 }
 
 struct SignUpButton: View {
-    @Binding var navSignIUp: Bool
+    var vm: AuthViewModel
     var body: some View {
         Button(action: {
-            withAnimation(.easeIn) {
-                navSignIUp = true
+            Task {
+                try await vm.signUp()
+            }
+        })
+        {
+            Text("新規登録")
+                .font(.footnote.bold())
+                .foregroundStyle(Color(.jade))
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade)))
+        .frame(width: commonButtonWidth())
+    }
+}
+
+struct ConfirmSignUpButton: View {
+    var vm: AuthViewModel
+    var body: some View {
+        Button(action: {
+            Task {
+                try await vm.signUpConfirmation()
             }
         })
         {
