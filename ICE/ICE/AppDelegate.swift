@@ -27,10 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             throw ConfigurationError.missingConfig
         }
         let amplifyConfig = try AmplifyConfiguration(configurationFile: url)
-            try Amplify.configure(amplifyConfig)
         try Amplify.add(plugin: AWSCognitoAuthPlugin())
-//        try Amplify.add(plugin: AWSAPIPlugin(modelRegistration: AmplifyModels()))
-        try Amplify.configure()
+        try Amplify.add(plugin: AWSAPIPlugin(modelRegistration: AmplifyModels()))
+        try Amplify.configure(amplifyConfig)
         print("Amplify configured with auth and api plugin")
     }
     // MARK: UISceneSession Lifecycle
