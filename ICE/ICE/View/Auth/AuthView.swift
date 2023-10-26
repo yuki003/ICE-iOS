@@ -18,16 +18,16 @@ struct AuthView: View {
             Color.clear.onAppear { vm.state = .loaded }
         case .loaded:
             NavigationStack {
-                VStack(alignment: .center, spacing: 15) {
+                VStack(alignment: .center, spacing: 25) {
                     icon()
-                        .padding(.top, 60)
+                        .padding(.top, 70)
                     if vm.navSignIn {
                         SignInSection()
                             .transition(.opacity)
                     } else if vm.navSignUp {
                         SignUpSection()
                             .transition(.opacity)
-                    } else if vm.navSignUpConfirm{
+                    } else if vm.navSignUpConfirm {
                         ConfirmationCodeSection()
                             .transition(.opacity)
                     } else {
@@ -45,8 +45,7 @@ struct AuthView: View {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button(action: {
                                 if vm.navSignIn || vm.navSignUp {
-                                    vm.navSignIn = false
-                                    vm.navSignUp = false
+                                    vm.propertyInitialize()
                                 } else if vm.navSignUpConfirm {
                                     vm.navSignUpConfirm = false
                                 }
@@ -64,6 +63,22 @@ struct AuthView: View {
                     }
                 }
             }
+            .loading(isLoading: $vm.isLoading)
+            .alert(isPresented: $vm.alert) {
+                Alert(
+                    title: Text(
+                        "認証エラー"
+                    ),
+                    message: Text(
+                        vm.alertMessage ?? "操作をやり直してください。"
+                    ),
+                    dismissButton: .default(
+                        Text(
+                            "閉じる"
+                        )
+                    )
+                )
+            }
             .navigationDestination(isPresented: $vm.authComplete) {
                 HomeView()
             }
@@ -75,11 +90,18 @@ struct AuthView: View {
     @ViewBuilder
     func SignInSection() -> some View {
         VStack(spacing: 20) {
+            if !vm.asGuest {
+                EmailTextField(email: $vm.email, focused: _focused)
+                    .validation(vm.emailValidation)
+            }
             UsernameTextField(userName: $vm.userName, focused: _focused)
+                .validation(vm.userNameValidation)
             
             PasswordTextField(password: $vm.password, focused: _focused)
+                .validation(vm.passwordValidation)
             
             SignInButton(vm: vm)
+                .disabled(vm.signInValid.isSuccess == false)
         }
         .frame(height: 150)
         .padding()
@@ -88,15 +110,22 @@ struct AuthView: View {
     @ViewBuilder
     func SignUpSection() -> some View {
         VStack(spacing: 20) {
-            EmailTextField(email: $vm.email, focused: _focused)
-            
+            if !vm.asGuest {
+                EmailTextField(email: $vm.email, focused: _focused)
+                    .validation(vm.emailValidation)
+            }
             UsernameTextField(userName: $vm.userName, focused: _focused)
+                .validation(vm.userNameValidation)
             
             PasswordTextField(password: $vm.password, focused: _focused)
+                .validation(vm.passwordValidation)
             
             SignUpButton(vm: vm)
+//                .disabled(vm.signUpValid.isSuccess == false)
             
-            LoginAsGuestButton(asGuest: $vm.asGuest)
+            if !vm.asGuest {
+                LoginAsGuestButton(asGuest: $vm.asGuest)
+            }
         }
         .frame(height: 150)
         .padding()
@@ -106,8 +135,10 @@ struct AuthView: View {
     func ConfirmationCodeSection() -> some View {
         VStack(spacing: 20) {
             ConfirmationCodeTextField(code: $vm.confirmationCode, focused: _focused)
+                .validation(vm.codeValidation)
             
             ConfirmSignUpButton(vm: vm)
+                .disabled(vm.codeValid.isSuccess == false)
         }
         .frame(height: 150)
         .padding()

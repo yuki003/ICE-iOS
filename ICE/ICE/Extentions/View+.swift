@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 extension View {
     func deviceWidth() -> CGFloat{
@@ -30,5 +31,13 @@ extension View {
     
     func dismissButton() -> some View {
         self.modifier(DismissButtonModifier())
+    }
+    
+    func validation(_ publisher: AnyPublisher<Validation, Never>) -> some View {
+        modifier(ValidationModifier(publisher: publisher))
+    }
+    
+    func loading(isLoading: Binding<Bool>) -> some View {
+        modifier(LoadingModifier(isLoading: isLoading))
     }
 }

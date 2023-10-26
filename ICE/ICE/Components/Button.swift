@@ -41,7 +41,9 @@ struct LoginAsGuestButton: View {
     @Binding var asGuest: Bool
     var body: some View {
         Button(action: {
-            asGuest = true
+            withAnimation(.linear) {
+                asGuest = true
+            }
         })
         {
             Text("ゲストユーザーとして登録")
@@ -108,11 +110,32 @@ struct ConfirmSignUpButton: View {
     }
 }
 
+struct SignOutButton: View {
+    var auth: AmplifyAuthService
+    var body: some View {
+        Button(action: {
+            Task {
+                try await auth.signOutLocally()
+            }
+        })
+        {
+            Text("ログアウト")
+                .font(.footnote.bold())
+                .foregroundStyle(Color(.jade))
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade)))
+        .frame(width: commonButtonWidth())
+    }
+}
+
 struct BackButton: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         Button(action: {
-            dismiss.callAsFunction()
+            withAnimation(.linear) {
+                dismiss.callAsFunction()
+            }
         })
         {
             Text("戻る")

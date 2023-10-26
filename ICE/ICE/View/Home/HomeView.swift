@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct HomeView: View {
+//    @StateObject var vm: HomeViewModel
+    @ObservedObject var auth = AmplifyAuthService()
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            SignOutButton(auth: auth)
+        }
     }
-}
-
-#Preview {
-    HomeView()
 }

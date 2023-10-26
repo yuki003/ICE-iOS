@@ -95,7 +95,7 @@ struct ConfirmationCodeTextField: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            TextField("Email", text: $code)
+            TextField("Code", text: $code)
                 .font(.footnote.bold())
                 .focused($focused, equals: .confirmationCode)
                 .autocapitalization(.none)
