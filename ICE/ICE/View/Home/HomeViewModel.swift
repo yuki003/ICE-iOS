@@ -9,4 +9,5 @@ import SwiftUI
 
 final class HomeViewModel: ObservableObject {
     @ObservedObject var auth = AmplifyAuthService()
+    
 }

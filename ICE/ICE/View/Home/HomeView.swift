@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-//    @StateObject var vm: HomeViewModel
+    @StateObject var vm: HomeViewModel
     @ObservedObject var auth = AmplifyAuthService()
     var body: some View {
         VStack {
@@ -16,4 +16,9 @@ struct HomeView: View {
             SignOutButton(auth: auth)
         }
     }
+}
+
+
+#Preview{
+    HomeView(vm: .init())
 }

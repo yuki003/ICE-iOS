@@ -11,7 +11,7 @@ struct ContentView: View {
     @ObservedObject var auth = AmplifyAuthService()
     var body: some View {
         VStack {
-            HomeView()
+            HomeView(vm: .init())
         }
     }
 }

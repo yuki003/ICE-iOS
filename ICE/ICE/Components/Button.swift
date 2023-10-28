@@ -37,22 +37,6 @@ struct VisibilityToggleButton: View {
     }
 }
 
-struct LoginAsGuestButton: View {
-    @Binding var asGuest: Bool
-    var body: some View {
-        Button(action: {
-            withAnimation(.linear) {
-                asGuest = true
-            }
-        })
-        {
-            Text("ゲストユーザーとして登録")
-                .font(.footnote.bold())
-                .foregroundStyle(Color.black)
-        }
-    }
-}
-
 struct SignInButton: View {
     var vm: AuthViewModel
     var body: some View {
@@ -144,6 +128,55 @@ struct BackButton: View {
         }
         .padding(8)
         .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.gray)))
+        .frame(width: commonButtonWidth())
+    }
+}
+
+struct HostUserButton: View {
+    var vm: AuthViewModel
+    var body: some View {
+        Button(action: {
+            withAnimation(.linear) {
+                vm.navHostOrGuest = false
+                if vm.isSignIn {
+                    vm.navSignIn = true
+                } else if vm.isSignUp {
+                    vm.navSignUp = true
+                }
+            }
+        })
+        {
+            Text("ホストユーザー")
+                .font(.footnote.bold())
+                .foregroundStyle(Color(.indigo))
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.indigo)))
+        .frame(width: commonButtonWidth())
+    }
+}
+
+struct GuestUserButton: View {
+    var vm: AuthViewModel
+    var body: some View {
+        Button(action: {
+            withAnimation(.linear) {
+                vm.navHostOrGuest = false
+                vm.asGuest = true
+                if vm.isSignIn {
+                    vm.navSignIn = true
+                } else if vm.isSignUp {
+                    vm.navSignUp = true
+                }
+            }
+        })
+        {
+            Text("招待を受けている方(ゲスト)")
+                .font(.footnote.bold())
+                .foregroundStyle(Color(.jade))
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade)))
         .frame(width: commonButtonWidth())
     }
 }
