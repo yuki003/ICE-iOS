@@ -11,7 +11,7 @@ struct HomeNavigation: View {
     @Binding var nav: Bool
     var body: some View {
         NavigationLink(
-            destination: HomeView(),
+            destination: HomeView(vm: .init()),
             isActive: $nav,
             label: EmptyView.init
         )

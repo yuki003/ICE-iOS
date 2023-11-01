@@ -21,7 +21,10 @@ struct AuthView: View {
                 VStack(alignment: .center, spacing: 25) {
                     icon()
                         .padding(.top, 70)
-                    if vm.navSignIn {
+                    if vm.navHostOrGuest {
+                        HostOrGuestSection()
+                            .transition(.opacity)
+                    } else if vm.navSignIn {
                         SignInSection()
                             .transition(.opacity)
                     } else if vm.navSignUp {
@@ -41,11 +44,16 @@ struct AuthView: View {
                     Spacer()
                 }
                 .toolbar {
-                    if vm.navSignIn || vm.navSignUp || vm.navSignUpConfirm {
+                    if vm.navSignIn || vm.navSignUp || vm.navSignUpConfirm || vm.navHostOrGuest {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button(action: {
-                                if vm.navSignIn || vm.navSignUp {
+                                if vm.navHostOrGuest {
                                     vm.propertyInitialize()
+                                } else if vm.navSignIn || vm.navSignUp {
+                                    vm.navSignIn = false
+                                    vm.isSignIn = false
+                                    vm.navSignUp = false
+                                    vm.isSignUp = false
                                 } else if vm.navSignUpConfirm {
                                     vm.navSignUpConfirm = false
                                 }
@@ -80,17 +88,28 @@ struct AuthView: View {
                 )
             }
             .navigationDestination(isPresented: $vm.authComplete) {
-                HomeView()
+                HomeView(vm: .init())
             }
         case let .failed(error):
             Text(error.localizedDescription)
         }
     }
+    @ViewBuilder
+    func HostOrGuestSection() -> some View {
+        VStack(spacing: 20) {
+            HostUserButton(vm: vm)
+            GuestUserButton(vm: vm)
+        }
+        .frame(height: 150)
+        .padding()
+    }
     
     @ViewBuilder
     func SignInSection() -> some View {
         VStack(spacing: 20) {
-            if !vm.asGuest {
+            if vm.asGuest {
+                // TODO:ゲストユーザーサインイン時の追加情報を検討
+            } else {
                 EmailTextField(email: $vm.email, focused: _focused)
                     .validation(vm.emailValidation)
             }
@@ -110,7 +129,9 @@ struct AuthView: View {
     @ViewBuilder
     func SignUpSection() -> some View {
         VStack(spacing: 20) {
-            if !vm.asGuest {
+            if vm.asGuest {
+                // TODO:ゲストユーザーサインイン時の追加情報を検討
+            } else {
                 EmailTextField(email: $vm.email, focused: _focused)
                     .validation(vm.emailValidation)
             }
@@ -121,11 +142,7 @@ struct AuthView: View {
                 .validation(vm.passwordValidation)
             
             SignUpButton(vm: vm)
-//                .disabled(vm.signUpValid.isSuccess == false)
-            
-            if !vm.asGuest {
-                LoginAsGuestButton(asGuest: $vm.asGuest)
-            }
+                .disabled(vm.signUpValid.isSuccess == false)
         }
         .frame(height: 150)
         .padding()

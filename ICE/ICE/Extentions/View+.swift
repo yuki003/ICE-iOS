@@ -17,6 +17,10 @@ extension View {
         return UIScreen.main.bounds.width / 1.2
     }
     
+    func sectionWidth() -> CGFloat{
+        return UIScreen.main.bounds.width / 1.3
+    }
+    
     func textFieldWidth() -> CGFloat{
         return UIScreen.main.bounds.width / 1.5
     }
@@ -29,6 +33,10 @@ extension View {
         modifier(DismissToolbarModifier(toolbar: content))
     }
     
+    func userToolbar(state: LoadingState, userName: String) -> some View {
+        modifier(UserToolbarModifier(state: state, userName: userName))
+    }
+    
     func dismissButton() -> some View {
         self.modifier(DismissButtonModifier())
     }
@@ -39,5 +47,9 @@ extension View {
     
     func loading(isLoading: Binding<Bool>) -> some View {
         modifier(LoadingModifier(isLoading: isLoading))
+    }
+    
+    func roundedSection(color: Color) -> some View {
+        modifier(RoundedSectionModifier(color: color))
     }
 }

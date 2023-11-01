@@ -9,6 +9,8 @@ extension User {
     case userID
     case userName
     case accountType
+    case hostGroupIDs
+    case belongingGroupIDs
     case createdAt
     case updatedAt
   }
@@ -31,6 +33,8 @@ extension User {
       .field(user.userID, is: .required, ofType: .string),
       .field(user.userName, is: .required, ofType: .string),
       .field(user.accountType, is: .required, ofType: .enum(type: AccountType.self)),
+      .field(user.hostGroupIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(user.belongingGroupIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(user.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(user.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime)
     )

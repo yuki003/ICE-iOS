@@ -37,22 +37,6 @@ struct VisibilityToggleButton: View {
     }
 }
 
-struct LoginAsGuestButton: View {
-    @Binding var asGuest: Bool
-    var body: some View {
-        Button(action: {
-            withAnimation(.linear) {
-                asGuest = true
-            }
-        })
-        {
-            Text("ゲストユーザーとして登録")
-                .font(.footnote.bold())
-                .foregroundStyle(Color.black)
-        }
-    }
-}
-
 struct SignInButton: View {
     var vm: AuthViewModel
     var body: some View {
@@ -67,7 +51,7 @@ struct SignInButton: View {
                 .foregroundStyle(Color(.indigo))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.indigo)))
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.indigo), lineWidth: 2))
         .frame(width: commonButtonWidth())
     }
 }
@@ -86,7 +70,7 @@ struct SignUpButton: View {
                 .foregroundStyle(Color(.jade))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade)))
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
         .frame(width: commonButtonWidth())
     }
 }
@@ -100,12 +84,12 @@ struct ConfirmSignUpButton: View {
             }
         })
         {
-            Text("新規登録")
+            Text("コードを送信")
                 .font(.footnote.bold())
                 .foregroundStyle(Color(.jade))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade)))
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
         .frame(width: commonButtonWidth())
     }
 }
@@ -124,7 +108,7 @@ struct SignOutButton: View {
                 .foregroundStyle(Color(.jade))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade)))
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
         .frame(width: commonButtonWidth())
     }
 }
@@ -143,7 +127,89 @@ struct BackButton: View {
                 .foregroundStyle(Color(.gray))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.gray)))
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.gray), lineWidth: 2))
         .frame(width: commonButtonWidth())
+    }
+}
+
+struct HostUserButton: View {
+    var vm: AuthViewModel
+    var body: some View {
+        Button(action: {
+            withAnimation(.linear) {
+                vm.navHostOrGuest = false
+                if vm.isSignIn {
+                    vm.navSignIn = true
+                } else if vm.isSignUp {
+                    vm.navSignUp = true
+                }
+            }
+        })
+        {
+            Text("ホストユーザー")
+                .font(.footnote.bold())
+                .foregroundStyle(Color(.indigo))
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.indigo), lineWidth: 2))
+        .frame(width: commonButtonWidth())
+    }
+}
+
+struct GuestUserButton: View {
+    var vm: AuthViewModel
+    var body: some View {
+        Button(action: {
+            withAnimation(.linear) {
+                vm.navHostOrGuest = false
+                vm.asGuest = true
+                if vm.isSignIn {
+                    vm.navSignIn = true
+                } else if vm.isSignUp {
+                    vm.navSignUp = true
+                }
+            }
+        })
+        {
+            Text("招待を受けている方(ゲスト)")
+                .font(.footnote.bold())
+                .foregroundStyle(Color(.jade))
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
+        .frame(width: commonButtonWidth())
+    }
+}
+
+struct XMarkButton: View {
+    @Binding var flag: Bool
+    let width: CGFloat
+    let height: CGFloat
+    let color: Color
+    var body: some View {
+        Button(action: {
+            withAnimation(.linear) {
+                flag.toggle()
+            }
+        })
+        {
+            Image(systemName: "xmark")
+                .resizable()
+                .frame(width: width, height: height)
+                .font(.callout.bold())
+                .foregroundStyle(color)
+        }
+    }
+}
+
+struct AddButton: View {
+    @Binding var flag: Bool
+    var body: some View {
+        Button(action: {
+            flag = true
+        })
+        {
+            AddSquareIcon()
+        }
     }
 }

@@ -20,10 +20,13 @@ final class AuthViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var confirmationCode: String = ""
     @Published var asGuest: Bool = false
+    @Published var isSignIn: Bool = false
+    @Published var isSignUp: Bool = false
     
     @Published var signInInfo: AuthSignInResult?
     @Published var signUpInfo: AuthSignUpResult?
     
+    @Published var navHostOrGuest: Bool = false
     @Published var navSignIn: Bool = false
     @Published var navSignUp: Bool = false
     @Published var navSignUpConfirm: Bool = false
@@ -183,7 +186,8 @@ final class AuthViewModel: ObservableObject {
         }
         if !navSignUpConfirm {
             withAnimation(.easeIn) {
-                navSignUp = true
+                isSignUp = true
+                navHostOrGuest = true
             }
         }
     }
@@ -215,9 +219,14 @@ final class AuthViewModel: ObservableObject {
         if !userName.isEmpty, !password.isEmpty, !email.isEmpty  {
             let hashedEmail = hashDelimiter + String(email.hashed())
             do {
-                signInInfo = try await auth.signIn(username: userName + hashedEmail, password: password)
+                if asGuest {
+                    signInInfo = try await auth.signIn(username: userName + hashedEmail, password: password)
+                } else {
+                    signInInfo = try await auth.signIn(username: userName + hashedEmail, password: password)
+                }
                 if let signInInfo = signInInfo, signInInfo.isSignedIn {
                     withAnimation(.easeIn) {
+                        auth.asGuest = asGuest
                         authComplete = true
                     }
                 } else if case .confirmSignUp(_) = signInInfo?.nextStep {
@@ -234,7 +243,8 @@ final class AuthViewModel: ObservableObject {
             }
         } else if !authComplete {
             withAnimation(.easeIn) {
-                navSignIn = true
+                isSignIn = true
+                navHostOrGuest = true
             }
         }
     }
@@ -248,6 +258,7 @@ final class AuthViewModel: ObservableObject {
             let user = User(userID: userID, userName: userName, accountType: asGuest ? AccountType.guest : AccountType.host)
             try await apiHandler.create(user)
             withAnimation(.easeIn) {
+                auth.asGuest = asGuest
                 authComplete = true
             }
         } catch {
@@ -268,6 +279,9 @@ final class AuthViewModel: ObservableObject {
             navSignUpConfirm = false
             asGuest = false
             authComplete = false
+            navHostOrGuest = false
+            isSignIn = false
+            isSignUp = false
         }
     }
 }

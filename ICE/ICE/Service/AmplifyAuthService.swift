@@ -14,6 +14,7 @@ import AWSCognitoAuthPlugin
 class AmplifyAuthService: ObservableObject {
     @AppStorage("isSignedIn") var isSignedIn = false
     @AppStorage("userID") var userID: String = ""
+    var asGuest: Bool = false
     
 //    @StateObject var router: AuthRouter = .shared
     
