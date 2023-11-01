@@ -226,6 +226,7 @@ final class AuthViewModel: ObservableObject {
                 }
                 if let signInInfo = signInInfo, signInInfo.isSignedIn {
                     withAnimation(.easeIn) {
+                        auth.asGuest = asGuest
                         authComplete = true
                     }
                 } else if case .confirmSignUp(_) = signInInfo?.nextStep {
@@ -257,6 +258,7 @@ final class AuthViewModel: ObservableObject {
             let user = User(userID: userID, userName: userName, accountType: asGuest ? AccountType.guest : AccountType.host)
             try await apiHandler.create(user)
             withAnimation(.easeIn) {
+                auth.asGuest = asGuest
                 authComplete = true
             }
         } catch {

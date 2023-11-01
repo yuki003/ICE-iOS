@@ -34,3 +34,18 @@ struct DismissButtonModifier: ViewModifier {
         DismissToolbar(dismiss: dismiss)
     }
 }
+
+struct UserToolbarModifier: ViewModifier {
+    var state: LoadingState
+    let userName: String
+    func body(content: Content) -> some View {
+        content
+            .navigationBarBackButtonHidden(true)
+            .toolbar(content: userInfo)
+    }
+    
+    @ToolbarContentBuilder
+    func userInfo() -> some ToolbarContent {
+        UserToolbar(state: state, userName: userName)
+    }
+}

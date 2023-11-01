@@ -34,7 +34,7 @@ struct ValidationModifier: ViewModifier {
             return AnyView(EmptyView())
         case let .failed(message):
             let view =
-            Group {
+            VStack {
                 if let message = message {
                     Text(message)
                         .foregroundStyle(Color(.indigo))

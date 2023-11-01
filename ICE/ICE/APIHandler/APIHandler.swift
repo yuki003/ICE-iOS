@@ -11,6 +11,7 @@ import Amplify
 class APIHandler: ObservableObject {
     func create<ModelType: Model>(_ model: ModelType) async throws {
         do {
+            Amplify.API
             let result = try await Amplify.API.mutate(request: .create(model))
             switch result {
             case .success(let data):

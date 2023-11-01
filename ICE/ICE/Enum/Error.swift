@@ -12,6 +12,7 @@ enum ConfigurationError: Error {
 }
 enum APIError: Error {
     case notFound
+    case userIdNotExists
     case createFailed
     case updateFailed
     case deleteFailed
@@ -21,6 +22,8 @@ extension APIError: LocalizedError {
         switch self {
         case .notFound:
             return "データが見つかりませんでした"
+        case .userIdNotExists:
+            return "ユーザー情報が見つかりません。ログインし直してください。"
         case .createFailed:
             return "登録に失敗しました"
         case .updateFailed:

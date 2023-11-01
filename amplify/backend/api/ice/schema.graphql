@@ -7,9 +7,18 @@ type User @model {
   userID: String!
   userName: String!
   accountType: AccountType!
+  hostGroupIDs: [ID]
+  belongingGroupIDs: [ID] 
 }
 
 enum AccountType {
   GUEST
   HOST
+}
+
+type Group @model {
+  id: ID!
+  groupName: String!
+  hostUserIDs: [String]
+  belongingUserIDs: [String]
 }
