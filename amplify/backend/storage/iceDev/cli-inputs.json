@@ -1,0 +1,15 @@
+{
+  "resourceName": "iceDev",
+  "policyUUID": "7ee93b54",
+  "bucketName": "icethumbnailsdev",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "triggerFunction": "S3Triggerdba0fdfb",
+  "groupAccess": {}
+}
