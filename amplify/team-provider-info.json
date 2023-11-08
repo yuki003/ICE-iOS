@@ -17,6 +17,15 @@
       },
       "api": {
         "ice": {}
+      },
+      "function": {
+        "S3Triggerdba0fdfb": {
+          "deploymentBucketName": "amplify-ice-dev-165429-deployment",
+          "s3Key": "amplify-builds/S3Triggerdba0fdfb-64334e3556446a4c4537-build.zip"
+        }
+      },
+      "storage": {
+        "iceDev": {}
       }
     }
   },

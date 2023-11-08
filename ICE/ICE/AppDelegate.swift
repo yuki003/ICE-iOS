@@ -9,6 +9,7 @@ import UIKit
 import Amplify
 import Foundation
 import AWSCognitoAuthPlugin
+import AWSS3StoragePlugin
 import AWSAPIPlugin
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         let amplifyConfig = try AmplifyConfiguration(configurationFile: url)
         try Amplify.add(plugin: AWSCognitoAuthPlugin())
+        try Amplify.add(plugin: AWSS3StoragePlugin())
         try Amplify.add(plugin: AWSAPIPlugin(modelRegistration: AmplifyModels()))
         try Amplify.configure(amplifyConfig)
         print("Amplify configured with auth and api plugin")
