@@ -33,8 +33,8 @@ extension View {
         modifier(DismissToolbarModifier(toolbar: content))
     }
     
-    func userToolbar(state: LoadingState, userName: String) -> some View {
-        modifier(UserToolbarModifier(state: state, userName: userName))
+    func userToolbar(state: LoadingState, userName: String, dismissExists: Bool = false) -> some View {
+        modifier(UserToolbarModifier(state: state, userName: userName, dismissExists: dismissExists))
     }
     
     func dismissButton() -> some View {

@@ -14,7 +14,7 @@ final class CreateGroupViewModel: ObservableObject {
     @ObservedObject var auth = AmplifyAuthService()
     @ObservedObject var apiHandler = APIHandler()
     
-    @Published var flag: Bool = false
+    @Published var navGroup: Bool = false
     @Published var alert: Bool = false
     @Published var alertMessage: String?
     

@@ -31,13 +31,7 @@ struct CreateGroupView: View {
                             Text("Create Group View!!")
                         }
                         .padding(.vertical)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                
-                            }
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                            }
-                        }
+                        .userToolbar(state: vm.state, userName: "ユーザー", dismissExists: true)
                         .navigationBarTitleDisplayMode(.inline)
                         .navigationBarBackButtonHidden(true)
                         .alert(isPresented: $vm.alert) {
@@ -57,8 +51,8 @@ struct CreateGroupView: View {
                         }
                     }
                 }
-                .navigationDestination(isPresented: $vm.flag) {
-                    HomeView(vm: .init())
+                .navigationDestination(isPresented: $vm.navGroup) {
+//                    GroupView(vm: .init())
                 }
             }
         }

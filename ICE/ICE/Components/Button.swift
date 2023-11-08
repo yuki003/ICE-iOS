@@ -22,7 +22,24 @@ struct ClearButton: View {
         }
     }
 }
-
+struct ClearIntButton: View {
+    @Binding var num: Int
+    @Binding var text: String
+    
+    var body: some View {
+        Button(action: {
+            if num != 0 {
+                num = 0
+                text = ""
+            }
+        })
+        {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundColor(Color(.jade))
+                .font(.system(size: 12))
+        }
+    }
+}
 struct VisibilityToggleButton: View {
     @Binding var isSecured: Bool
     
