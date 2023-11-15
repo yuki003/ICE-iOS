@@ -8,6 +8,7 @@ extension User {
     case id
     case userID
     case userName
+    case thumbnailKey
     case accountType
     case hostGroupIDs
     case belongingGroupIDs
@@ -32,6 +33,7 @@ extension User {
       .field(user.id, is: .required, ofType: .string),
       .field(user.userID, is: .required, ofType: .string),
       .field(user.userName, is: .required, ofType: .string),
+      .field(user.thumbnailKey, is: .optional, ofType: .string),
       .field(user.accountType, is: .required, ofType: .enum(type: AccountType.self)),
       .field(user.hostGroupIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(user.belongingGroupIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),

@@ -7,6 +7,8 @@ extension Group {
    public enum CodingKeys: String, ModelKey {
     case id
     case groupName
+    case description
+    case thumbnailKey
     case hostUserIDs
     case belongingUserIDs
     case createdAt
@@ -29,6 +31,8 @@ extension Group {
     model.fields(
       .field(group.id, is: .required, ofType: .string),
       .field(group.groupName, is: .required, ofType: .string),
+      .field(group.description, is: .optional, ofType: .string),
+      .field(group.thumbnailKey, is: .optional, ofType: .string),
       .field(group.hostUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(group.belongingUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(group.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),

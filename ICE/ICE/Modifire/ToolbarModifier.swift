@@ -41,7 +41,6 @@ struct UserToolbarModifier: ViewModifier {
     var dismissExists: Bool
     func body(content: Content) -> some View {
         content
-            .navigationBarBackButtonHidden(true)
             .toolbar(content: userInfo)
     }
     

@@ -16,6 +16,7 @@ struct DismissToolbar: ToolbarContent {
             }) {
                 Image(systemName: "chevron.left")
                     .font(.callout)
+                    .foregroundStyle(Color(.indigo))
             }
         }
     }
@@ -36,6 +37,7 @@ struct UserToolbar: ToolbarContent {
                         }) {
                             Image(systemName: "chevron.left")
                                 .font(.callout)
+                                .foregroundStyle(Color(.indigo))
                         }
                     }
                     DefaultUserThumbnail()
