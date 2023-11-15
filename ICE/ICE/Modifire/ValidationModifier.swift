@@ -13,9 +13,10 @@ struct ValidationModifier: ViewModifier {
     @State var validation: Validation = .success
     
     let publisher: AnyPublisher<Validation, Never>
+    var alignmentCenter: Bool
     
     func body(content: Content) -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: alignmentCenter ? .center : .leading ) {
             content
             if !validation.isSuccess {
                 message

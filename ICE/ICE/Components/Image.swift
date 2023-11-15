@@ -22,12 +22,27 @@ struct DefaultUserThumbnail: View {
 }
 
 struct DefaultGroupThumbnail: View {
-    let text: String
     var body: some View {
-        Text(text.prefix(1))
-            .font(.caption.bold())
+        Image(systemName: "figure.2")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
             .foregroundStyle(Color(.indigo))
-            .overlay(Circle().stroke(Color(.indigo), lineWidth: 3))
+            .padding()
+            .background()
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
+    }
+}
+
+struct Thumbnail: View {
+    var image: UIImage
+    var body: some View {
+        Image(uiImage: image)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .background()
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
     }
 }
 

@@ -6,6 +6,7 @@ type User @model {
   id: ID!
   userID: String!
   userName: String!
+  thumbnailKey: String
   accountType: AccountType!
   hostGroupIDs: [ID]
   belongingGroupIDs: [ID] 
@@ -19,6 +20,8 @@ enum AccountType {
 type Group @model {
   id: ID!
   groupName: String!
+  description: String
+  thumbnailKey: String
   hostUserIDs: [String]
   belongingUserIDs: [String]
 }

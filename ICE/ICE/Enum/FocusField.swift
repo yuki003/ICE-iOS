@@ -13,3 +13,11 @@ enum AuthField: Hashable {
     case email
     case confirmationCode
 }
+
+enum FormField: Hashable {
+    // common
+    case name
+    case description
+    // task and reward
+    case number
+}

@@ -10,63 +10,101 @@ import Amplify
 
 struct CreateGroupView: View {
     @Environment(\.asGuestKey) private var asGuest
+    @FocusState private var focused: FormField?
     @StateObject var vm: CreateGroupViewModel
     var body: some View {
-        VStack {
-            switch vm.state {
-            case .idle:
-                Color.clear.onAppear { vm.state = .loading }
-            case .loading:
-                LoadingView().onAppear{
-                    Task{
-                        try await vm.loadData()
+        NavigationStack {
+            VStack {
+                switch vm.state {
+                case .idle:
+                    Color.clear.onAppear { vm.state = .loading }
+                case .loading:
+                    LoadingView().onAppear{
+                        Task{
+                            try await vm.loadData()
+                        }
                     }
-                }
-            case let .failed(error):
-                Text(error.localizedDescription)
-            case .loaded:
-                NavigationView {
+                case let .failed(error):
+                    Text(error.localizedDescription)
+                case .loaded:
                     ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 10) {
-                            Text("Create Group View!!")
+                        VStack(alignment: .center, spacing: 20) {
+                            if !vm.createComplete {
+                                groupImageSection()
+                                    .validation(vm.thumbnailValidation, alignmentCenter: true)
+                                UnderLineTextField(text: $vm.groupName, focused: _focused, field: FormField.name, placeHolder: "グループ名を入力")
+                                    .onChange(of: vm.groupName) { newValue in
+                                        if newValue.isEmpty {
+                                            vm.buttonDisabled = true
+                                        } else {
+                                            vm.buttonDisabled = false
+                                        }
+                                    }
+                                    .validation(vm.groupNameValidation)
+                                DescriptionTextEditor(description: $vm.groupDescription, focused: _focused)
+                            } else {
+                                VStack(alignment: .center, spacing: 20) {
+                                    Text("グループの登録が完了しました！")
+                                        .font(.callout.bold())
+                                    Text("""
+                                         ホームからグループの詳細を確認し、
+                                         タスクやリワードを設定しましょう!! 
+                                         """)
+                                        .font(.footnote.bold())
+                                }
+                                .padding(.vertical, 20)
+                            }
+                            CreateGroupCard(groupName: vm.groupName, image: vm.image, description: vm.groupDescription, color: vm.groupName.isEmpty ? Color.gray : Color(.indigo))
+                            
+                            if vm.createComplete {
+                                DismissRoundedButton(label: "ホームに戻る", color: Color(.indigo))
+                            } else {
+                                EnabledFlagFillButton(label: "グループを作成", color: Color(.jade), flag: $vm.showAlert, condition: $vm.buttonDisabled)
+                                    .padding(.vertical)
+                            }
+                            
                         }
+                        .frame(width: deviceWidth())
                         .padding(.vertical)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                
-                            }
-                            ToolbarItem(placement: .navigationBarTrailing) {
+//                        .popupDismissAlert(isPresented: $vm.createComplete, title: "グループ作成完了!!", text: "ホーム画面から新しく作成したグループを確認してください。", buttonLabel: "ホームに戻る")
+                        .popupActionAlert(isPresented: $vm.showAlert, title: "グループを作成します", text: "現在の内容でグループを作成します。グループ詳細画面から内容を更新することができます。", action: vm.createGroup, actionLabel: "作成")
+                        .onAppear {
+                            if vm.groupName.isEmpty {
+                                vm.buttonDisabled = true
                             }
                         }
-                        .navigationBarTitleDisplayMode(.inline)
-                        .navigationBarBackButtonHidden(true)
-                        .alert(isPresented: $vm.alert) {
-                            Alert(
-                                title: Text(
-                                    "エラー"
-                                ),
-                                message: Text(
-                                    vm.alertMessage ?? "操作をやり直してください。"
-                                ),
-                                dismissButton: .default(
-                                    Text(
-                                        "閉じる"
-                                    )
-                                )
-                            )
-                        }
+                        .loading(isLoading: $vm.isLoading)
+                        .sheet(isPresented: $vm.showImagePicker, content: {
+                            ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
+                        })
                     }
                 }
-                .navigationDestination(isPresented: $vm.flag) {
-                    HomeView(vm: .init())
-                }
+            }
+            .userToolbar(state: vm.state, userName: "ユーザー", dismissExists: true)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .onTapGesture {
+                self.focused = nil
             }
         }
     }
     
     @ViewBuilder
-    func hooSection() -> some View {
-        VStack(alignment: .leading, spacing: 10) {
+    func groupImageSection() -> some View {
+        Button(action: {
+            vm.showImagePicker = true
+        })
+        {
+            if vm.image.size == CGSize.zero {
+                DefaultGroupThumbnail()
+                    .foregroundStyle(Color.gray)
+                    .frame(width: 90, height: 90)
+                    .padding(.top)
+            } else {
+                Thumbnail(image: vm.image)
+                    .frame(width: 90, height: 90)
+                    .padding(.top)
+            }
         }
     }
 }

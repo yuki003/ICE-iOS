@@ -17,8 +17,8 @@ extension View {
         return UIScreen.main.bounds.width / 1.2
     }
     
-    func sectionWidth() -> CGFloat{
-        return UIScreen.main.bounds.width / 1.3
+    func cardWidth() -> CGFloat{
+        return UIScreen.main.bounds.width / 2.0
     }
     
     func textFieldWidth() -> CGFloat{
@@ -33,16 +33,16 @@ extension View {
         modifier(DismissToolbarModifier(toolbar: content))
     }
     
-    func userToolbar(state: LoadingState, userName: String) -> some View {
-        modifier(UserToolbarModifier(state: state, userName: userName))
+    func userToolbar(state: LoadingState, userName: String, dismissExists: Bool = false) -> some View {
+        modifier(UserToolbarModifier(state: state, userName: userName, dismissExists: dismissExists))
     }
     
     func dismissButton() -> some View {
         self.modifier(DismissButtonModifier())
     }
     
-    func validation(_ publisher: AnyPublisher<Validation, Never>) -> some View {
-        modifier(ValidationModifier(publisher: publisher))
+    func validation(_ publisher: AnyPublisher<Validation, Never>, alignmentCenter: Bool = false) -> some View {
+        modifier(ValidationModifier(publisher: publisher, alignmentCenter: alignmentCenter ))
     }
     
     func loading(isLoading: Binding<Bool>) -> some View {
@@ -51,5 +51,13 @@ extension View {
     
     func roundedSection(color: Color) -> some View {
         modifier(RoundedSectionModifier(color: color))
+    }
+    
+    func popupActionAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, action: @escaping () async throws -> Void, actionLabel: String = "実行", color: Color = Color(.indigo)) -> some View {
+        modifier(PopupActionAlertModifier(isPresented: isPresented, title: title, text: text, action: action, actionLabel: actionLabel, color: color))
+    }
+    
+    func popupDismissAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, color: Color = Color(.indigo), buttonLabel: String = "戻る") -> some View {
+        modifier(PopupDismissAlertModifier(isPresented: isPresented, title: title, text: text, color: color, buttonLabel: buttonLabel))
     }
 }

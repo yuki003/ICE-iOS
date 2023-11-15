@@ -22,7 +22,24 @@ struct ClearButton: View {
         }
     }
 }
-
+struct ClearIntButton: View {
+    @Binding var num: Int
+    @Binding var text: String
+    
+    var body: some View {
+        Button(action: {
+            if num != 0 {
+                num = 0
+                text = ""
+            }
+        })
+        {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundColor(Color(.jade))
+                .font(.system(size: 12))
+        }
+    }
+}
 struct VisibilityToggleButton: View {
     @Binding var isSecured: Bool
     
@@ -210,6 +227,117 @@ struct AddButton: View {
         })
         {
             AddSquareIcon()
+        }
+    }
+}
+
+struct EnabledActionFillButton: View {
+    var label: String
+    let action: () async throws -> Void
+    let color: Color
+    @Binding var condition: Bool
+    var body: some View {
+        Button(action: {
+            Task {
+                try await action()
+            }
+        })
+        {
+            Text(label)
+                .font(.callout.bold())
+                .padding(.vertical)
+                .padding(.horizontal, 20)
+                .background(condition ? Color.gray : color)
+                .foregroundStyle(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+        }
+        .disabled(condition)
+    }
+}
+
+struct ActionFillButton: View {
+    var label: String
+    let action: () async throws -> Void
+    let color: Color
+    var body: some View {
+        Button(action: {
+            Task {
+                try await action()
+            }
+        })
+        {
+            Text(label)
+                .font(.callout.bold())
+                .padding(.vertical)
+                .padding(.horizontal, 20)
+                .background(color)
+                .foregroundStyle(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+        }
+    }
+}
+
+struct EnabledFlagFillButton: View {
+    var label: String
+    let color: Color
+    @Binding var flag: Bool
+    @Binding var condition: Bool
+    var body: some View {
+        Button(action: {
+            withAnimation(.linear(duration: 0.3)) {
+                flag.toggle()
+            }
+        })
+        {
+            Text(label)
+                .font(.callout.bold())
+                .padding(.vertical)
+                .padding(.horizontal, 20)
+                .background(condition ? Color.gray : color)
+                .foregroundStyle(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+        }
+        .disabled(condition)
+    }
+}
+struct FlagFillButton: View {
+    var label: String
+    let color: Color
+    @Binding var flag: Bool
+    var body: some View {
+        Button(action: {
+            withAnimation(.linear(duration: 0.3)) {
+                flag.toggle()
+            }
+        })
+        {
+            Text(label)
+                .font(.callout.bold())
+                .padding(.vertical)
+                .padding(.horizontal, 20)
+                .background(color)
+                .foregroundStyle(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+        }
+    }
+}
+
+struct DismissRoundedButton: View {
+    var label: String
+    @Environment(\.dismiss) var dismiss
+    let color: Color
+    var body: some View {
+        Button(action: {
+            dismiss()
+        })
+        {
+            Text(label)
+                .font(.callout.bold())
+                .padding(.vertical)
+                .padding(.horizontal, 20)
+                .background(color)
+                .foregroundStyle(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
         }
     }
 }

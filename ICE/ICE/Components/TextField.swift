@@ -108,3 +108,101 @@ struct ConfirmationCodeTextField: View {
         .frame(width: textFieldWidth())
     }
 }
+
+struct UnderLineTextField: View {
+    @Binding var text: String
+    @FocusState var focused: FormField?
+    let field: FormField
+    var placeHolder: String = ""
+    var isFocused: Bool {
+        return focused == field
+    }
+    
+    var body: some View {
+        VStack (alignment: .center, spacing: 0) {
+            HStack(alignment: .center) {
+                TextField(placeHolder, text: $text)
+                    .font(.callout.bold())
+                    .focused($focused, equals: field)
+                    .autocapitalization(.none)
+                    .keyboardType(.emailAddress)
+                
+                ClearButton(text: $text)
+            }
+            .padding(8)
+            Rectangle()
+                .frame(width: textFieldWidth(), height: 2)
+                .foregroundStyle(isFocused ? Color(.indigo) : Color.gray)
+        }
+        .frame(width: textFieldWidth())
+    }
+}
+
+struct UnderLineNumField: View {
+    @Binding var fieldValue: String
+    @Binding var num: Int
+    @FocusState var focused: FormField?
+    let field: FormField
+    var isFocused: Bool {
+        return focused == field
+    }
+    
+    var body: some View {
+        VStack (alignment: .center, spacing: 0) {
+            HStack(alignment: .center) {
+                TextField("", text: $fieldValue)
+                    .onChange(of: fieldValue) { newValue in
+                        let filteredValue = String(newValue.filter { "0"..."9" ~= $0 })
+                        num = Int(filteredValue) ?? 0
+                        
+                        fieldValue = num.comma()
+                    }
+                    .onChange(of: num) { newValue in
+                        fieldValue = num.comma()
+                    }
+                    .font(.callout.bold())
+                    .focused($focused, equals: field)
+                    .autocapitalization(.none)
+                    .keyboardType(.emailAddress)
+                
+                ClearIntButton(num: $num, text: $fieldValue)
+            }
+            .padding(8)
+            Rectangle()
+                .frame(width: textFieldWidth(), height: 2)
+                .foregroundStyle(isFocused ? Color(.indigo) : Color.gray)
+        }
+        .frame(width: textFieldWidth())
+    }
+}
+
+struct DescriptionTextEditor: View {
+    @Binding var description: String
+    @FocusState var focused: FormField?
+    var isFocused: Bool {
+        return focused == .description
+    }
+    var body: some View {
+        VStack(alignment: .leading) {
+            TextEditor(text: $description)
+                .font(.footnote.bold())
+                .focused($focused, equals: .description)
+                .padding(.vertical, 5)
+                .padding(.horizontal, 10)
+                .overlay {
+                    if description.isEmpty {
+                        Text("説明を入力(任意)")
+                            .frame(alignment: .leading)
+                            .font(.footnote.bold())
+                            .foregroundStyle(Color.gray)
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 10)
+                            .focused($focused, equals: .description)
+                        
+                    }
+                }
+                .background(RoundedRectangle(cornerRadius: 4).stroke(isFocused ? Color(.indigo) : Color.gray))
+        }
+        .frame(maxWidth: textFieldWidth(), minHeight: 100)
+    }
+}

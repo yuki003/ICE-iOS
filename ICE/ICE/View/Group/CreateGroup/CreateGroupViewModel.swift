@@ -8,39 +8,67 @@
 
 import SwiftUI
 import Amplify
+import Combine
 
-final class CreateGroupViewModel: ObservableObject {
-    @Published var state: LoadingState = .idle
-    @ObservedObject var auth = AmplifyAuthService()
-    @ObservedObject var apiHandler = APIHandler()
+final class CreateGroupViewModel: ViewModelBase {
+    @Published var createComplete: Bool = false
+    @Published var showAlert: Bool = false
     
-    @Published var flag: Bool = false
-    @Published var alert: Bool = false
-    @Published var alertMessage: String?
+    @Published var buttonDisabled: Bool = false
     
     @Published var createGroup: Bool = false
     @Published var belongGroup: Bool = false
+    @Published var showImagePicker: Bool = false
+    @Published var image = UIImage()
+    @Published var groupName: String = ""
+    @Published var groupDescription: String = ""
     
-    @Published var userID: String? = UserDefaults.standard.string(forKey: "userID")
+    var groupNameValidation: AnyPublisher<Validation, Never> {
+        $groupName
+            .dropFirst()
+            .map { value in
+                if value.isEmpty {
+                    return .failed(message: "グループ名を入力してください")
+                }
+                return .success
+            }
+            .eraseToAnyPublisher()
+    }
+    var thumbnailValidation: AnyPublisher<Validation, Never> {
+        $image
+            .map { value in
+                if value.size == CGSize.zero {
+                    return .failed(message: "サムネイルの設定は任意です")
+                }
+                return .success
+            }
+            .eraseToAnyPublisher()
+    }
     
     @MainActor
     func loadData() async throws {
-        do {
-            withAnimation(.linear) {
-                state = .loaded
-            }
-        } catch let error as APIError {
-            alertMessage = error.localizedDescription
-            alert = true
-            withAnimation(.linear) {
-                state = .failed(error)
-            }
-        } catch let error {
-            alertMessage = error.localizedDescription
-            alert = true
-            withAnimation(.linear) {
-                state = .failed(error)
-            }
-        }
+        asyncOperation({
+        }, apiErrorHandler: { apiError in
+            self.setErrorMessage(apiError)
+        }, errorHandler: { error in
+            self.setErrorMessage(error)
+        })
+    }
+    
+    @MainActor
+    func createGroup() async throws {
+        asyncOperation({
+            self.showAlert = false
+            var group = Group(groupName: self.groupName, description: self.groupDescription.isEmpty ? nil : self.groupDescription , thumbnailKey: self.image.size == CGSize.zero ? nil : "", hostUserIDs: [self.userID])
+            let key = self.userID + group.id
+            group.thumbnailKey = key
+            try await self.apiHandler.create(group)
+            try await self.storage.uploadData(self.image, key: key)
+            self.createComplete = true
+        }, apiErrorHandler: { apiError in
+            self.setErrorMessage(apiError)
+        }, errorHandler: { error in
+            self.setErrorMessage(error)
+        })
     }
 }

@@ -87,9 +87,6 @@ struct AuthView: View {
                     )
                 )
             }
-            .navigationDestination(isPresented: $vm.authComplete) {
-                HomeView(vm: .init())
-            }
         case let .failed(error):
             Text(error.localizedDescription)
         }
@@ -121,6 +118,9 @@ struct AuthView: View {
             
             SignInButton(vm: vm)
                 .disabled(vm.signInValid.isSuccess == false)
+                .navigationDestination(isPresented: $vm.authComplete) {
+                    HomeView(vm: .init())
+                }
         }
         .frame(height: 150)
         .padding()
@@ -156,6 +156,9 @@ struct AuthView: View {
             
             ConfirmSignUpButton(vm: vm)
                 .disabled(vm.codeValid.isSuccess == false)
+                .navigationDestination(isPresented: $vm.authComplete) {
+                    HomeView(vm: .init())
+                }
         }
         .frame(height: 150)
         .padding()

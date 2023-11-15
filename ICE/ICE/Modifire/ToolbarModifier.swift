@@ -38,14 +38,14 @@ struct DismissButtonModifier: ViewModifier {
 struct UserToolbarModifier: ViewModifier {
     var state: LoadingState
     let userName: String
+    var dismissExists: Bool
     func body(content: Content) -> some View {
         content
-            .navigationBarBackButtonHidden(true)
             .toolbar(content: userInfo)
     }
     
     @ToolbarContentBuilder
     func userInfo() -> some ToolbarContent {
-        UserToolbar(state: state, userName: userName)
+        UserToolbar(state: state, userName: userName, dismissExists: dismissExists)
     }
 }

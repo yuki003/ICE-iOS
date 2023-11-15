@@ -16,6 +16,7 @@ struct DismissToolbar: ToolbarContent {
             }) {
                 Image(systemName: "chevron.left")
                     .font(.callout)
+                    .foregroundStyle(Color(.indigo))
             }
         }
     }
@@ -24,10 +25,21 @@ struct DismissToolbar: ToolbarContent {
 struct UserToolbar: ToolbarContent {
     var state: LoadingState
     var userName: String
+    @Environment(\.dismiss) var dismiss
+    var dismissExists: Bool
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             if state == .loaded {
                 HStack(alignment: .center, spacing: 10) {
+                    if dismissExists {
+                        Button(action: {
+                            self.dismiss.callAsFunction()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.callout)
+                                .foregroundStyle(Color(.indigo))
+                        }
+                    }
                     DefaultUserThumbnail()
                         .frame(width: 30, height: 30)
                     Text("\(userName)")
