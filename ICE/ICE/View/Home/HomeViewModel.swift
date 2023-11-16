@@ -35,20 +35,20 @@ final class HomeViewModel: ObservableObject {
         do {
             // 検証中のAPIアクセスを節約するためにコメントアウト＆スタブを導入
             
-//            guard let id = userID else { throw APIError.userIdNotExists }
-//            let userPredicate = User.keys.userID.eq(id)
-//            async let userInfo = apiHandler.list(User.self, where: userPredicate)
-//            (self.userInfo) = try await (userInfo[0])
+            guard let id = userID else { throw APIError.userIdNotExists }
+            let userPredicate = User.keys.userID.eq(id)
+            async let userInfo = apiHandler.list(User.self, where: userPredicate)
+            (self.userInfo) = try await (userInfo[0])
             
-//            var hostGroupPredicate: QueryPredicateGroup = .init(type: .or)
-//            if let hostGroupIDs = self.userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {
-//                for id in hostGroupIDs {
-//                    hostGroupPredicate = hostGroupPredicate.or(Group.keys.id.eq(id))
-//                }
-//                let hostGroups = try await apiHandler.list(Group.self, where: hostGroupPredicate)
-//               self.hostGroups = hostGroups
+            var hostGroupPredicate: QueryPredicateGroup = .init(type: .or)
+            if let hostGroupIDs = self.userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {
+                for id in hostGroupIDs {
+                    hostGroupPredicate = hostGroupPredicate.or(Group.keys.id.eq(id))
+                }
+                let hostGroups = try await apiHandler.list(Group.self, where: hostGroupPredicate)
+               self.hostGroups = hostGroups
             
-            hostGroups.append(Group(id: "5470851A-A7A7-4564-B8FB-4DD6DB4637BB", groupName: "Jadigo Family", description: "Jadigo First Group!!", thumbnailKey: "7adf414e-d90b-47db-bd1b-b2b9155aafbe5470851A-A7A7-4564-B8FB-4DD6DB4637BB", hostUserIDs: ["7adf414e-d90b-47db-bd1b-b2b9155aafbe"]))
+//            hostGroups.append(Group(id: "5470851A-A7A7-4564-B8FB-4DD6DB4637BB", groupName: "Jadigo Family", description: "Jadigo First Group!!", thumbnailKey: "7adf414e-d90b-47db-bd1b-b2b9155aafbe5470851A-A7A7-4564-B8FB-4DD6DB4637BB", hostUserIDs: ["7adf414e-d90b-47db-bd1b-b2b9155aafbe"]))
             
                 if !hostGroups.isEmpty {
                     for hostGroup in hostGroups {
@@ -56,7 +56,7 @@ final class HomeViewModel: ObservableObject {
                         hostGroupThumbnails.append(thumbnail)
                     }
                 }
-//            }
+            }
             
             var belongingGroupPredicate: QueryPredicateGroup = .init()
             if let belongingGroupIDs = self.userInfo?.belongingGroupIDs, !belongingGroupIDs.isEmpty {

@@ -1,0 +1,20 @@
+{
+"Statement":[
+    {
+                "Effect": "Allow",
+                "Action": [
+                    "dynamodb:DeleteItem",
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:Scan",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DescribeStream",
+                    "dynamodb:GetRecords",
+                    "dynamodb:GetShardIterator",
+                    "dynamodb:ListStreams",
+                    "dynamodb:Query"
+                ],
+                "Resource": "arn:aws:dynamodb:ap-northeast-1:008965067649:table/*"
+            }
+]
+}

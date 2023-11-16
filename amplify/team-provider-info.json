@@ -22,6 +22,12 @@
         "S3Triggerdba0fdfb": {
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
           "s3Key": "amplify-builds/S3Triggerdba0fdfb-64334e3556446a4c4537-build.zip"
+        },
+        "iceCreateGroup": {
+          "userTableName": "User-osqdzys545b2jhvrdngnvdt57i-dev",
+          "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
+          "deploymentBucketName": "amplify-ice-dev-165429-deployment",
+          "s3Key": "amplify-builds/iceCreateGroup-73644341624167726f77-build.zip"
         }
       },
       "storage": {
@@ -47,6 +53,21 @@
       },
       "api": {
         "ice": {}
+      },
+      "function": {
+        "S3Triggerdba0fdfb": {
+          "deploymentBucketName": "amplify-ice-prod-165724-deployment",
+          "s3Key": "amplify-builds/S3Triggerdba0fdfb-64334e3556446a4c4537-build.zip"
+        },
+        "iceCreateGroup": {
+          "userTableName": "User-ncesakvf3veofbfk64el5p6sd4-prod",
+          "groupTableName": "Group-ncesakvf3veofbfk64el5p6sd4-prod",
+          "deploymentBucketName": "amplify-ice-prod-165724-deployment",
+          "s3Key": "amplify-builds/iceCreateGroup-73644341624167726f77-build.zip"
+        }
+      },
+      "storage": {
+        "iceDev": {}
       }
     }
   }
