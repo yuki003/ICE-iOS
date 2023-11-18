@@ -16,8 +16,6 @@ class AmplifyAuthService: ObservableObject {
     @AppStorage("userID") var userID: String = ""
     var asGuest: Bool = false
     
-//    @StateObject var router: AuthRouter = .shared
-    
     func checkSessionStatus() async {
         do {
             let result = try await Amplify.Auth.fetchAuthSession()
@@ -143,9 +141,56 @@ class AmplifyAuthService: ObservableObject {
             case .configuration(_, _, _):
                 print("configuration exception")
                 print(error)
-            case .service(_, _, _):
+            case .service(let description, _, _):
                 print("service exception")
                 print(error)
+                if description.contains("Invalid verification code"){
+                    throw AmplifyAuthError.notAuthorized
+                }
+            case .unknown(_, _):
+                print("unknown exception")
+                print(error)
+            case .validation(_, _, _, _):
+                print("validation exception")
+                print(error)
+            case .notAuthorized(_, _, _):
+                print("notAuthorized exception")
+                print(error)
+            case .invalidState(_, _, _):
+                print("invalidState exception")
+                print(error)
+            case .signedOut(_, _, _):
+                print("signedOut exception")
+                print(error)
+            case .sessionExpired(_, _, _):
+                print("sessionExpired exception")
+                print(error)
+            }
+            print("An error occurred while confirming sign up \(error)")
+            throw error
+        } catch {
+            print("Unexpected error: \(error)")
+            throw error
+        }
+    }
+    
+    func resendSignUpCode(for username: String) async throws {
+        do {
+            let authCodeDeliveryDetails = try await Amplify.Auth.resendSignUpCode(
+                for: username
+            )
+            print("Auth code resend completed: \(authCodeDeliveryDetails.destination)")
+        } catch let error as AuthError {
+            switch error {
+            case .configuration(_, _, _):
+                print("configuration exception")
+                print(error)
+            case .service(let description, _, _):
+                print("service exception")
+                print(error)
+                if description.contains("Invalid verification code"){
+                    throw AmplifyAuthError.invalidVerificationCode
+                }
             case .unknown(_, _):
                 print("unknown exception")
                 print(error)
@@ -256,14 +301,14 @@ class AmplifyAuthService: ObservableObject {
         }
     }
     
-    func resendCode() async {
-        do {
-            let deliveryDetails = try await Amplify.Auth.resendConfirmationCode(forUserAttributeKey: .email)
-            print("Resend code send to - \(deliveryDetails)")
-        } catch let error as AuthError {
-            print("Resend code failed with error \(error)")
-        } catch {
-            print("Unexpected error: \(error)")
-        }
-    }
+//    func resendCode() async {
+//        do {
+//            let deliveryDetails = try await Amplify.Auth.resendConfirmationCode(forUserAttributeKey: .email)
+//            print("Resend code send to - \(deliveryDetails)")
+//        } catch let error as AuthError {
+//            print("Resend code failed with error \(error)")
+//        } catch {
+//            print("Unexpected error: \(error)")
+//        }
+//    }
 }

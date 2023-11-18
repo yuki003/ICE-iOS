@@ -19,6 +19,8 @@ final class AuthViewModel: ObservableObject {
     @Published var password: String = ""
     @Published var email: String = ""
     @Published var confirmationCode: String = ""
+    var hashedEmail: String = ""
+    @Published var userID: String = ""
     @Published var asGuest: Bool = false
     @Published var isSignIn: Bool = false
     @Published var isSignUp: Bool = false
@@ -67,6 +69,12 @@ final class AuthViewModel: ObservableObject {
             .map { value in
                 if value.containsEmoji() {
                     return .failed(message: "絵文字は入力できません")
+                }
+                if value.count <= 0 {
+                    return .failed(message: "ユーザー名を入力してください。")
+                }
+                if !value.isMatch(pattern: Regex.userName) {
+                    return .failed(message: "ユーザー名に空白は使用できません")
                 }
                 return .success
             }
@@ -151,15 +159,17 @@ final class AuthViewModel: ObservableObject {
                 if asGuest {
                     signUpInfo = try await auth.signUp(username: userName, password: password, email: nil)
                 } else if !email.isEmpty {
-                    let hashedEmail = hashDelimiter + String(email.hashed())
+                    hashedEmail = hashDelimiter + String(email.hashed())
                     signUpInfo = try await auth.signUp(username: userName + hashedEmail , password: password, email: email)
                 } else {
                     throw AmplifyAuthError.signUpFailed
                 }
                 
                 if case .confirmUser(_, _, _) = signUpInfo?.nextStep {
-                    UserDefaults.standard.set(signUpInfo?.userID, forKey:"userID")
-                    withAnimation(.easeIn) {
+                    guard let id = signUpInfo?.userID else { throw AmplifyAuthError.signUpFailed }
+                    UserDefaults.standard.set(id, forKey:"userID")
+                    userID = id
+                    withAnimation(.easeOut(duration: 0.3)) {
                         navSignUp = false
                         navSignUpConfirm = true
                     }
@@ -184,8 +194,8 @@ final class AuthViewModel: ObservableObject {
                 alert = true
             }
         }
-        if !navSignUpConfirm {
-            withAnimation(.easeIn) {
+        if !navSignUpConfirm, !isSignUp {
+            withAnimation(.easeOut(duration: 0.3)) {
                 isSignUp = true
                 navHostOrGuest = true
             }
@@ -197,7 +207,6 @@ final class AuthViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         if !userName.isEmpty, !confirmationCode.isEmpty {
-            let hashedEmail = hashDelimiter + String(email.hashed())
             do {
                 signUpInfo = try await auth.confirmSignUp(for: userName + hashedEmail, with: confirmationCode)
                 if let signUpInfo = signUpInfo, signUpInfo.isSignUpComplete {
@@ -205,6 +214,12 @@ final class AuthViewModel: ObservableObject {
                 } else {
                     throw AmplifyAuthError.confirmError
                 }
+            } catch let error as AmplifyAuthError {
+                alertMessage = error.localizedDescription
+                alert = true
+            } catch let error as AuthError {
+                alertMessage = error.localizedDescription
+                alert = true
             } catch let error {
                 alertMessage = error.localizedDescription
                 alert = true
@@ -213,11 +228,23 @@ final class AuthViewModel: ObservableObject {
     }
     
     @MainActor
+    func resendCode() async throws {
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            try await auth.resendSignUpCode(for: userName + hashedEmail)
+        } catch {
+            alertMessage = APIError.createFailed.localizedDescription
+            alert = true
+        }
+    }
+    
+    @MainActor
     func signIn() async throws {
         isLoading = true
         defer { isLoading = false }
         if !userName.isEmpty, !password.isEmpty, !email.isEmpty  {
-            let hashedEmail = hashDelimiter + String(email.hashed())
+            hashedEmail = hashDelimiter + String(email.hashed())
             do {
                 if asGuest {
                     signInInfo = try await auth.signIn(username: userName + hashedEmail, password: password)
@@ -225,24 +252,31 @@ final class AuthViewModel: ObservableObject {
                     signInInfo = try await auth.signIn(username: userName + hashedEmail, password: password)
                 }
                 if let signInInfo = signInInfo, signInInfo.isSignedIn {
-                    withAnimation(.easeIn) {
+                    withAnimation(.easeOut(duration: 0.3)) {
                         auth.asGuest = asGuest
-                        authComplete = true
+                        flagInitialize()
+                        DispatchQueue.main.async {
+                            self.authComplete = true
+                        }
                     }
                 } else if case .confirmSignUp(_) = signInInfo?.nextStep {
-                    withAnimation(.easeIn) {
-                        navSignIn = false
+                    try await auth.resendSignUpCode(for: userName + hashedEmail)
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        flagInitialize()
                         navSignUpConfirm = true
                     }
                 } else {
                     throw AmplifyAuthError.signInFailed
                 }
+            } catch let error as AmplifyAuthError {
+                alertMessage = error.localizedDescription
+                alert = true
             } catch let error as AuthError {
                 alertMessage = error.localizedDescription
                 alert = true
             }
-        } else if !authComplete {
-            withAnimation(.easeIn) {
+        } else if !authComplete, !isSignIn {
+            withAnimation(.easeOut(duration: 0.3)) {
                 isSignIn = true
                 navHostOrGuest = true
             }
@@ -259,7 +293,9 @@ final class AuthViewModel: ObservableObject {
             try await apiHandler.create(user)
             withAnimation(.easeIn) {
                 auth.asGuest = asGuest
-                authComplete = true
+                DispatchQueue.main.async {
+                    self.authComplete = true
+                }
             }
         } catch {
             alertMessage = APIError.createFailed.localizedDescription
@@ -274,14 +310,14 @@ final class AuthViewModel: ObservableObject {
             email = ""
             password = ""
             confirmationCode = ""
-            navSignIn = false
-            navSignUp = false
-            navSignUpConfirm = false
-            asGuest = false
-            authComplete = false
-            navHostOrGuest = false
-            isSignIn = false
-            isSignUp = false
         }
+    }
+    
+    func flagInitialize() {
+        navSignIn = false
+        navSignUp = false
+        navSignUpConfirm = false
+        asGuest = false
+        navHostOrGuest = false
     }
 }
