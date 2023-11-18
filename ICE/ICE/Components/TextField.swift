@@ -41,7 +41,6 @@ struct EmailTextField: View {
             TextField("Email", text: $email)
                 .font(.footnote.bold())
                 .focused($focused, equals: .email)
-                .autocapitalization(.none)
                 .keyboardType(.emailAddress)
             
             ClearButton(text: $email)

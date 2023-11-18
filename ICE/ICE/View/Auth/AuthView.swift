@@ -48,14 +48,16 @@ struct AuthView: View {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button(action: {
                                 if vm.navHostOrGuest {
-                                    vm.propertyInitialize()
-                                } else if vm.navSignIn || vm.navSignUp {
-                                    vm.navSignIn = false
+                                    vm.flagInitialize()
                                     vm.isSignIn = false
-                                    vm.navSignUp = false
                                     vm.isSignUp = false
+                                } else if vm.navSignIn || vm.navSignUp {
+                                    vm.propertyInitialize()
+                                    vm.flagInitialize()
+                                    vm.navHostOrGuest = true
                                 } else if vm.navSignUpConfirm {
-                                    vm.navSignUpConfirm = false
+                                    vm.flagInitialize()
+                                    vm.navSignUp = true
                                 }
                             }) {
                                 Image(systemName: "chevron.left")
@@ -159,6 +161,7 @@ struct AuthView: View {
                 .navigationDestination(isPresented: $vm.authComplete) {
                     HomeView(vm: .init())
                 }
+            ActionFillButton(label: "コード再送", action: vm.resendCode, color: Color(.indigo))
         }
         .frame(height: 150)
         .padding()
