@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DefaultUserThumbnail: View {
+    let color: Color
     var body: some View {
         Image(systemName: "person.fill")
             .resizable()
@@ -22,6 +23,7 @@ struct DefaultUserThumbnail: View {
 }
 
 struct DefaultGroupThumbnail: View {
+    let color: Color
     var body: some View {
         Image(systemName: "figure.2")
             .resizable()
@@ -35,14 +37,28 @@ struct DefaultGroupThumbnail: View {
 }
 
 struct Thumbnail: View {
-    var image: UIImage
+    let type: ThumbnailType
+    let thumbnail: UIImage
+    var defaultColor: Color = Color(.indigo)
     var body: some View {
-        Image(uiImage: image)
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .background()
-            .clipShape(Circle())
-            .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
+        if thumbnail.size == CGSize.zero {
+            switch type {
+            case .user:
+                DefaultUserThumbnail(color: defaultColor)
+            case .group:
+                DefaultGroupThumbnail(color: defaultColor)
+//            case .task:
+//            case .reward:
+            }
+        } else {
+            Image(uiImage: thumbnail)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .background()
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
+            
+        }
     }
 }
 

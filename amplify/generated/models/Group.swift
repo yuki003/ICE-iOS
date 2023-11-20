@@ -9,6 +9,8 @@ public struct Group: Model {
   public var thumbnailKey: String?
   public var hostUserIDs: [String?]?
   public var belongingUserIDs: [String?]?
+  public var taskIDs: [String?]?
+  public var rewardIDs: [String?]?
   public var createdAt: Temporal.DateTime?
   public var updatedAt: Temporal.DateTime?
   
@@ -17,13 +19,17 @@ public struct Group: Model {
       description: String? = nil,
       thumbnailKey: String? = nil,
       hostUserIDs: [String?]? = nil,
-      belongingUserIDs: [String?]? = nil) {
+      belongingUserIDs: [String?]? = nil,
+      taskIDs: [String?]? = nil,
+      rewardIDs: [String?]? = nil) {
     self.init(id: id,
       groupName: groupName,
       description: description,
       thumbnailKey: thumbnailKey,
       hostUserIDs: hostUserIDs,
       belongingUserIDs: belongingUserIDs,
+      taskIDs: taskIDs,
+      rewardIDs: rewardIDs,
       createdAt: nil,
       updatedAt: nil)
   }
@@ -33,6 +39,8 @@ public struct Group: Model {
       thumbnailKey: String? = nil,
       hostUserIDs: [String?]? = nil,
       belongingUserIDs: [String?]? = nil,
+      taskIDs: [String?]? = nil,
+      rewardIDs: [String?]? = nil,
       createdAt: Temporal.DateTime? = nil,
       updatedAt: Temporal.DateTime? = nil) {
       self.id = id
@@ -41,6 +49,8 @@ public struct Group: Model {
       self.thumbnailKey = thumbnailKey
       self.hostUserIDs = hostUserIDs
       self.belongingUserIDs = belongingUserIDs
+      self.taskIDs = taskIDs
+      self.rewardIDs = rewardIDs
       self.createdAt = createdAt
       self.updatedAt = updatedAt
   }

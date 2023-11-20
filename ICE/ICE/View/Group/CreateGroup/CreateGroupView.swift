@@ -19,8 +19,8 @@ struct CreateGroupView: View {
                 case .idle:
                     Color.clear.onAppear { vm.state = .loading }
                 case .loading:
-                    LoadingView().onAppear{
-                        Task{
+                    LoadingView().onAppear {
+                        Task {
                             try await vm.loadData()
                         }
                     }
@@ -95,16 +95,9 @@ struct CreateGroupView: View {
             vm.showImagePicker = true
         })
         {
-            if vm.image.size == CGSize.zero {
-                DefaultGroupThumbnail()
-                    .foregroundStyle(Color.gray)
-                    .frame(width: 90, height: 90)
-                    .padding(.top)
-            } else {
-                Thumbnail(image: vm.image)
-                    .frame(width: 90, height: 90)
-                    .padding(.top)
-            }
+            Thumbnail(type: ThumbnailType.group, thumbnail: vm.image, defaultColor: Color.gray)
+                .frame(width: 90, height: 90)
+                .padding(.top)
         }
     }
 }

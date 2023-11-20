@@ -24,4 +24,52 @@ type Group @model {
   thumbnailKey: String
   hostUserIDs: [String]
   belongingUserIDs: [String]
+  taskIDs: [String]
+  rewardIDs: [String]
+}
+
+type Tasks @model {
+  id: ID!
+  createUserID: String!
+  taskName: String!
+  description: String
+  frequencyType: FrequencyType!
+  periodicType: PeriodicType
+  condition: [String]
+  point: Int!
+  groupID: String
+}
+
+type Rewards @model {
+  id: ID!
+  createUserID: String!
+  rewardName: String!
+  description: String
+  thumbnailKey: String
+  frequencyType: FrequencyType!
+  periodicType: PeriodicType
+  whoGetsPaid: WhoGetsPaid!
+  getUserID: [String]
+  cost: Int!
+  groupId: String
+}
+
+enum FrequencyType {
+  ONLY_ONCE
+  PERIODIC
+}
+
+enum PeriodicType {
+  EVERY_DAY
+  WEEK_DAY
+  HOLIDAY
+  ONCE_PER_WEEK
+  ONCE_PER_MONTH
+  ONCE_PER_YEAR
+}
+
+enum WhoGetsPaid {
+  ONLY_ONE
+  EVERYBODY
+  LIMITED
 }

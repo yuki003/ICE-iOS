@@ -11,6 +11,8 @@ extension Group {
     case thumbnailKey
     case hostUserIDs
     case belongingUserIDs
+    case taskIDs
+    case rewardIDs
     case createdAt
     case updatedAt
   }
@@ -35,6 +37,8 @@ extension Group {
       .field(group.thumbnailKey, is: .optional, ofType: .string),
       .field(group.hostUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(group.belongingUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(group.taskIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(group.rewardIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(group.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(group.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime)
     )

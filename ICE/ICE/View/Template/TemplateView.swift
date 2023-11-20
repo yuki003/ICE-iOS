@@ -11,7 +11,7 @@ struct TemplateView: View {
                 Color.clear.onAppear { vm.state = .loading }
             case .loading:
                 LoadingView().onAppear{
-                    Task{
+                    Task {
                         try await vm.loadData()
                     }
                 }
@@ -23,15 +23,7 @@ struct TemplateView: View {
                         VStack(alignment: .center, spacing: 10) {
                         }
                         .padding(.vertical)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                
-                            }
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                            }
-                        }
-                        .navigationBarTitleDisplayMode(.inline)
-                        .navigationBarBackButtonHidden(true)
+                        .frame(width: deviceWidth())
                         .alert(isPresented: $vm.alert) {
                             Alert(
                                 title: Text(
@@ -54,6 +46,15 @@ struct TemplateView: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
     }
     
     @ViewBuilder

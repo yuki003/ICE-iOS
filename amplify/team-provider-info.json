@@ -27,7 +27,7 @@
           "userTableName": "User-osqdzys545b2jhvrdngnvdt57i-dev",
           "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateGroup-73644341624167726f77-build.zip"
+          "s3Key": "amplify-builds/iceCreateGroup-46564d496a6f754d7377-build.zip"
         }
       },
       "storage": {

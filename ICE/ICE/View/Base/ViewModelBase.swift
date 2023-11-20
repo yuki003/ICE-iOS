@@ -18,6 +18,7 @@ class ViewModelBase: ObservableObject {
     @ObservedObject var apiHandler = APIHandler()
     @ObservedObject var auth = AmplifyAuthService()
     @ObservedObject var storage = AmplifyStorageService()
+    @ObservedObject var apiService = APIService()
     
     @Published var isLoading = false
     
@@ -26,6 +27,7 @@ class ViewModelBase: ObservableObject {
     
     @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
     // 非同期処理を行う共通関数
+    @MainActor
     func asyncOperation(_ operation: @escaping () async throws -> Void,
                                apiErrorHandler: @escaping APIErrorHandler,
                                errorHandler: @escaping ErrorHandler) {

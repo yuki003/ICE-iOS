@@ -92,10 +92,18 @@ struct HomeView: View {
                 ForEach(vm.hostGroups.indices, id: \.self) { index in
                     let group = vm.hostGroups[index]
                     ScrollView(.horizontal) {
-                        HomeGroupCard(group: group, image: vm.hostGroupThumbnails[index], color: Color(.indigo))
-                            .padding(.vertical, 5)
-                        /// イカしたスクロールを実装するのでpaddingで暫定対応
-                            .padding(.horizontal, 40)
+                        Button(action: {
+                            vm.navGroupDetail = true
+                        })
+                        {
+                            HomeGroupCard(group: group, image: vm.hostGroupThumbnails[index], color: Color(.indigo))
+                                .padding(.vertical, 5)
+                            /// イカしたスクロールを実装するのでpaddingで暫定対応
+                                .padding(.horizontal, 40)
+                        }
+                        .navigationDestination(isPresented: $vm.navGroupDetail, destination: {
+                            GroupDetailView(vm: .init(groupInfo: group, thumbnail: vm.hostGroupThumbnails[index]))
+                        })
 //                        VStack(alignment: .leading, spacing: 10) {
 //                            HStack(alignment: .center, spacing: 10) {
 //                                DefaultUserThumbnail()
@@ -147,15 +155,17 @@ struct HomeView: View {
                     }
                 }
             } else {
-                Text("主催しているグループはありません")
+                Text("あなたのグループを作成してみましょう！")
                     .font(.callout.bold())
                     .foregroundStyle(Color.black.opacity(0.8))
                     .padding(5)
                     .frame(width: screenWidth(), height: 100, alignment: .center)
                     .roundedSection(color: Color(.jade))
+                /// イカしたスクロールを実装するのでpaddingで暫定対応
+                    .padding(.horizontal, 40)
             }
         }
-        .frame(maxWidth: deviceWidth(), minHeight: 300, maxHeight: .infinity, alignment: .leading)
+        .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
     }
     
     @ViewBuilder

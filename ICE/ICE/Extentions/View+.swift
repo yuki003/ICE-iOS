@@ -18,7 +18,7 @@ extension View {
     }
     
     func cardWidth() -> CGFloat{
-        return UIScreen.main.bounds.width / 2.0
+        return UIScreen.main.bounds.width / 2.3
     }
     
     func textFieldWidth() -> CGFloat{
@@ -33,7 +33,7 @@ extension View {
         modifier(DismissToolbarModifier(toolbar: content))
     }
     
-    func userToolbar(state: LoadingState, userName: String, dismissExists: Bool = false) -> some View {
+    func userToolbar(state: LoadingState, userName: String?, dismissExists: Bool = false) -> some View {
         modifier(UserToolbarModifier(state: state, userName: userName, dismissExists: dismissExists))
     }
     
