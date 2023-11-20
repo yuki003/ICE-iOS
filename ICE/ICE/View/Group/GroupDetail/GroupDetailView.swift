@@ -26,17 +26,18 @@ struct GroupDetailView: View {
             case .loaded:
                 NavigationView {
                     VStack(alignment: .center, spacing: 20) {
-                        Text(vm.groupInfo.groupName)
-                            .font(.headline.bold())
-                            .foregroundStyle(Color(.indigo))
-                        
-                        Thumbnail(type: ThumbnailType.group, thumbnail: vm.thumbnail)
-                            .frame(width: 90, height: 90)
-                        
-                        GroupDescription(description: vm.groupInfo.description)
-                        
-                        Divider()
-                        
+                        VStack(alignment: .center, spacing: 15) {
+                            Text(vm.groupInfo.groupName)
+                                .font(.headline.bold())
+                                .foregroundStyle(Color(.indigo))
+                            
+                            Thumbnail(type: ThumbnailType.group, thumbnail: vm.thumbnail)
+                                .frame(width: 70, height: 70)
+                            
+                            GroupDescription(description: vm.groupInfo.description)
+                            
+                            Divider()
+                        }
                         makeMemberList()
                         makeTaskList()
                         makeRewardList()
@@ -104,10 +105,14 @@ struct GroupDetailView: View {
     func makeTaskList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createTask)
-                    .navigationDestination(isPresented: $vm.createTask, destination: {
-                        // CreateTaskView(vm: .init())
-                    })
+                if asGuest {
+                    SectionLabel(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0)
+                } else {
+                    SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createTask)
+                        .navigationDestination(isPresented: $vm.createTask, destination: {
+                            // CreateTaskView(vm: .init())
+                        })
+                }
             }
             if vm.latestTasks.count > 0 {
                 ForEach(vm.latestTasks.indices, id: \.self) { index in
@@ -117,19 +122,21 @@ struct GroupDetailView: View {
                     }) {
                         ActiveTaskRow(taskName: task.taskName)
                     }
-                    if vm.tasks.count > vm.latestTasks.count {
-                        Button(action: {
-                            // タスク一覧に遷移、ポップアップで詳細表示でも可
-                        }) {
-                            Text("他\(vm.tasks.count)のタスク")
-                        }
-                    }
+                    .padding(.leading, 10)
                 }
             } else {
                 Text("タスクを設定しましょう！")
                     .font(.callout.bold())
                     .foregroundStyle(Color.black.opacity(0.8))
                     .padding(5)
+            }
+            
+            if vm.tasks.count > vm.latestTasks.count {
+                Button(action: {
+                    // タスク一覧に遷移、ポップアップで詳細表示でも可
+                }) {
+                    Text("他\(vm.tasks.count)のタスク")
+                }
             }
         }
     }
@@ -138,10 +145,14 @@ struct GroupDetailView: View {
     func makeRewardList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createReward)
-                    .navigationDestination(isPresented: $vm.createTask, destination: {
-                        // CreateRewardView(vm: .init())
-                    })
+                if asGuest {
+                    SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
+                } else {
+                    SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createReward)
+                        .navigationDestination(isPresented: $vm.createTask, destination: {
+                            // CreateRewardView(vm: .init())
+                        })
+                }
             }
             if vm.latestRewards.count > 0 {
                 ForEach(vm.latestRewards.indices, id: \.self) { index in
@@ -149,21 +160,23 @@ struct GroupDetailView: View {
                     Button(action: {
                         // タスク詳細に遷移、ポップアップで詳細表示でも可
                     }) {
-                        ActiveTaskRow(taskName: reward.rewardName)
+                        PendingRewardRow(rewardName: reward.rewardName, status: "申請中")
                     }
-                    if vm.rewards.count > vm.rewards.count {
-                        Button(action: {
-                            // タスク一覧に遷移、ポップアップで詳細表示でも可
-                        }) {
-                            Text("他\(vm.tasks.count)のタスク")
-                        }
-                    }
+                    .padding(.leading, 10)
                 }
             } else {
                 Text("リワードを設定しましょう！")
                     .font(.callout.bold())
                     .foregroundStyle(Color.black.opacity(0.8))
                     .padding(5)
+            }
+            
+            if vm.rewards.count > vm.latestRewards.count {
+                Button(action: {
+                    // タスク一覧に遷移、ポップアップで詳細表示でも可
+                }) {
+                    Text("他\(vm.tasks.count)のタスク")
+                }
             }
         }
     }
