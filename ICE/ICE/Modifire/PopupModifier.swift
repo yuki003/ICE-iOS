@@ -171,6 +171,7 @@ struct PopupTaskIconModifier: ViewModifier {
                         ActionFillButton(label: buttonLabel, action: {
                             selected = false
                             taskType = select
+                            select = .defaultIcon
                             isPresented = false
                         }, color: color)
                     }
