@@ -67,7 +67,7 @@ struct GroupDetailView: View {
             .navigationBarBackButtonHidden(true)
         }
         .navigationDestination(isPresented: $vm.createTask) {
-            CreateTaskView(vm: .init())
+            CreateTaskView(vm: .init(groupID: vm.groupInfo.id))
         }
     }
     

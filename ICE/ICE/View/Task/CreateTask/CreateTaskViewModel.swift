@@ -24,6 +24,7 @@ final class CreateTaskViewModel: ViewModelBase {
     var translatedPeriodic: String? {
         enumUtil.translatePeriodicType(periodic: frequencyAndPeriodic.periodic)
     }
+    let groupID: String
     
     // MARK: Flags
     @Published var showIconSelector: Bool = false
@@ -80,8 +81,9 @@ final class CreateTaskViewModel: ViewModelBase {
     
     private var cancellables: Set<AnyCancellable> = []
     // MARK: Initializer
-    override init()
+    init(groupID: String)
     {
+        self.groupID = groupID
         super.init()
         self.createValidation
             .receive(on: RunLoop.main)
@@ -96,7 +98,7 @@ final class CreateTaskViewModel: ViewModelBase {
             if !self.condition.isEmpty {
                 self.conditions.append(self.condition)
             }
-            let task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyAndPeriodic.frequency, periodicType: self.frequencyAndPeriodic.periodic, condition: self.conditions, point: self.point)
+            let task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyAndPeriodic.frequency, periodicType: self.frequencyAndPeriodic.periodic, condition: self.conditions, point: self.point, groupID: self.groupID)
             try await self.apiHandler.create(task)
             self.createComplete = true
         }, apiErrorHandler: { apiError in

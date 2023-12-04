@@ -55,6 +55,22 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "iceCreateTasks": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "ice"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -103,6 +119,46 @@
         {
           "category": "function",
           "resourceName": "iceCreateGroup"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateTasks_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateTasks"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateTasks_env": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateTasks"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateTasks_groupTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateTasks"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateTasks_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateTasks"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateTasks_tasksTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateTasks"
         }
       ]
     }
