@@ -9,6 +9,7 @@ extension Tasks {
     case createUserID
     case taskName
     case description
+    case iconName
     case frequencyType
     case periodicType
     case condition
@@ -36,6 +37,7 @@ extension Tasks {
       .field(tasks.createUserID, is: .required, ofType: .string),
       .field(tasks.taskName, is: .required, ofType: .string),
       .field(tasks.description, is: .optional, ofType: .string),
+      .field(tasks.iconName, is: .optional, ofType: .string),
       .field(tasks.frequencyType, is: .required, ofType: .enum(type: FrequencyType.self)),
       .field(tasks.periodicType, is: .optional, ofType: .enum(type: PeriodicType.self)),
       .field(tasks.condition, is: .optional, ofType: .embeddedCollection(of: String.self)),

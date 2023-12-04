@@ -30,6 +30,11 @@
 		B62AAE1B2B09A161004862F2 /* Tasks+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE172B09A161004862F2 /* Tasks+Schema.swift */; };
 		B62AAE1D2B09A1E4004862F2 /* TasksService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE1C2B09A1E4004862F2 /* TasksService.swift */; };
 		B62AAE1F2B09A24E004862F2 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE1E2B09A24E004862F2 /* APIService.swift */; };
+		B62AAE222B0B4078004862F2 /* CreateTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE212B0B4078004862F2 /* CreateTaskView.swift */; };
+		B62AAE242B0B408E004862F2 /* CreateTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE232B0B408E004862F2 /* CreateTaskViewModel.swift */; };
+		B62AAE2A2B143C6C004862F2 /* Image+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE292B143C6C004862F2 /* Image+.swift */; };
+		B62AAE2D2B144A53004862F2 /* EnumUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE2C2B144A53004862F2 /* EnumUtility.swift */; };
+		B62AAE2F2B144D39004862F2 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62AAE2E2B144D39004862F2 /* General.swift */; };
 		B62C9C8E2AE3BC570048A166 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62C9C8D2AE3BC570048A166 /* String+.swift */; };
 		B62C9C902AE3BCBA0048A166 /* Caracter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62C9C8F2AE3BCBA0048A166 /* Caracter+.swift */; };
 		B62C9C922AE3C0300048A166 /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62C9C912AE3C0300048A166 /* Regex.swift */; };
@@ -127,6 +132,11 @@
 		B62AAE172B09A161004862F2 /* Tasks+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tasks+Schema.swift"; sourceTree = "<group>"; };
 		B62AAE1C2B09A1E4004862F2 /* TasksService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksService.swift; sourceTree = "<group>"; };
 		B62AAE1E2B09A24E004862F2 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		B62AAE212B0B4078004862F2 /* CreateTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTaskView.swift; sourceTree = "<group>"; };
+		B62AAE232B0B408E004862F2 /* CreateTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTaskViewModel.swift; sourceTree = "<group>"; };
+		B62AAE292B143C6C004862F2 /* Image+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+.swift"; sourceTree = "<group>"; };
+		B62AAE2C2B144A53004862F2 /* EnumUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumUtility.swift; sourceTree = "<group>"; };
+		B62AAE2E2B144D39004862F2 /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		B62C9C8D2AE3BC570048A166 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		B62C9C8F2AE3BCBA0048A166 /* Caracter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Caracter+.swift"; sourceTree = "<group>"; };
 		B62C9C912AE3C0300048A166 /* Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
@@ -285,6 +295,7 @@
 				B61BE95B2ADCBD60003BC55B /* Modifire */,
 				B61BE9602ADD29C0003BC55B /* Service */,
 				B61E206F2AC9247100EF3CEB /* Preview Content */,
+				B62AAE2B2B144A2B004862F2 /* Utility */,
 				B6B9E7DB2AEF37350056D175 /* models */,
 			);
 			path = ICE;
@@ -323,6 +334,7 @@
 				B62C9C8D2AE3BC570048A166 /* String+.swift */,
 				B62C9C8F2AE3BCBA0048A166 /* Caracter+.swift */,
 				B6B9E7F32AEF97740056D175 /* EnvironmentValues+.swift */,
+				B62AAE292B143C6C004862F2 /* Image+.swift */,
 			);
 			path = Extentions;
 			sourceTree = "<group>";
@@ -336,6 +348,23 @@
 			path = API;
 			sourceTree = "<group>";
 		};
+		B62AAE202B0B405F004862F2 /* CreateTask */ = {
+			isa = PBXGroup;
+			children = (
+				B62AAE212B0B4078004862F2 /* CreateTaskView.swift */,
+				B62AAE232B0B408E004862F2 /* CreateTaskViewModel.swift */,
+			);
+			path = CreateTask;
+			sourceTree = "<group>";
+		};
+		B62AAE2B2B144A2B004862F2 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				B62AAE2C2B144A53004862F2 /* EnumUtility.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 		B64E1CD52AD3923000A876CC /* Enum */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +374,7 @@
 				B61BE9662AE00FC8003BC55B /* LoadingState.swift */,
 				B62C9C912AE3C0300048A166 /* Regex.swift */,
 				B62AAE012B08A6D1004862F2 /* Type.swift */,
+				B62AAE2E2B144D39004862F2 /* General.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -421,6 +451,7 @@
 		B6BD49A62AF0F20700349C7A /* Task */ = {
 			isa = PBXGroup;
 			children = (
+				B62AAE202B0B405F004862F2 /* CreateTask */,
 			);
 			path = Task;
 			sourceTree = "<group>";
@@ -635,6 +666,7 @@
 				B62AAE0D2B099C5A004862F2 /* FrequencyType.swift in Sources */,
 				B6A2F26C2B02216800F779CC /* GroupComponent.swift in Sources */,
 				B6B9E7EE2AEF37350056D175 /* Group+Schema.swift in Sources */,
+				B62AAE222B0B4078004862F2 /* CreateTaskView.swift in Sources */,
 				B62AAE1A2B09A161004862F2 /* Tasks.swift in Sources */,
 				B6BD49AB2AF0F23C00349C7A /* TemplateViewModel.swift in Sources */,
 				B61BE9622ADD29E0003BC55B /* AmplifyAuthService.swift in Sources */,
@@ -658,13 +690,17 @@
 				B6B9E7D82AECF26D0056D175 /* SectionModifier.swift in Sources */,
 				B6B9E7EF2AEF37350056D175 /* AccountType.swift in Sources */,
 				B6BD49B02AF0FAE100349C7A /* CreateGroupViewModel.swift in Sources */,
+				B62AAE242B0B408E004862F2 /* CreateTaskViewModel.swift in Sources */,
 				B69A76C32AE3B6EF009228EC /* Validation.swift in Sources */,
+				B62AAE2D2B144A53004862F2 /* EnumUtility.swift in Sources */,
 				B61E206C2AC9247000EF3CEB /* ContentView.swift in Sources */,
+				B62AAE2A2B143C6C004862F2 /* Image+.swift in Sources */,
 				B65C8E9F2B0870270083080D /* GroupDetailView.swift in Sources */,
 				B6B9E7EB2AEF37350056D175 /* User.swift in Sources */,
 				B62C9C922AE3C0300048A166 /* Regex.swift in Sources */,
 				B651F7552B01A3D400AE6FF6 /* PopupModifier.swift in Sources */,
 				B62AAE1B2B09A161004862F2 /* Tasks+Schema.swift in Sources */,
+				B62AAE2F2B144D39004862F2 /* General.swift in Sources */,
 				B6B49DB12AFB30E900CF0E6A /* Int+.swift in Sources */,
 				B6B9E7F22AEF970B0056D175 /* Environments.swift in Sources */,
 				B61BE95F2ADCBE69003BC55B /* Toolbar.swift in Sources */,

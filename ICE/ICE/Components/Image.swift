@@ -9,10 +9,12 @@ import SwiftUI
 
 struct DefaultUserThumbnail: View {
     let color: Color
+    var aspect: CGFloat
     var body: some View {
         Image(systemName: "person.fill")
             .resizable()
             .aspectRatio(contentMode: .fill)
+            .frame(width: aspect, height: aspect)
             .foregroundStyle(Color(.indigo))
             .padding(.top, 5)
             .padding(.horizontal, 5)
@@ -24,12 +26,29 @@ struct DefaultUserThumbnail: View {
 
 struct DefaultGroupThumbnail: View {
     let color: Color
+    var aspect: CGFloat
+
     var body: some View {
         Image(systemName: "figure.2")
             .resizable()
             .aspectRatio(contentMode: .fill)
+            .frame(width: aspect, height: aspect)
             .foregroundStyle(Color(.indigo))
             .padding()
+            .background()
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
+    }
+}
+
+struct DefaultIcon: View {
+    let color: Color
+    var aspect: CGFloat
+    var body: some View {
+        IceLogo()
+            .frame(width: aspect, height: aspect)
+            .aspectRatio(contentMode: .fill)
+            .foregroundStyle(Color(.indigo))
             .background()
             .clipShape(Circle())
             .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
@@ -40,25 +59,46 @@ struct Thumbnail: View {
     let type: ThumbnailType
     let thumbnail: UIImage
     var defaultColor: Color = Color(.indigo)
+    var aspect: CGFloat = 40
     var body: some View {
         if thumbnail.size == CGSize.zero {
             switch type {
             case .user:
-                DefaultUserThumbnail(color: defaultColor)
+                DefaultUserThumbnail(color: defaultColor, aspect: aspect)
             case .group:
-                DefaultGroupThumbnail(color: defaultColor)
-//            case .task:
+                DefaultGroupThumbnail(color: defaultColor, aspect: aspect)
+            case .tasks:
+                DefaultIcon(color: defaultColor, aspect: aspect)
 //            case .reward:
             }
         } else {
             Image(uiImage: thumbnail)
                 .resizable()
+                .frame(width: aspect, height: aspect)
                 .aspectRatio(contentMode: .fill)
                 .background()
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
             
         }
+    }
+}
+
+struct TaskIcon: View {
+    let thumbnail: UIImage
+    var defaultColor: Color = Color(.indigo)
+    var aspect: CGFloat = 40
+    var selected: Bool
+    var body: some View {
+        Image(uiImage: thumbnail)
+            .resizable()
+            .foregroundStyle(defaultColor)
+            .padding(5)
+            .frame(width: aspect, height: aspect)
+            .aspectRatio(contentMode: .fill)
+            .background()
+            .clipShape(Circle())
+            .overlay(Circle().stroke(selected ? Color(.indigo) : Color.gray, lineWidth: selected ? 2 : 1))
     }
 }
 
@@ -72,6 +112,40 @@ struct SettingIcon: View {
 struct AddSquareIcon: View {
     var body: some View {
         Image(systemName: "plus.square")
+            .resizable()
+    }
+}
+
+struct IceLogo: View {
+    var body: some View {
+        Image(.logo)
+            .resizable()
+            .scaledToFill()
+    }
+}
+
+struct CircleIcon: View {
+    var body: some View {
+        Image(systemName: "circle.fill")
+            .resizable()
+    }
+}
+struct ArrowTriangleIcon: View {
+    var direction: Direction
+    var systemName: String {
+        switch direction {
+        case .up:
+            "arrowtriangle.up.fill"
+        case .down:
+            "arrowtriangle.down.fill"
+        case .right:
+            "arrowtriangle.right.fill"
+        case .left:
+            "arrowtriangle.left.fill"
+        }
+    }
+    var body: some View {
+        Image(systemName: systemName)
             .resizable()
     }
 }

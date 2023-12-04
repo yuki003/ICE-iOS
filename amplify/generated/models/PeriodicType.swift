@@ -2,7 +2,7 @@
 import Amplify
 import Foundation
 
-public enum PeriodicType: String, EnumPersistable {
+public enum PeriodicType: String, EnumPersistable, CaseIterable {
   case everyDay = "EVERY_DAY"
   case weekDay = "WEEK_DAY"
   case holiday = "HOLIDAY"

@@ -20,4 +20,5 @@ enum FormField: Hashable {
     case description
     // task and reward
     case number
+    case itemize
 }

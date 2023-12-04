@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "api": {
+      "ice": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "env",
+      "environmentVariableName": "ENV"
+    },
+    {
+      "cloudFormationParameterName": "tasksTableName",
+      "environmentVariableName": "TASKS_TABLE_NAME"
+    },
+    {
+      "cloudFormationParameterName": "groupTableName",
+      "environmentVariableName": "GROUP_TABLE_NAME"
+    },
+    {
+      "cloudFormationParameterName": "env",
+      "environmentVariableName": "ENV"
+    },
+    {
+      "cloudFormationParameterName": "groupTableName",
+      "environmentVariableName": "GROUP_TABLE_NAME"
+    },
+    {
+      "cloudFormationParameterName": "tasksTableName",
+      "environmentVariableName": "TASKS_TABLE_NAME"
+    }
+  ]
+}

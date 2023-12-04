@@ -7,6 +7,7 @@ public struct Tasks: Model {
   public var createUserID: String
   public var taskName: String
   public var description: String?
+  public var iconName: String?
   public var frequencyType: FrequencyType
   public var periodicType: PeriodicType?
   public var condition: [String?]?
@@ -19,6 +20,7 @@ public struct Tasks: Model {
       createUserID: String,
       taskName: String,
       description: String? = nil,
+      iconName: String? = nil,
       frequencyType: FrequencyType,
       periodicType: PeriodicType? = nil,
       condition: [String?]? = nil,
@@ -28,6 +30,7 @@ public struct Tasks: Model {
       createUserID: createUserID,
       taskName: taskName,
       description: description,
+      iconName: iconName,
       frequencyType: frequencyType,
       periodicType: periodicType,
       condition: condition,
@@ -40,6 +43,7 @@ public struct Tasks: Model {
       createUserID: String,
       taskName: String,
       description: String? = nil,
+      iconName: String? = nil,
       frequencyType: FrequencyType,
       periodicType: PeriodicType? = nil,
       condition: [String?]? = nil,
@@ -51,6 +55,7 @@ public struct Tasks: Model {
       self.createUserID = createUserID
       self.taskName = taskName
       self.description = description
+      self.iconName = iconName
       self.frequencyType = frequencyType
       self.periodicType = periodicType
       self.condition = condition

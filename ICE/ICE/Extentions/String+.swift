@@ -10,6 +10,10 @@ import SwiftUI
 import CryptoKit
 
 extension String {
+    mutating func initialize() {
+        self = ""
+    }
+    
     func containsEmoji() -> Bool {
         contains { $0.isEmoji }
     }

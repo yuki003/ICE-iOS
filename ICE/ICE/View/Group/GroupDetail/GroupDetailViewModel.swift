@@ -55,21 +55,21 @@ final class GroupDetailViewModel: ViewModelBase {
             self.users = [User(userID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", userName: "Yuki", accountType: AccountType(rawValue: "HOST")!),
                           User(userID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", userName: "Yuki", accountType: AccountType(rawValue: "HOST")!)]
             self.userThumbnails = [UIImage(), UIImage()]
-            self.tasks = [Tasks(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", taskName: "Task1", frequencyType: FrequencyType.onlyOnce, point: 1, updatedAt: Temporal.DateTime(Date())),
+            self.tasks = [Tasks(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", taskName: "First Task", description: "I will complete developing this app!", iconName: "Programing", frequencyType: FrequencyType.onlyOnce, point: 10000, updatedAt: Temporal.DateTime(Date())),
                           Tasks(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", taskName: "Task2", frequencyType: FrequencyType.periodic, point: 10, updatedAt: Temporal.DateTime(Date()))]
             self.rewards = [Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward1", frequencyType: FrequencyType.onlyOnce, whoGetsPaid: WhoGetsPaid.onlyOne, cost: 100, createdAt: Temporal.DateTime(Date())),
                             Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward2", frequencyType: FrequencyType.periodic, periodicType: PeriodicType.oncePerWeek ,whoGetsPaid: WhoGetsPaid.onlyOne, cost: 1000, createdAt: Temporal.DateTime(Date())),
                             Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward3", frequencyType: FrequencyType.onlyOnce, whoGetsPaid: WhoGetsPaid.onlyOne, cost: 20, createdAt: Temporal.DateTime(Date())),
                             Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward4", frequencyType: FrequencyType.onlyOnce, whoGetsPaid: WhoGetsPaid.onlyOne, cost: 1000, createdAt: Temporal.DateTime(Date()))]
             
-//            var userPredicate: QueryPredicateGroup = .init()
-//            for id in userIDs {
-//                userPredicate = userPredicate.or(User.keys.userID.eq(id))
-//            }
+            var userPredicate: QueryPredicateGroup = .init()
+            for id in userIDs {
+                userPredicate = userPredicate.or(User.keys.userID.eq(id))
+            }
 //            let userPredicate = self.apiService.orPredicateGroupByID(ids: userIDs, model: User.keys.userID)
 //            let tasksPredicate = self.apiService.orPredicateGroupByID(ids: self.groupInfo.taskIDs ?? [], model: Tasks.keys.id)
 //            let rewardsPredicate = self.apiService.orPredicateGroupByID(ids: self.groupInfo.rewardIDs ?? [], model: Rewards.keys.id)
-            
+//            
 //            if let predicate = userPredicate {
 //                let users = try await self.apiHandler.list(User.self, where: predicate)
 //                self.users = users
@@ -82,7 +82,7 @@ final class GroupDetailViewModel: ViewModelBase {
 //                let rewards = try await self.apiHandler.list(Rewards.self, where: predicate)
 //                self.rewards = rewards
 //            }
-            
+//            
 //            for user in self.users {
 //                let thumbnail = try await self.storage.downloadImage(key: user.thumbnailKey)
 //                self.userThumbnails.append(thumbnail)

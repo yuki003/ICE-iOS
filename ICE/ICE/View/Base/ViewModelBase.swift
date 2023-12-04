@@ -8,34 +8,42 @@
 import Foundation
 import SwiftUI
 import Amplify
+import Combine
 
 // 共通のエラーハンドリングを行うための型エイリアスを定義
 typealias ErrorHandler = (Error) -> Void
 typealias APIErrorHandler = (APIError) -> Void
 
 class ViewModelBase: ObservableObject {
+    // MARK: Properties
     @Published var state: LoadingState = .idle
+    @Published var formValid: Validation = .failed()
+    @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
+    @Published var alertMessage: String?
+    var publishers = Set<AnyCancellable>()
+    
+    // MARK: Flags
+    @Published var isLoading = false
+    @Published var createComplete: Bool = false
+    @Published var showAlert: Bool = false
+    @Published var alert: Bool = false
+    
+    // MARK: Services
     @ObservedObject var apiHandler = APIHandler()
     @ObservedObject var auth = AmplifyAuthService()
     @ObservedObject var storage = AmplifyStorageService()
     @ObservedObject var apiService = APIService()
+    @ObservedObject var enumUtil = EnumUtility()
     
-    @Published var isLoading = false
-    
-    @Published var alert: Bool = false
-    @Published var alertMessage: String?
-    
-    @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
     // 非同期処理を行う共通関数
     @MainActor
     func asyncOperation(_ operation: @escaping () async throws -> Void,
                                apiErrorHandler: @escaping APIErrorHandler,
                                errorHandler: @escaping ErrorHandler) {
-        isLoading = true
-        defer { isLoading = false }
-        
         Task {
             do {
+                isLoading = true
+                defer { isLoading = false }
                 if userID.isEmpty {
                     let userInfo = try await Amplify.Auth.getCurrentUser()
                     userID = userInfo.userId

@@ -60,4 +60,13 @@ extension View {
     func popupDismissAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, color: Color = Color(.indigo), buttonLabel: String = "戻る") -> some View {
         modifier(PopupDismissAlertModifier(isPresented: isPresented, title: title, text: text, color: color, buttonLabel: buttonLabel))
     }
+    
+    func popupDismissAndActionAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, dismissLabel: String = "戻る", actionLabel: String = "実行", action: @escaping () async throws -> Void) -> some View {
+        modifier(PopupDismissAndActionAlertModifier(isPresented: isPresented, title: title, text: text, dismissLabel: dismissLabel, actionLabel: actionLabel, action: action))
+    }
+    
+    func popupTaskIconSelector(isPresented: Binding<Bool>, taskType: Binding<TaskType>, color: Color = Color(.indigo), buttonLabel: String = "決定") -> some View {
+        modifier(PopupTaskIconModifier(isPresented: isPresented, taskType: taskType, color: color, buttonLabel: buttonLabel))
+    }
 }
+

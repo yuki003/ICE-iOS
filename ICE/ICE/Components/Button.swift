@@ -231,6 +231,18 @@ struct AddButton: View {
     }
 }
 
+struct AddCountButton: View {
+    @Binding var count: Int
+    var body: some View {
+        Button(action: {
+            count += 1
+        })
+        {
+            AddSquareIcon()
+        }
+    }
+}
+
 struct EnabledActionFillButton: View {
     var label: String
     let action: () async throws -> Void
@@ -245,7 +257,7 @@ struct EnabledActionFillButton: View {
         {
             Text(label)
                 .font(.callout.bold())
-                .padding(.vertical)
+                .padding(.vertical, 10)
                 .padding(.horizontal, 20)
                 .background(condition ? Color.gray : color)
                 .foregroundStyle(Color.white)
@@ -268,7 +280,7 @@ struct ActionFillButton: View {
         {
             Text(label)
                 .font(.callout.bold())
-                .padding(.vertical)
+                .padding(.vertical, 10)
                 .padding(.horizontal, 20)
                 .background(color)
                 .foregroundStyle(Color.white)
@@ -281,7 +293,7 @@ struct EnabledFlagFillButton: View {
     var label: String
     let color: Color
     @Binding var flag: Bool
-    @Binding var condition: Bool
+    var condition: Bool
     var body: some View {
         Button(action: {
             withAnimation(.linear(duration: 0.3)) {
@@ -291,7 +303,7 @@ struct EnabledFlagFillButton: View {
         {
             Text(label)
                 .font(.callout.bold())
-                .padding(.vertical)
+                .padding(.vertical, 10)
                 .padding(.horizontal, 20)
                 .background(condition ? Color.gray : color)
                 .foregroundStyle(Color.white)
@@ -313,7 +325,7 @@ struct FlagFillButton: View {
         {
             Text(label)
                 .font(.callout.bold())
-                .padding(.vertical)
+                .padding(.vertical, 10)
                 .padding(.horizontal, 20)
                 .background(color)
                 .foregroundStyle(Color.white)
@@ -333,7 +345,7 @@ struct DismissRoundedButton: View {
         {
             Text(label)
                 .font(.callout.bold())
-                .padding(.vertical)
+                .padding(.vertical, 10)
                 .padding(.horizontal, 20)
                 .background(color)
                 .foregroundStyle(Color.white)

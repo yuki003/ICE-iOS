@@ -27,7 +27,7 @@ final class HomeViewModel: ViewModelBase {
     func loadData() async throws {
         asyncOperation({
             // 検証中のAPIアクセスを節約するためにコメントアウト＆スタブを導入
-            
+//            
 //            let userPredicate = User.keys.userID.eq(self.userID)
 //            async let userInfo = self.apiHandler.list(User.self, where: userPredicate)
 //            (self.userInfo) = try await (userInfo[0])
@@ -39,7 +39,7 @@ final class HomeViewModel: ViewModelBase {
 //                }
 //                var hostGroups = try await self.apiHandler.list(Group.self, where: hostGroupPredicate)
 //                self.hostGroups = hostGroups
-                
+//                
 #if DEBUG
                 self.hostGroups.append(Group(id: "3AF1D34C-7A50-497F-84E6-7344B6BD2345", groupName: "Jadigo Family", description: "Jadigo dev", thumbnailKey: "7adf414e-d90b-47db-bd1b-b2b9155aafbe3AF1D34C-7A50-497F-84E6-7344B6BD2345", hostUserIDs: ["7adf414e-d90b-47db-bd1b-b2b9155aafbe"]))
                 

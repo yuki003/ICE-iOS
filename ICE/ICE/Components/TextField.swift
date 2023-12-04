@@ -113,6 +113,7 @@ struct UnderLineTextField: View {
     @FocusState var focused: FormField?
     let field: FormField
     var placeHolder: String = ""
+    var iconName: String = ""
     var isFocused: Bool {
         return focused == field
     }
@@ -120,6 +121,11 @@ struct UnderLineTextField: View {
     var body: some View {
         VStack (alignment: .center, spacing: 0) {
             HStack(alignment: .center) {
+                if !iconName.isEmpty {
+                    Image(systemName: iconName)
+                        .resizable()
+                        .frame(width: 5, height: 5)
+                }
                 TextField(placeHolder, text: $text)
                     .font(.callout.bold())
                     .focused($focused, equals: field)
@@ -191,12 +197,14 @@ struct DescriptionTextEditor: View {
                 .overlay {
                     if description.isEmpty {
                         Text("説明を入力(任意)")
-                            .frame(alignment: .leading)
+                            .frame(width: 100, alignment: .topLeading)
                             .font(.footnote.bold())
                             .foregroundStyle(Color.gray)
                             .padding(.vertical, 5)
                             .padding(.horizontal, 10)
-                            .focused($focused, equals: .description)
+                            .onTapGesture {
+                                focused = .description
+                            }
                         
                     }
                 }

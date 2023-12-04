@@ -81,9 +81,9 @@ struct HomeView: View {
                 Text("自分のグループ")
                 AddButton(flag: $vm.createGroup)
                     .frame(width: 18, height: 18)
-                    .navigationDestination(isPresented: $vm.createGroup, destination: {
+                    .navigationDestination(isPresented: $vm.createGroup) {
                         CreateGroupView(vm: .init())
-                    })
+                    }
             }
             .padding(.leading, 40)
             .font(.callout.bold())
@@ -101,9 +101,10 @@ struct HomeView: View {
                             /// イカしたスクロールを実装するのでpaddingで暫定対応
                                 .padding(.horizontal, 40)
                         }
-                        .navigationDestination(isPresented: $vm.navGroupDetail, destination: {
+                        .navigationDestination(isPresented: $vm.navGroupDetail) {
                             GroupDetailView(vm: .init(groupInfo: group, thumbnail: vm.hostGroupThumbnails[index]))
-                        })
+//                                .navigationViewStyle(.stack)
+                        }
 //                        VStack(alignment: .leading, spacing: 10) {
 //                            HStack(alignment: .center, spacing: 10) {
 //                                DefaultUserThumbnail()

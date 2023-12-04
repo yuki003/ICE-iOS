@@ -11,9 +11,6 @@ import Amplify
 import Combine
 
 final class CreateGroupViewModel: ViewModelBase {
-    @Published var createComplete: Bool = false
-    @Published var showAlert: Bool = false
-    
     @Published var buttonDisabled: Bool = false
     
     @Published var createGroup: Bool = false
@@ -28,7 +25,7 @@ final class CreateGroupViewModel: ViewModelBase {
             .dropFirst()
             .map { value in
                 if value.isEmpty {
-                    return .failed(message: "グループ名を入力してください")
+                    return .failed()
                 }
                 return .success
             }
