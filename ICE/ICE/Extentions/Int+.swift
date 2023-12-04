@@ -14,7 +14,7 @@ extension Int {
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = ","
         formatter.groupingSize = 3
-        let num = "¥\(formatter.string(from: NSNumber(value: self)) ?? "")"
+        let num = "\(formatter.string(from: NSNumber(value: self)) ?? "")"
         
         return num
     }

@@ -11,28 +11,27 @@ struct GroupDetailView: View {
     @Environment(\.asGuestKey) private var asGuest
     @StateObject var vm: GroupDetailViewModel
     var body: some View {
-        VStack {
-            switch vm.state {
-            case .idle:
-                Color.clear.onAppear { vm.state = .loading }
-            case .loading:
-                LoadingView().onAppear{
-                    Task {
-                        try await vm.loadData()
+        NavigationStack {
+            VStack {
+                switch vm.state {
+                case .idle:
+                    Color.clear.onAppear { vm.state = .loading }
+                case .loading:
+                    LoadingView().onAppear{
+                        Task {
+                            try await vm.loadData()
+                        }
                     }
-                }
-            case let .failed(error):
-                Text(error.localizedDescription)
-            case .loaded:
-                NavigationView {
+                case let .failed(error):
+                    Text(error.localizedDescription)
+                case .loaded:
                     VStack(alignment: .center, spacing: 20) {
                         VStack(alignment: .center, spacing: 15) {
                             Text(vm.groupInfo.groupName)
                                 .font(.headline.bold())
                                 .foregroundStyle(Color(.indigo))
                             
-                            Thumbnail(type: ThumbnailType.group, thumbnail: vm.thumbnail)
-                                .frame(width: 70, height: 70)
+                            Thumbnail(type: ThumbnailType.group, thumbnail: vm.thumbnail, aspect: 70)
                             
                             GroupDescription(description: vm.groupInfo.description)
                             
@@ -63,10 +62,13 @@ struct GroupDetailView: View {
                     }
                 }
             }
+            .userToolbar(state: vm.state, userName: nil, dismissExists: true)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
         }
-        .userToolbar(state: vm.state, userName: nil, dismissExists: true)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
+        .navigationDestination(isPresented: $vm.createTask) {
+            CreateTaskView(vm: .init())
+        }
     }
     
     @ViewBuilder
@@ -80,8 +82,7 @@ struct GroupDetailView: View {
                         Button(action: {
                             // ユーザー詳細に遷移、ポップアップで詳細表示でも可
                         }) {
-                            Thumbnail(type: ThumbnailType.user, thumbnail: vm.userThumbnails[index])
-                                .frame(width: 30, height: 30)
+                            Thumbnail(type: ThumbnailType.user, thumbnail: vm.userThumbnails[index], aspect: 30)
                         }
                         if vm.notDisplayUserCount > 0 {
                             Button(action: {
@@ -109,9 +110,6 @@ struct GroupDetailView: View {
                     SectionLabel(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createTask)
-                        .navigationDestination(isPresented: $vm.createTask, destination: {
-                            // CreateTaskView(vm: .init())
-                        })
                 }
             }
             if vm.latestTasks.count > 0 {
@@ -149,7 +147,7 @@ struct GroupDetailView: View {
                     SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createReward)
-                        .navigationDestination(isPresented: $vm.createTask, destination: {
+                        .navigationDestination(isPresented: $vm.createReward, destination: {
                             // CreateRewardView(vm: .init())
                         })
                 }

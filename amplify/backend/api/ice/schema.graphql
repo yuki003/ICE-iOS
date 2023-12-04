@@ -33,6 +33,7 @@ type Tasks @model {
   createUserID: String!
   taskName: String!
   description: String
+  iconName: String
   frequencyType: FrequencyType!
   periodicType: PeriodicType
   condition: [String]

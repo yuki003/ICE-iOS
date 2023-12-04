@@ -18,8 +18,7 @@ struct CreateGroupCard: View {
             SectionLabel(text: groupName , font: .footnote.bold(), color: color, width: 3.0, placeHolder: placeHolder)
                 .frame(maxWidth: textFieldWidth(), alignment: .leading)
             
-            Thumbnail(type:ThumbnailType.group, thumbnail: image)
-                        .frame(width: 70, height: 70)
+            Thumbnail(type:ThumbnailType.group, thumbnail: image, aspect: 70)
             Text(description)
                 .font(.footnote)
                 .foregroundStyle(Color.black)
@@ -46,8 +45,7 @@ struct HomeGroupCard: View {
             SectionLabel(text: group.groupName , font: .footnote.bold(), color: color, width: 3.0)
                 .frame(maxWidth: textFieldWidth(), alignment: .leading)
             
-            Thumbnail(type:ThumbnailType.group, thumbnail: image)
-                .frame(width: 70, height: 70)
+            Thumbnail(type:ThumbnailType.group, thumbnail: image, aspect: 70)
             
             GroupDescription(description: group.description)
             

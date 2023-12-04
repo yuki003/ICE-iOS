@@ -40,8 +40,7 @@ struct UserToolbar: ToolbarContent {
                                 .foregroundStyle(Color(.indigo))
                         }
                     }
-                    Thumbnail(type: ThumbnailType.user, thumbnail: UIImage())
-                        .frame(width: 30, height: 30)
+                    Thumbnail(type: ThumbnailType.user, thumbnail: UIImage(), aspect: 30)
                     if let name = userName {
                         Text("\(name)")
                             .font(.system(size: 15, weight: .heavy))

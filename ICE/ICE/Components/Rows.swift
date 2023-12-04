@@ -60,3 +60,27 @@ struct PendingRewardRow: View {
         }
     }
 }
+
+struct ItemizedRow: View {
+    let name: String
+    var body: some View {
+        VStack (alignment: .center, spacing: 0) {
+            HStack(alignment: .center) {
+                Image(systemName: "circle.fill")
+                    .resizable()
+                    .frame(width: 5, height: 5)
+                Text(name)
+                    .font(.callout.bold())
+                    .keyboardType(.emailAddress)
+                Spacer()
+                
+            }
+            .padding(8)
+            Rectangle()
+                .frame(width: textFieldWidth(), height: 2)
+                .foregroundStyle(Color.gray)
+        }
+        .frame(width: textFieldWidth())
+
+    }
+}

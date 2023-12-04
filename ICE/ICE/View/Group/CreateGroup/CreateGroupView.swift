@@ -40,7 +40,6 @@ struct CreateGroupView: View {
                                             vm.buttonDisabled = false
                                         }
                                     }
-                                    .validation(vm.groupNameValidation)
                                 DescriptionTextEditor(description: $vm.groupDescription, focused: _focused)
                             } else {
                                 VStack(alignment: .center, spacing: 20) {
@@ -59,7 +58,7 @@ struct CreateGroupView: View {
                             if vm.createComplete {
                                 DismissRoundedButton(label: "ホームに戻る", color: Color(.indigo))
                             } else {
-                                EnabledFlagFillButton(label: "グループを作成", color: Color(.jade), flag: $vm.showAlert, condition: $vm.buttonDisabled)
+                                EnabledFlagFillButton(label: "グループを作成", color: Color(.jade), flag: $vm.showAlert, condition: vm.buttonDisabled)
                                     .padding(.vertical)
                             }
                             
@@ -95,8 +94,7 @@ struct CreateGroupView: View {
             vm.showImagePicker = true
         })
         {
-            Thumbnail(type: ThumbnailType.group, thumbnail: vm.image, defaultColor: Color.gray)
-                .frame(width: 90, height: 90)
+            Thumbnail(type: ThumbnailType.group, thumbnail: vm.image, defaultColor: Color.gray, aspect: 90)
                 .padding(.top)
         }
     }
