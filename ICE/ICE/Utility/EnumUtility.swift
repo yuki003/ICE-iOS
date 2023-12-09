@@ -8,6 +8,7 @@
 import Foundation
 
 class EnumUtility: ObservableObject {
+    static let shared = EnumUtility()
     func translateFrequencyType(frequency: FrequencyType) -> String {
         switch frequency {
         case .onlyOnce:

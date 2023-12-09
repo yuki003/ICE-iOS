@@ -99,7 +99,7 @@ final class CreateTaskViewModel: ViewModelBase {
                 self.conditions.append(self.condition)
             }
             let task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyAndPeriodic.frequency, periodicType: self.frequencyAndPeriodic.periodic, condition: self.conditions, point: self.point, groupID: self.groupID)
-            try await self.apiHandler.create(task)
+            try await self.apiHandler.create(task, keyName: "\(self.groupID)-tasks")
             self.createComplete = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)

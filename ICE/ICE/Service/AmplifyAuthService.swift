@@ -12,8 +12,8 @@ import UIKit
 import AWSCognitoAuthPlugin
 
 class AmplifyAuthService: ObservableObject {
+    static let shared = AmplifyAuthService()
     @AppStorage("isSignedIn") var isSignedIn = false
-    @AppStorage("userID") var userID: String = ""
     var asGuest: Bool = false
     
     func checkSessionStatus() async {

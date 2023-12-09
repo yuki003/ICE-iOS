@@ -9,12 +9,22 @@ import Foundation
 import Amplify
 
 class APIHandler: ObservableObject {
-    func create<ModelType: Model>(_ model: ModelType) async throws {
+    static let shared = APIHandler()
+    let jsonEncoder = JSONEncoder()
+    let jsonDecoder = JSONDecoder()
+    var userDefaultKeys: [String] = []
+    let defaults = UserDefaults.standard
+    func create<ModelType: Model>(_ model: ModelType, keyName: String = "") async throws {
         do {
+            var keyName = keyName
+            if keyName.isEmpty {
+                keyName = model.modelName
+            }
             let result = try await Amplify.API.mutate(request: .create(model))
             switch result {
             case .success(let data):
                 print("Successfully created the model: \(data)")
+                appendUserDefault(model: model, keyName: keyName)
             case .failure(let graphQLError):
                 print("Failed to create graphql \(graphQLError)")
                 throw APIError.createFailed
@@ -29,8 +39,12 @@ class APIHandler: ObservableObject {
     }
 
     
-    func get<ModelType: Model>(_ modelType: ModelType.Type, byId id: String) async throws -> Model {
+    func get<ModelType: Model>(_ modelType: ModelType.Type, byId id: String, keyName: String = "") async throws -> Model {
         do {
+            var keyName = keyName
+            if keyName.isEmpty {
+                keyName = modelType.modelName
+            }
             let result = try await Amplify.API.query(request: .get(modelType, byId: id))
 
             switch result {
@@ -40,6 +54,15 @@ class APIHandler: ObservableObject {
                     throw APIError.notFound
                 }
                 print("Successfully retrieved model: \(model)")
+                guard let data = try? jsonEncoder.encode(model) else {
+                    return model
+                }
+                defaults.set(data, forKey: "\(keyName)")
+                if !userDefaultKeys.contains(where: { value in
+                    value == keyName
+                }) {
+                    userDefaultKeys.append(keyName)
+                }
                 return model
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
@@ -54,13 +77,18 @@ class APIHandler: ObservableObject {
         }
     }
 
-    func list<M: Model>(_ modelType: M.Type, where predicate: QueryPredicate? = nil) async throws -> [M] {
+    func list<M: Model>(_ modelType: M.Type, where predicate: QueryPredicate? = nil, keyName: String = "") async throws -> [M] {
         do {
+            var keyName = keyName
+            if keyName.isEmpty {
+                keyName = modelType.modelName
+            }
             let request = GraphQLRequest<M>.list(modelType, where: predicate, limit: 1000)
             let result = try await Amplify.API.query(request: request)
             switch result {
             case .success(let models):
                 print("Successfully retrieved list of \(modelType): \(models)")
+                setUserDefault(models: models.elements, keyName: keyName)
                 return models.elements
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
@@ -72,12 +100,17 @@ class APIHandler: ObservableObject {
         }
     }
     
-    func update<ModelType: Model>(_ model: ModelType) async throws {
+    func update<ModelType: Model>(_ model: ModelType, keyName: String = "") async throws {
         do {
+            var keyName = keyName
+            if keyName.isEmpty {
+                keyName = model.modelName
+            }
             let result = try await Amplify.API.mutate(request: .update(model))
             switch result {
             case .success(let updatedModel):
                 print("Successfully updated model: \(updatedModel)")
+                appendUserDefault(model: updatedModel, keyName: keyName)
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
                 throw APIError.updateFailed
@@ -108,5 +141,63 @@ class APIHandler: ObservableObject {
             print("Unexpected error: \(error)")
             throw error
         }
+    }
+    
+    func appendUserDefault<ModelType: Model>(model: ModelType, keyName: String) {
+        if let savedData = defaults.data(forKey: keyName),
+           var structArray = try? jsonDecoder.decode([ModelType].self, from: savedData) {
+            // 新しいデータを配列に追加
+            structArray.append(model)
+            
+            // 配列を再度エンコードし、UserDefaultsに保存
+            if let encodedData = try? jsonEncoder.encode(structArray) {
+                defaults.set(encodedData, forKey: keyName)
+            } else {
+                print("Failed to encode data")
+            }
+        } else {
+            // 既存のデータがない場合は新しい配列を作成
+            let newArray = [model]
+            if let encodedData = try? jsonEncoder.encode(newArray) {
+                defaults.set(encodedData, forKey: keyName)
+            } else {
+                print("Failed to encode data")
+            }
+        }
+        if !userDefaultKeys.contains(where: { value in
+            value == keyName
+        }) {
+            userDefaultKeys.append(keyName)
+        }
+    }
+    
+    func setUserDefault<M: Model>(models: [M], keyName: String) {
+        guard let data = try? jsonEncoder.encode(models) else {
+            return
+        }
+        defaults.set(data, forKey: "\(keyName)")
+        if !userDefaultKeys.contains(where: { value in
+            value == keyName
+        }) {
+            userDefaultKeys.append(keyName)
+        }
+    }
+    
+    func decodeUserDefault<T: Decodable>(modelType: T.Type, key: String) throws -> T? {
+        let keyList = userDefaultKeys.filter({ $0.contains(key)})
+        if !(keyList.count == 1) {
+            throw DeveloperError.userDefaultKeyDuplicated
+        }
+        let key = keyList[0]
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let dataModel = try? jsonDecoder.decode(modelType, from: data) else {
+            return nil
+        }
+        return dataModel
+    }
+    
+    func isRunFetch(userDefaultKey: String) -> Bool {
+        print(userDefaultKeys)
+        return !userDefaultKeys.contains(userDefaultKey)
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 import Amplify
 
 class APIService: ObservableObject {
+    static let shared = APIService()
     func orPredicateGroupByID(ids: [String?], model: any ModelKey) -> QueryPredicateGroup? {
         var queryPredicateGroup: QueryPredicateGroup = .init(type: .or)
         if !ids.isEmpty {

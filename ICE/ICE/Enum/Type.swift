@@ -38,3 +38,8 @@ extension TaskType {
         return UIImage(named: self.rawValue) ?? UIImage()
     }
 }
+
+enum APIType: CaseIterable {
+    case get
+    case list
+}

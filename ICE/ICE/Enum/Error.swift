@@ -63,3 +63,15 @@ extension AmplifyAuthError: LocalizedError {
         }
     }
 }
+
+enum DeveloperError {
+    case userDefaultKeyDuplicated
+}
+extension DeveloperError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .userDefaultKeyDuplicated:
+            return "ユーザーデフォルト取得に使ったkeyが重複しています。"
+        }
+    }
+}
