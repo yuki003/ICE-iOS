@@ -12,9 +12,9 @@ class EnumUtility: ObservableObject {
     func translateFrequencyType(frequency: FrequencyType) -> String {
         switch frequency {
         case .onlyOnce:
-            return "一度きりのタスク"
+            return "一度きり"
         case .periodic:
-            return "定期的なタスク"
+            return "定期的"
         }
     }
     func translatePeriodicType(periodic: PeriodicType?) -> String? {
@@ -33,6 +33,16 @@ class EnumUtility: ObservableObject {
             return "年に一回"
         default:
             return nil
+        }
+    }
+    func translateWhoGetsPaid(who: WhoGetsPaid) -> String {
+        switch who {
+        case .onlyOne:
+            return "グループで1人だけ"
+        case .everybody:
+            return "グループ全員"
+        case .limited:
+            return "限定"
         }
     }
 }

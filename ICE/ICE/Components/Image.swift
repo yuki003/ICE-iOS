@@ -42,6 +42,22 @@ struct DefaultGroupThumbnail: View {
     }
 }
 
+struct DefaultRewardThumbnail: View {
+    let color: Color
+    var aspect: CGFloat
+    var body: some View {
+        Image(.reward)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: aspect, height: aspect)
+            .foregroundStyle(Color(.indigo))
+            .padding()
+            .background()
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
+    }
+}
+
 struct DefaultIcon: View {
     let color: Color
     var aspect: CGFloat
@@ -79,7 +95,8 @@ struct Thumbnail: View {
                 DefaultGroupThumbnail(color: defaultColor, aspect: aspect)
             case .tasks:
                 DefaultIcon(color: defaultColor, aspect: aspect)
-//            case .reward:
+            case .rewards:
+                DefaultRewardThumbnail(color: defaultColor, aspect: aspect)
             }
         } else {
             KFImage(URL(string: url))

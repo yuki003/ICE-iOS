@@ -12,7 +12,7 @@ enum ThumbnailType: Hashable {
     case user
     case group
     case tasks
-//    case rewards
+    case rewards
 }
 
 enum TaskType: String, CaseIterable {

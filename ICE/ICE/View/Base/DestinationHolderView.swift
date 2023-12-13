@@ -34,6 +34,8 @@ struct DestinationHolderView<Content:View>: View {
                         CreateTaskView(vm: .init(groupID: groupID))
                     case .createGroup:
                         CreateGroupView(vm: .init())
+                    case .createReward(groupID: let groupID):
+                        CreateRewardsView(vm: .init(groupID: groupID))
                     }
                 }
         }
