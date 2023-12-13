@@ -26,40 +26,46 @@ struct GroupDetailView: View {
                 case let .failed(error):
                     Text(error.localizedDescription)
                 case .loaded:
-                    VStack(alignment: .center, spacing: 20) {
-                        VStack(alignment: .center, spacing: 15) {
-                            Text(vm.groupInfo.groupName)
-                                .font(.headline.bold())
-                                .foregroundStyle(Color(.indigo))
-                            
-                            Thumbnail(type: ThumbnailType.group, url: vm.groupInfo.thumbnailKey ?? "", aspect: 70)
-                            
-                            GroupDescription(description: vm.groupInfo.description)
-                            
-                            Divider()
+                    ScrollView(showsIndicators: false) {
+                        VStack(alignment: .center, spacing: 20) {
+                            VStack(alignment: .center, spacing: 15) {
+                                Text(vm.groupInfo.groupName)
+                                    .font(.headline.bold())
+                                    .foregroundStyle(Color(.indigo))
+                                
+                                Thumbnail(type: ThumbnailType.group, url: vm.groupInfo.thumbnailKey ?? "", aspect: 70)
+                                
+                                GroupDescription(description: vm.groupInfo.description)
+                                
+                                Divider()
+                            }
+                            makeMemberList()
+                            makeTaskList()
+                            makeRewardList()
                         }
-                        makeMemberList()
-                        makeTaskList()
-                        makeRewardList()
-                        
-                        Spacer()
-                    }
-                    .padding()
-                    .frame(width: deviceWidth())
-                    .alert(isPresented: $vm.alert) {
-                        Alert(
-                            title: Text(
-                                "エラー"
-                            ),
-                            message: Text(
-                                vm.alertMessage ?? "操作をやり直してください。"
-                            ),
-                            dismissButton: .default(
-                                Text(
-                                    "閉じる"
+                        .padding()
+                        .frame(width: deviceWidth())
+                        .alert(isPresented: $vm.alert) {
+                            Alert(
+                                title: Text(
+                                    "エラー"
+                                ),
+                                message: Text(
+                                    vm.alertMessage ?? "操作をやり直してください。"
+                                ),
+                                dismissButton: .default(
+                                    Text(
+                                        "閉じる"
+                                    )
                                 )
                             )
-                        )
+                        }
+                    }
+                    .refreshable {
+                        Task {
+                            vm.reload = true
+                            try await vm.loadData()
+                        }
                     }
                 }
             }
