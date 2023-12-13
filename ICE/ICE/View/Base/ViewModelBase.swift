@@ -26,7 +26,6 @@ class ViewModelBase: ObservableObject {
     // MARK: Flags
     @Published var reload = false
     @Published var isLoading = false
-    @Published var createComplete: Bool = false
     @Published var showAlert: Bool = false
     @Published var alert: Bool = false
     

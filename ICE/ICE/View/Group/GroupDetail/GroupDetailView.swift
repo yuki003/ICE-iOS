@@ -10,8 +10,9 @@ import Amplify
 struct GroupDetailView: View {
     @Environment(\.asGuestKey) private var asGuest
     @StateObject var vm: GroupDetailViewModel
+    @EnvironmentObject var router: PageRouter
     var body: some View {
-        NavigationStack {
+        DestinationHolderView(router: router) {
             VStack {
                 switch vm.state {
                 case .idle:
@@ -31,7 +32,7 @@ struct GroupDetailView: View {
                                 .font(.headline.bold())
                                 .foregroundStyle(Color(.indigo))
                             
-                            Thumbnail(type: ThumbnailType.group, thumbnail: vm.thumbnail, aspect: 70)
+                            Thumbnail(type: ThumbnailType.group, url: vm.groupInfo.thumbnailKey ?? "", aspect: 70)
                             
                             GroupDescription(description: vm.groupInfo.description)
                             
@@ -65,9 +66,9 @@ struct GroupDetailView: View {
             .userToolbar(state: vm.state, userName: nil, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-        }
-        .navigationDestination(isPresented: $vm.createTask) {
-            CreateTaskView(vm: .init(groupID: vm.groupInfo.id))
+            .onAppear {
+                vm.state = .idle
+            }
         }
     }
     
@@ -82,7 +83,7 @@ struct GroupDetailView: View {
                         Button(action: {
                             // ユーザー詳細に遷移、ポップアップで詳細表示でも可
                         }) {
-                            Thumbnail(type: ThumbnailType.user, thumbnail: vm.userThumbnails[index], aspect: 30)
+                            Thumbnail(type: ThumbnailType.user, url: user.thumbnailKey ?? "", aspect: 30)
                         }
                         if vm.notDisplayUserCount > 0 {
                             Button(action: {
@@ -109,7 +110,9 @@ struct GroupDetailView: View {
                 if asGuest {
                     SectionLabel(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
-                    SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createTask)
+                    SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
+                        router.path.append(NavigationPathType.createTask(groupID: vm.groupInfo.id))
+                    })
                 }
             }
             if vm.latestTasks.count > 0 {
@@ -146,10 +149,9 @@ struct GroupDetailView: View {
                 if asGuest {
                     SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
-                    SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, addFlag: $vm.createReward)
-                        .navigationDestination(isPresented: $vm.createReward, destination: {
-                            // CreateRewardView(vm: .init())
-                        })
+                    SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
+                        router.path.append(NavigationPathType.createTask(groupID: vm.groupInfo.id))
+                    })
                 }
             }
             if vm.latestRewards.count > 0 {
@@ -179,7 +181,3 @@ struct GroupDetailView: View {
         }
     }
 }
-
-//#Preview {
-//    GroupDetailView()
-//}

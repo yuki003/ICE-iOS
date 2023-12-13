@@ -28,6 +28,7 @@ final class CreateTaskViewModel: ViewModelBase {
     
     // MARK: Flags
     @Published var showIconSelector: Bool = false
+    @Published var createComplete: Bool = false
     
     // MARK: Validations
     var groupNameValidation: AnyPublisher<Validation, Never> {
