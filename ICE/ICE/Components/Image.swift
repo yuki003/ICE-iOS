@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct DefaultUserThumbnail: View {
     let color: Color
@@ -57,11 +58,20 @@ struct DefaultIcon: View {
 
 struct Thumbnail: View {
     let type: ThumbnailType
-    let thumbnail: UIImage
+    var url: String = ""
+    var image: UIImage = UIImage()
     var defaultColor: Color = Color(.indigo)
     var aspect: CGFloat = 40
     var body: some View {
-        if thumbnail.size == CGSize.zero {
+         if image.size != CGSize.zero {
+            Image(uiImage: image)
+                .resizable()
+                .frame(width: aspect, height: aspect)
+                .aspectRatio(contentMode: .fill)
+                .background()
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
+        } else if url.isEmpty {
             switch type {
             case .user:
                 DefaultUserThumbnail(color: defaultColor, aspect: aspect)
@@ -72,7 +82,7 @@ struct Thumbnail: View {
 //            case .reward:
             }
         } else {
-            Image(uiImage: thumbnail)
+            KFImage(URL(string: url))
                 .resizable()
                 .frame(width: aspect, height: aspect)
                 .aspectRatio(contentMode: .fill)

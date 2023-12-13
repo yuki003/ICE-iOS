@@ -16,6 +16,7 @@ final class CreateGroupViewModel: ViewModelBase {
     @Published var createGroup: Bool = false
     @Published var belongGroup: Bool = false
     @Published var showImagePicker: Bool = false
+    @Published var createComplete: Bool = false
     @Published var image = UIImage()
     @Published var groupName: String = ""
     @Published var groupDescription: String = ""
@@ -56,11 +57,13 @@ final class CreateGroupViewModel: ViewModelBase {
     func createGroup() async throws {
         asyncOperation({
             self.showAlert = false
-            var group = Group(groupName: self.groupName, description: self.groupDescription.isEmpty ? nil : self.groupDescription , thumbnailKey: self.image.size == CGSize.zero ? nil : "", hostUserIDs: [self.userID])
+            var group = Group(groupName: self.groupName, description: self.groupDescription.isEmpty ? nil : self.groupDescription , thumbnailKey: "", hostUserIDs: [self.userID])
             let key = self.userID + group.id
             group.thumbnailKey = key
-            try await self.apiHandler.create(group)
             try await self.storage.uploadData(self.image, key: key)
+            let thumbnailURL = try await self.storage.getPublicURLForKey(key)
+            group.thumbnailKey = thumbnailURL
+            try await self.apiHandler.create(group, keyName: "hostGroups")
             self.createComplete = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)

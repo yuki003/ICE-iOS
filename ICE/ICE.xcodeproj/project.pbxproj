@@ -54,6 +54,7 @@
 		B68565BD2AE94EBA002C8413 /* LoadingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68565BC2AE94EBA002C8413 /* LoadingModifier.swift */; };
 		B69A76C32AE3B6EF009228EC /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69A76C22AE3B6EF009228EC /* Validation.swift */; };
 		B6A2F26C2B02216800F779CC /* GroupComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A2F26B2B02216800F779CC /* GroupComponent.swift */; };
+		B6A71B512B25965200B9E938 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B6A71B502B25965200B9E938 /* Kingfisher */; };
 		B6A951442ADBA0D00099CB06 /* amplifyconfiguration_prod.json in Resources */ = {isa = PBXBuildFile; fileRef = B6A951422ADBA0D00099CB06 /* amplifyconfiguration_prod.json */; };
 		B6B49DAB2AFB2BD700CF0E6A /* AWSS3StoragePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = B6B49DAA2AFB2BD700CF0E6A /* AWSS3StoragePlugin */; };
 		B6B49DAD2AFB2D9D00CF0E6A /* amplifyconfiguration_dev.json in Resources */ = {isa = PBXBuildFile; fileRef = B6B49DAC2AFB2D9D00CF0E6A /* amplifyconfiguration_dev.json */; };
@@ -73,6 +74,9 @@
 		B6B9E7F22AEF970B0056D175 /* Environments.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B9E7F12AEF970B0056D175 /* Environments.swift */; };
 		B6B9E7F42AEF97740056D175 /* EnvironmentValues+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B9E7F32AEF97740056D175 /* EnvironmentValues+.swift */; };
 		B6B9E8072AF0928F0056D175 /* Rows.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B9E8062AF0928F0056D175 /* Rows.swift */; };
+		B6BD45C52B26EA76000296E4 /* NavigationPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BD45C42B26EA76000296E4 /* NavigationPath.swift */; };
+		B6BD45C72B26EDBF000296E4 /* DestinationHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BD45C62B26EDBF000296E4 /* DestinationHolderView.swift */; };
+		B6BD45C92B26EE13000296E4 /* PageRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BD45C82B26EE13000296E4 /* PageRouter.swift */; };
 		B6BD49A92AF0F23000349C7A /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BD49A82AF0F23000349C7A /* TemplateView.swift */; };
 		B6BD49AB2AF0F23C00349C7A /* TemplateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BD49AA2AF0F23C00349C7A /* TemplateViewModel.swift */; };
 		B6BD49AE2AF0FAD000349C7A /* CreateGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BD49AD2AF0FAD000349C7A /* CreateGroupView.swift */; };
@@ -171,6 +175,9 @@
 		B6B9E7F12AEF970B0056D175 /* Environments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environments.swift; sourceTree = "<group>"; };
 		B6B9E7F32AEF97740056D175 /* EnvironmentValues+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+.swift"; sourceTree = "<group>"; };
 		B6B9E8062AF0928F0056D175 /* Rows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rows.swift; sourceTree = "<group>"; };
+		B6BD45C42B26EA76000296E4 /* NavigationPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPath.swift; sourceTree = "<group>"; };
+		B6BD45C62B26EDBF000296E4 /* DestinationHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationHolderView.swift; sourceTree = "<group>"; };
+		B6BD45C82B26EE13000296E4 /* PageRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRouter.swift; sourceTree = "<group>"; };
 		B6BD49A82AF0F23000349C7A /* TemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
 		B6BD49AA2AF0F23C00349C7A /* TemplateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewModel.swift; sourceTree = "<group>"; };
 		B6BD49AD2AF0FAD000349C7A /* CreateGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupView.swift; sourceTree = "<group>"; };
@@ -191,6 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6A71B512B25965200B9E938 /* Kingfisher in Frameworks */,
 				B6B49DAB2AFB2BD700CF0E6A /* AWSS3StoragePlugin in Frameworks */,
 				B64E1CCD2AD38CC500A876CC /* AWSAPIPlugin in Frameworks */,
 				B64E1CD32AD38CC500A876CC /* Amplify in Frameworks */,
@@ -375,6 +383,7 @@
 				B62C9C912AE3C0300048A166 /* Regex.swift */,
 				B62AAE012B08A6D1004862F2 /* Type.swift */,
 				B62AAE2E2B144D39004862F2 /* General.swift */,
+				B6BD45C42B26EA76000296E4 /* NavigationPath.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -488,6 +497,8 @@
 			isa = PBXGroup;
 			children = (
 				B6FEEA2C2AFCBAF10040725E /* ViewModelBase.swift */,
+				B6BD45C62B26EDBF000296E4 /* DestinationHolderView.swift */,
+				B6BD45C82B26EE13000296E4 /* PageRouter.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -531,6 +542,7 @@
 				B64E1CD02AD38CC500A876CC /* AWSPluginsCore */,
 				B64E1CD22AD38CC500A876CC /* Amplify */,
 				B6B49DAA2AFB2BD700CF0E6A /* AWSS3StoragePlugin */,
+				B6A71B502B25965200B9E938 /* Kingfisher */,
 			);
 			productName = ICE;
 			productReference = B61E20662AC9247000EF3CEB /* ICE.app */;
@@ -606,6 +618,7 @@
 			mainGroup = B61E205D2AC9247000EF3CEB;
 			packageReferences = (
 				B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */,
+				B6A71B4F2B25965200B9E938 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = B61E20672AC9247000EF3CEB /* Products */;
 			projectDirPath = "";
@@ -654,7 +667,9 @@
 				B6BD49AE2AF0FAD000349C7A /* CreateGroupView.swift in Sources */,
 				B6F2C0402ADC221B00960084 /* AuthViewModel.swift in Sources */,
 				B6F2C0412ADC221B00960084 /* AuthView.swift in Sources */,
+				B6BD45C72B26EDBF000296E4 /* DestinationHolderView.swift in Sources */,
 				B6B9E7D42AE9F3520056D175 /* NavigationLink.swift in Sources */,
+				B6BD45C52B26EA76000296E4 /* NavigationPath.swift in Sources */,
 				B61BE96D2AE15E50003BC55B /* APIHandler.swift in Sources */,
 				B6FEEA2D2AFCBAF10040725E /* ViewModelBase.swift in Sources */,
 				B62C9C902AE3BCBA0048A166 /* Caracter+.swift in Sources */,
@@ -666,6 +681,7 @@
 				B62AAE0D2B099C5A004862F2 /* FrequencyType.swift in Sources */,
 				B6A2F26C2B02216800F779CC /* GroupComponent.swift in Sources */,
 				B6B9E7EE2AEF37350056D175 /* Group+Schema.swift in Sources */,
+				B6BD45C92B26EE13000296E4 /* PageRouter.swift in Sources */,
 				B62AAE222B0B4078004862F2 /* CreateTaskView.swift in Sources */,
 				B62AAE1A2B09A161004862F2 /* Tasks.swift in Sources */,
 				B6BD49AB2AF0F23C00349C7A /* TemplateViewModel.swift in Sources */,
@@ -1201,6 +1217,14 @@
 				minimumVersion = 2.19.0;
 			};
 		};
+		B6A71B4F2B25965200B9E938 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.10.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1223,6 +1247,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
 			productName = Amplify;
+		};
+		B6A71B502B25965200B9E938 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B6A71B4F2B25965200B9E938 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		B6B49DAA2AFB2BD700CF0E6A /* AWSS3StoragePlugin */ = {
 			isa = XCSwiftPackageProductDependency;

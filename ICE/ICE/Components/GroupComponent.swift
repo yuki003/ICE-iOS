@@ -18,7 +18,7 @@ struct CreateGroupCard: View {
             SectionLabel(text: groupName , font: .footnote.bold(), color: color, width: 3.0, placeHolder: placeHolder)
                 .frame(maxWidth: textFieldWidth(), alignment: .leading)
             
-            Thumbnail(type:ThumbnailType.group, thumbnail: image, aspect: 70)
+            Thumbnail(type:ThumbnailType.group, image: image, aspect: 70)
             Text(description)
                 .font(.footnote)
                 .foregroundStyle(Color.black)
@@ -35,7 +35,7 @@ struct CreateGroupCard: View {
 
 struct HomeGroupCard: View {
     let group: Group
-    let image: UIImage
+    let url: String
     var color: Color
     var member: Int {
         group.belongingUserIDs?.count ?? 0
@@ -45,7 +45,7 @@ struct HomeGroupCard: View {
             SectionLabel(text: group.groupName , font: .footnote.bold(), color: color, width: 3.0)
                 .frame(maxWidth: textFieldWidth(), alignment: .leading)
             
-            Thumbnail(type:ThumbnailType.group, thumbnail: image, aspect: 70)
+            Thumbnail(type:ThumbnailType.group, url: url, aspect: 70)
             
             GroupDescription(description: group.description)
             

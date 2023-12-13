@@ -28,6 +28,18 @@ struct UserToolbar: ToolbarContent {
     @Environment(\.dismiss) var dismiss
     var dismissExists: Bool
     var body: some ToolbarContent {
+        ToolbarItemGroup(placement: .keyboard) {
+            Spacer()
+            Button(action: {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            })
+            {
+                Text("閉じる")
+                    .foregroundStyle(Color(.indigo))
+                    .bold()
+                    .padding(.trailing)
+            }
+        }
         ToolbarItem(placement: .navigationBarLeading) {
             if state == .loaded {
                 HStack(alignment: .center, spacing: 5) {
@@ -40,7 +52,7 @@ struct UserToolbar: ToolbarContent {
                                 .foregroundStyle(Color(.indigo))
                         }
                     }
-                    Thumbnail(type: ThumbnailType.user, thumbnail: UIImage(), aspect: 30)
+                    Thumbnail(type: ThumbnailType.user, aspect: 30)
                     if let name = userName {
                         Text("\(name)")
                             .font(.system(size: 15, weight: .heavy))

@@ -31,7 +31,7 @@ struct SectionLabelWithAdd: View {
     let font: Font
     let color: Color
     let width: CGFloat
-    @Binding var addFlag: Bool
+    let action: ()  -> Void
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             Rectangle()
@@ -40,7 +40,7 @@ struct SectionLabelWithAdd: View {
             Text(text)
                 .font(font)
                 .lineLimit(2)
-            AddButton(flag: $addFlag)
+            AddButton(action: action)
                 .frame(width: 18, height: 18)
             Spacer()
         }

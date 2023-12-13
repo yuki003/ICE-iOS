@@ -21,19 +21,20 @@ class ViewModelBase: ObservableObject {
     @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
     @Published var alertMessage: String?
     var publishers = Set<AnyCancellable>()
+    let jsonDecoder = JSONDecoder()
     
     // MARK: Flags
+    @Published var reload = false
     @Published var isLoading = false
-    @Published var createComplete: Bool = false
     @Published var showAlert: Bool = false
     @Published var alert: Bool = false
     
     // MARK: Services
-    @ObservedObject var apiHandler = APIHandler()
-    @ObservedObject var auth = AmplifyAuthService()
-    @ObservedObject var storage = AmplifyStorageService()
-    @ObservedObject var apiService = APIService()
-    @ObservedObject var enumUtil = EnumUtility()
+    @ObservedObject var apiHandler = APIHandler.shared
+    @ObservedObject var auth = AmplifyAuthService.shared
+    @ObservedObject var storage = AmplifyStorageService.shared
+    @ObservedObject var apiService = APIService.shared
+    @ObservedObject var enumUtil = EnumUtility.shared
     
     // 非同期処理を行う共通関数
     @MainActor

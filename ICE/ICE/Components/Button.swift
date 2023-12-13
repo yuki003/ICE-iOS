@@ -220,10 +220,10 @@ struct XMarkButton: View {
 }
 
 struct AddButton: View {
-    @Binding var flag: Bool
+    let action: ()  -> Void
     var body: some View {
         Button(action: {
-            flag = true
+            action()
         })
         {
             AddSquareIcon()

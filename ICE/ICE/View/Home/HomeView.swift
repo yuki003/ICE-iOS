@@ -12,9 +12,10 @@ struct HomeView: View {
     @Environment(\.asGuestKey) private var asGuest
     @StateObject var vm: HomeViewModel
     @ObservedObject var auth = AmplifyAuthService()
+    @StateObject var router = PageRouter()
     
     var body: some View {
-        NavigationStack {
+        DestinationHolderView(router: router) {
             VStack {
                 switch vm.state {
                 case .idle:
@@ -63,6 +64,9 @@ struct HomeView: View {
             .userToolbar(state: vm.state, userName: vm.userInfo?.userName ?? "ユーザー")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
+            .onAppear {
+                vm.state = .idle
+            }
         }
     }
     @ViewBuilder
@@ -79,80 +83,30 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
                 Text("自分のグループ")
-                AddButton(flag: $vm.createGroup)
-                    .frame(width: 18, height: 18)
-                    .navigationDestination(isPresented: $vm.createGroup) {
-                        CreateGroupView(vm: .init())
-                    }
+                AddButton(action: {
+                    router.path.append(NavigationPathType.createGroup)
+                })
+                .frame(width: 18, height: 18)
             }
             .padding(.leading, 40)
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
             if !vm.hostGroups.isEmpty {
-                ForEach(vm.hostGroups.indices, id: \.self) { index in
-                    let group = vm.hostGroups[index]
-                    ScrollView(.horizontal) {
-                        Button(action: {
-                            vm.navGroupDetail = true
-                        })
-                        {
-                            HomeGroupCard(group: group, image: vm.hostGroupThumbnails[index], color: Color(.indigo))
-                                .padding(.vertical, 5)
-                            /// イカしたスクロールを実装するのでpaddingで暫定対応
-                                .padding(.horizontal, 40)
+                ScrollView(.horizontal) {
+                    HStack(spacing: 10) {
+                        ForEach(vm.hostGroups.indices, id: \.self) { index in
+                            let group = vm.hostGroups[index]
+                            Button(action: {
+                                vm.selectedGroup = group
+                                router.path.append(NavigationPathType.groupDetail(group: group))
+                            })
+                            {
+                                HomeGroupCard(group: group, url: group.thumbnailKey ?? "" , color: Color(.indigo))
+                                    .padding(.vertical, 5)
+                                /// イカしたスクロールを実装するのでpaddingで暫定対応
+                                    .padding(.leading, index == 0 ? 40 : 0)
+                            }
                         }
-                        .navigationDestination(isPresented: $vm.navGroupDetail) {
-                            GroupDetailView(vm: .init(groupInfo: group, thumbnail: vm.hostGroupThumbnails[index]))
-//                                .navigationViewStyle(.stack)
-                        }
-//                        VStack(alignment: .leading, spacing: 10) {
-//                            HStack(alignment: .center, spacing: 10) {
-//                                DefaultUserThumbnail()
-//                                    .frame(width: 35, height: 35)
-//                                // group name
-//                                Text("MyGroup")
-//                                    .font(.subheadline.bold())
-//                            }
-//                            VStack(alignment: .leading ,spacing: 5) {
-//                                Button(action:{
-//                                    print("Push member link")
-//                                }){
-//                                    Text("メンバー：\(4)人")
-//                                        .font(.caption.bold())
-//                                }
-//                                
-//                                HStack(alignment: .center, spacing: 5) {
-//                                    Button(action:{
-//                                        print("Push user thmbnail")
-//                                    })
-//                                    {
-//                                        DefaultUserThumbnail()
-//                                            .frame(width: 15, height:  15)
-//                                    }
-//                                    DefaultUserThumbnail()
-//                                        .frame(width: 15, height:  15)
-//                                    DefaultUserThumbnail()
-//                                        .frame(width: 15, height:  15)
-//                                    DefaultUserThumbnail()
-//                                        .frame(width: 15, height:  15)
-//                                }
-//                            }
-//                            .padding(.top, 5)
-//                            // pending rewards
-//                            VStack(alignment: .leading, spacing: 5) {
-//                                Text("最新のアクティビティ")
-//                                    .font(.footnote.bold())
-//                                    .foregroundStyle(Color(.indigo))
-//                                    .padding(.top, 10)
-//                                PendingRewardRow(rewardName: "Reward1", status: "申請中")
-//                                PendingRewardRow(rewardName: "Reward2", status: "OK!!")
-//                            }
-//                            Spacer()
-//                        }
-//                        .padding(.vertical)
-//                        .padding(.horizontal, 15)
-//                        .frame(maxWidth: screenWidth(), minHeight: 100, maxHeight: .infinity, alignment: .leading)
-//                        .roundedSection(color: Color(.jade))
                     }
                 }
             } else {
@@ -174,11 +128,10 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
                 Text("所属しているグループ")
-                AddButton(flag: $vm.belongGroup)
-                    .frame(width: 18, height: 18)
-                    .navigationDestination(isPresented: $vm.belongGroup, destination: {
-                        CreateGroupView(vm: .init())
-                    })
+                AddButton(action: {
+                    router.path.append(NavigationPathType.createGroup)
+                })
+                .frame(width: 18, height: 18)
             }
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
@@ -233,8 +186,6 @@ struct HomeView: View {
         }
     }
 }
-
-
 //#Preview{
 //    HomeView(vm: .init())
 //}
