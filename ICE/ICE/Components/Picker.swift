@@ -49,3 +49,109 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
 }
+
+
+struct FrequencyPicker: View {
+    @ObservedObject var enumUtil = EnumUtility()
+    @Binding var frequencyAndPeriodic: FrequencyAndPeriodic
+    var translatedFrequency: String {
+        enumUtil.translateFrequencyType(frequency: frequencyAndPeriodic.frequency)
+    }
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            SectionLabel(text: "発生頻度", font: .callout.bold(), color: Color(.indigo), width: 3)
+            Menu {
+                ForEach(FrequencyType.allCases, id: \.self) { type in
+                    Button(enumUtil.translateFrequencyType(frequency: type), action: {
+                        frequencyAndPeriodic.frequency = type
+                    })
+                }
+            } label: {
+                HStack(alignment: .center, spacing: 20) {
+                    Text(translatedFrequency)
+                        .font(.callout.bold())
+                        .foregroundStyle(Color.black)
+                    ArrowTriangleIcon(direction: Direction.down)
+                        .frame(width: 10, height: 10)
+                        .foregroundStyle(Color.black)
+                    Spacer()
+                }
+                .padding(.vertical)
+                .padding(.leading)
+                .frame(width: textFieldWidth(), height: 30)
+            }
+        }
+    }
+}
+
+struct PeriodicPicker: View {
+    @ObservedObject var enumUtil = EnumUtility()
+    @Binding var frequencyAndPeriodic: FrequencyAndPeriodic
+    var translatedPeriodic: String? {
+        enumUtil.translatePeriodicType(periodic: frequencyAndPeriodic.periodic)
+    }
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            SectionLabel(text: "タイミング", font: .callout.bold(), color: Color(.indigo), width: 3)
+            Menu {
+                ForEach(PeriodicType.allCases, id: \.self) { type in
+                    Button(enumUtil.translatePeriodicType(periodic: type)!, action: {
+                        frequencyAndPeriodic.periodic = type
+                    })
+                }
+            } label: {
+                HStack(alignment: .center, spacing: 20) {
+                    Text(translatedPeriodic ?? "選択してください")
+                        .font(.callout.bold())
+                        .foregroundStyle(Color.black)
+                    ArrowTriangleIcon(direction: Direction.down)
+                        .frame(width: 10, height: 10)
+                        .foregroundStyle(Color.black)
+                    Spacer()
+                }
+                .padding(.vertical)
+                .padding(.leading)
+                .frame(width: textFieldWidth(), height: 30)
+            }
+        }
+    }
+}
+
+struct FrequencyAndPeriodic {
+    var frequency: FrequencyType = .onlyOnce
+    var periodic: PeriodicType?
+}
+
+
+struct WhoGetsPaidPicker: View {
+    @ObservedObject var enumUtil = EnumUtility()
+    @Binding var whoGetsPaid: WhoGetsPaid
+    var translatedWhoGetsPaid: String? {
+        enumUtil.translateWhoGetsPaid(who: whoGetsPaid)
+    }
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            SectionLabel(text: "獲得できる人", font: .callout.bold(), color: Color(.indigo), width: 3)
+            Menu {
+                ForEach(WhoGetsPaid.allCases, id: \.self) { who in
+                    Button(enumUtil.translateWhoGetsPaid(who: who), action: {
+                        whoGetsPaid = who
+                    })
+                }
+            } label: {
+                HStack(alignment: .center, spacing: 20) {
+                    Text(translatedWhoGetsPaid ?? "選択してください")
+                        .font(.callout.bold())
+                        .foregroundStyle(Color.black)
+                    ArrowTriangleIcon(direction: Direction.down)
+                        .frame(width: 10, height: 10)
+                        .foregroundStyle(Color.black)
+                    Spacer()
+                }
+                .padding(.vertical)
+                .padding(.leading)
+                .frame(width: textFieldWidth(), height: 30)
+            }
+        }
+    }
+}

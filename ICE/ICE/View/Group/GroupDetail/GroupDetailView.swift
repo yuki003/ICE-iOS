@@ -156,7 +156,7 @@ struct GroupDetailView: View {
                     SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
-                        router.path.append(NavigationPathType.createTask(groupID: vm.groupInfo.id))
+                        router.path.append(NavigationPathType.createReward(groupID: vm.groupInfo.id))
                     })
                 }
             }
