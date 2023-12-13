@@ -51,6 +51,11 @@ class ViewModelBase: ObservableObject {
                     UserDefaults.standard.set(userID, forKey:"userID")
                 }
                 try await operation()
+                
+                if reload {
+                    reload = false
+                }
+                
                 withAnimation(.linear) {
                     state = .loaded
                 }

@@ -58,6 +58,12 @@ struct HomeView: View {
                             )
                         }
                     }
+                    .refreshable {
+                        Task{
+                            vm.reload = true
+                            try await vm.loadData()
+                        }
+                    }
                 }
                 SignOutButton(auth: auth)
             }
