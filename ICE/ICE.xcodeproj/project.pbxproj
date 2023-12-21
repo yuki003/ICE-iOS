@@ -56,10 +56,10 @@
 		B68565BD2AE94EBA002C8413 /* LoadingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68565BC2AE94EBA002C8413 /* LoadingModifier.swift */; };
 		B69A76C32AE3B6EF009228EC /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69A76C22AE3B6EF009228EC /* Validation.swift */; };
 		B6A2F26C2B02216800F779CC /* GroupComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A2F26B2B02216800F779CC /* GroupComponent.swift */; };
+		B6A471C82B2B11C700229BBC /* amplifyconfiguration_dev.json in Resources */ = {isa = PBXBuildFile; fileRef = B6A471C72B2B11C700229BBC /* amplifyconfiguration_dev.json */; };
 		B6A71B512B25965200B9E938 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B6A71B502B25965200B9E938 /* Kingfisher */; };
 		B6A951442ADBA0D00099CB06 /* amplifyconfiguration_prod.json in Resources */ = {isa = PBXBuildFile; fileRef = B6A951422ADBA0D00099CB06 /* amplifyconfiguration_prod.json */; };
 		B6B49DAB2AFB2BD700CF0E6A /* AWSS3StoragePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = B6B49DAA2AFB2BD700CF0E6A /* AWSS3StoragePlugin */; };
-		B6B49DAD2AFB2D9D00CF0E6A /* amplifyconfiguration_dev.json in Resources */ = {isa = PBXBuildFile; fileRef = B6B49DAC2AFB2D9D00CF0E6A /* amplifyconfiguration_dev.json */; };
 		B6B49DAF2AFB2F9F00CF0E6A /* AmplifyStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B49DAE2AFB2F9F00CF0E6A /* AmplifyStorageService.swift */; };
 		B6B49DB12AFB30E900CF0E6A /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B49DB02AFB30E900CF0E6A /* Int+.swift */; };
 		B6B49DB32AFB396500CF0E6A /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B49DB22AFB396500CF0E6A /* Picker.swift */; };
@@ -161,8 +161,8 @@
 		B68565BC2AE94EBA002C8413 /* LoadingModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingModifier.swift; sourceTree = "<group>"; };
 		B69A76C22AE3B6EF009228EC /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 		B6A2F26B2B02216800F779CC /* GroupComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupComponent.swift; sourceTree = "<group>"; };
+		B6A471C72B2B11C700229BBC /* amplifyconfiguration_dev.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration_dev.json; sourceTree = "<group>"; };
 		B6A951422ADBA0D00099CB06 /* amplifyconfiguration_prod.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration_prod.json; sourceTree = "<group>"; };
-		B6B49DAC2AFB2D9D00CF0E6A /* amplifyconfiguration_dev.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = amplifyconfiguration_dev.json; path = ../../amplifyconfiguration_dev.json; sourceTree = "<group>"; };
 		B6B49DAE2AFB2F9F00CF0E6A /* AmplifyStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplifyStorageService.swift; sourceTree = "<group>"; };
 		B6B49DB02AFB30E900CF0E6A /* Int+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		B6B49DB22AFB396500CF0E6A /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
@@ -309,7 +309,7 @@
 			isa = PBXGroup;
 			children = (
 				B64E1CD42AD3916600A876CC /* Info.plist */,
-				B6B49DAC2AFB2D9D00CF0E6A /* amplifyconfiguration_dev.json */,
+				B6A471C72B2B11C700229BBC /* amplifyconfiguration_dev.json */,
 				B6A951422ADBA0D00099CB06 /* amplifyconfiguration_prod.json */,
 				B61E20692AC9247000EF3CEB /* ICEApp.swift */,
 				B64E1CBF2AD38B5B00A876CC /* AppDelegate.swift */,
@@ -659,7 +659,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B61E20712AC9247100EF3CEB /* Preview Assets.xcassets in Resources */,
-				B6B49DAD2AFB2D9D00CF0E6A /* amplifyconfiguration_dev.json in Resources */,
+				B6A471C82B2B11C700229BBC /* amplifyconfiguration_dev.json in Resources */,
 				B6A951442ADBA0D00099CB06 /* amplifyconfiguration_prod.json in Resources */,
 				B61E206E2AC9247100EF3CEB /* Assets.xcassets in Resources */,
 			);

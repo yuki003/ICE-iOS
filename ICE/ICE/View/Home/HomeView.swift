@@ -9,7 +9,6 @@ import SwiftUI
 import Amplify
 
 struct HomeView: View {
-    @Environment(\.asGuestKey) private var asGuest
     @StateObject var vm: HomeViewModel
     @ObservedObject var auth = AmplifyAuthService()
     @StateObject var router = PageRouter()
@@ -34,7 +33,7 @@ struct HomeView: View {
                             CurrentActivityNotice(message: "test notice", isShowNotice: $vm.isShowNotice, nav: $vm.navNotice)
                                 .padding(.top)
                             currentActivitySection()
-                            if !asGuest {
+                            if vm.asHost {
                                 hostGroupSection()
                                     .padding(.top, 10)
                             }
@@ -143,42 +142,21 @@ struct HomeView: View {
             .foregroundStyle(Color(.indigo))
             // group switchable
             if !vm.belongingGroups.isEmpty {
-                ForEach(vm.belongingGroups.indices, id: \.self) { index in
-                    let group = vm.belongingGroups[index]
-                    ScrollView(.horizontal) {
-                        VStack(alignment: .center, spacing: 0) {
-                            // group name
-                            Text("Group1")
-                                .font(.callout.bold())
-                            // earned point
-                            Text("\(100) Pt")
-                                .font(.callout.bold())
-                                .padding(.vertical, 10)
-                            // active task
-                            VStack(alignment: .leading ,spacing: 0) {
-                                Text("実行中のタスク")
-                                    .font(.footnote.bold())
-                                    .foregroundStyle(Color(.indigo))
-                                    .padding(.vertical, 10)
-                                ActiveTaskRow(taskName: "Task1")
-                                ActiveTaskRow(taskName: "Task2")
-                                ActiveTaskRow(taskName: "Task3")
+                ScrollView(.horizontal) {
+                    HStack(spacing: 10) {
+                        ForEach(vm.belongingGroups.indices, id: \.self) { index in
+                            let group = vm.belongingGroups[index]
+                            Button(action: {
+                                vm.selectedGroup = group
+                                router.path.append(NavigationPathType.groupDetail(group: group))
+                            })
+                            {
+                                HomeGroupCard(group: group, url: group.thumbnailKey ?? "" , color: Color(.indigo))
+                                    .padding(.vertical, 5)
+                                /// イカしたスクロールを実装するのでpaddingで暫定対応
+                                    .padding(.leading, index == 0 ? 40 : 0)
                             }
-                            // pending rewards
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text("申請中のリワード")
-                                    .font(.footnote.bold())
-                                    .foregroundStyle(Color(.indigo))
-                                    .padding(.vertical, 10)
-                                PendingRewardRow(rewardName: "Reward1", status: "申請中")
-                                PendingRewardRow(rewardName: "Reward2", status: "OK!!")
-                            }
-                            Spacer()
                         }
-                        .padding(.vertical)
-                        .padding(.horizontal, 20)
-                        .frame(maxWidth: screenWidth(), minHeight: 100, maxHeight: .infinity, alignment: .leading)
-                        .roundedSection(color: Color(.jade))
                     }
                 }
             } else {
@@ -190,6 +168,7 @@ struct HomeView: View {
                     .roundedSection(color: Color(.jade))
             }
         }
+        .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
     }
 }
 //#Preview{

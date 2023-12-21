@@ -14,7 +14,6 @@ import AWSCognitoAuthPlugin
 class AmplifyAuthService: ObservableObject {
     static let shared = AmplifyAuthService()
     @AppStorage("isSignedIn") var isSignedIn = false
-    var asGuest: Bool = false
     
     func checkSessionStatus() async {
         do {
@@ -74,14 +73,20 @@ class AmplifyAuthService: ObservableObject {
         }
     }
     
-    func signUp(username: String, password: String, email: String?) async throws -> AuthSignUpResult {
-        let userAttributes = [AuthUserAttribute(.email, value: email ?? "")]
+    func signUp(username: String, password: String, name: String, email: String = "", groupID: String = "") async throws -> AuthSignUpResult {
+        var userAttributes = [AuthUserAttribute(.name, value: name)]
+        if !email.isEmpty {
+            userAttributes.append(AuthUserAttribute(.email, value: email))
+        }
+        if !groupID.isEmpty {
+            userAttributes.append(AuthUserAttribute(.custom("InvitedGroupID"), value: groupID))
+        }
         let options = AuthSignUpRequest.Options(userAttributes: userAttributes)
         do {
             let signUpResult = try await Amplify.Auth.signUp(
                 username: username,
                 password: password,
-                options: email != nil ? options : nil
+                options: options
             )
             if case let .confirmUser(deliveryDetails, _, userId) = signUpResult.nextStep {
                 print("Delivery details \(String(describing: deliveryDetails)) for userId: \(String(describing: userId))")
@@ -274,6 +279,8 @@ class AmplifyAuthService: ObservableObject {
         print("Local signout successful: \(signOutResult.signedOutLocally)")
         switch signOutResult {
         case .complete:
+            let appDomain = Bundle.main.bundleIdentifier
+            UserDefaults.standard.removePersistentDomain(forName: appDomain!)
             // Sign Out completed fully and without errors.
             print("Signed out successfully")
 

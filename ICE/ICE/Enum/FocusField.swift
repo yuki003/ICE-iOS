@@ -12,6 +12,7 @@ enum AuthField: Hashable {
     case password
     case email
     case confirmationCode
+    case invitedGroupID
 }
 
 enum FormField: Hashable {

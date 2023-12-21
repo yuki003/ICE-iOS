@@ -43,6 +43,9 @@ struct AuthView: View {
                     }
                     Spacer()
                 }
+                .navigationDestination(isPresented: $vm.authComplete) {
+                    HomeView(vm: .init())
+                }
                 .toolbar {
                     if vm.navSignIn || vm.navSignUp || vm.navSignUpConfirm || vm.navHostOrGuest {
                         ToolbarItem(placement: .navigationBarLeading) {
@@ -106,11 +109,11 @@ struct AuthView: View {
     @ViewBuilder
     func SignInSection() -> some View {
         VStack(spacing: 20) {
-            if vm.asGuest {
-                // TODO:ゲストユーザーサインイン時の追加情報を検討
+            if !vm.asHost {
+                InvitedGroupTextField(groupID: $vm.signUpOptions.invitedGroupID, focused: _focused)
             } else {
-                EmailTextField(email: $vm.email, focused: _focused)
-                    .validation(vm.emailValidation)
+                EmailTextField(email: $vm.signUpOptions.email, focused: _focused)
+                    .validation(vm.optionsValidation)
             }
             UsernameTextField(userName: $vm.userName, focused: _focused)
                 .validation(vm.userNameValidation)
@@ -120,9 +123,9 @@ struct AuthView: View {
             
             SignInButton(vm: vm)
                 .disabled(vm.signInValid.isSuccess == false)
-                .navigationDestination(isPresented: $vm.authComplete) {
-                    HomeView(vm: .init())
-                }
+//                .navigationDestination(isPresented: $vm.authComplete) {
+//                    HomeView(vm: .init())
+//                }
         }
         .frame(height: 150)
         .padding()
@@ -131,11 +134,11 @@ struct AuthView: View {
     @ViewBuilder
     func SignUpSection() -> some View {
         VStack(spacing: 20) {
-            if vm.asGuest {
-                // TODO:ゲストユーザーサインイン時の追加情報を検討
+            if !vm.asHost {
+                InvitedGroupTextField(groupID: $vm.signUpOptions.invitedGroupID, focused: _focused)
             } else {
-                EmailTextField(email: $vm.email, focused: _focused)
-                    .validation(vm.emailValidation)
+                EmailTextField(email: $vm.signUpOptions.email, focused: _focused)
+                    .validation(vm.optionsValidation)
             }
             UsernameTextField(userName: $vm.userName, focused: _focused)
                 .validation(vm.userNameValidation)
@@ -158,9 +161,9 @@ struct AuthView: View {
             
             ConfirmSignUpButton(vm: vm)
                 .disabled(vm.codeValid.isSuccess == false)
-                .navigationDestination(isPresented: $vm.authComplete) {
-                    HomeView(vm: .init())
-                }
+//                .navigationDestination(isPresented: $vm.authComplete) {
+//                    HomeView(vm: .init())
+//                }
             ActionFillButton(label: "コード再送", action: vm.resendCode, color: Color(.indigo))
         }
         .frame(height: 150)

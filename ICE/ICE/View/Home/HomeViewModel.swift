@@ -36,12 +36,19 @@ final class HomeViewModel: ViewModelBase {
             
             if self.apiHandler.isRunFetch(userDefaultKey: User.modelName) || self.reload {
                 let userPredicate = User.keys.userID.eq(self.userID)
-                async let userInfo = self.apiHandler.list(User.self, where: userPredicate)
-                (self.userInfo) = try await (userInfo[0])
+                let userInfo = try await self.apiHandler.list(User.self, where: userPredicate)
+                guard !userInfo.isEmpty else {
+                    throw APIError.notFound
+                }
+                self.userInfo = userInfo[0]
             } else {
                 self.userInfo = try self.apiHandler.decodeUserDefault(modelType: User.self, key: User.modelName)
             }
             
+            if !self.asHost, self.userInfo?.accountType == .host {
+                self.asHost = true
+                UserDefaults.standard.set(self.asHost, forKey: "asHost")
+            }
             
             if self.apiHandler.isRunFetch(userDefaultKey: "hostGroups") || self.reload  {
                 if let hostGroupIDs = self.userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {
@@ -54,15 +61,15 @@ final class HomeViewModel: ViewModelBase {
                 self.hostGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "hostGroups") ?? []
             }
 
-//            if self.apiHandler.isRunFetch(userDefaultKey: "belongingGroups") || self.reload  {
-//                if let belongingGroupIDs = self.userInfo?.belongingGroupIDs, !belongingGroupIDs.isEmpty {
-//                    let belongingGroupPredicate = self.apiService.orPredicateGroupByID(ids: belongingGroupIDs, model: Group.keys.id)
-//                    let belongingGroups = try await self.apiHandler.list(Group.self, where: belongingGroupPredicate, keyName: "belongingGroups")
-//                    self.belongingGroups = belongingGroups
-//                }
-//            } else {
-//                self.belongingGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups") ?? []
-//            }
+            if self.apiHandler.isRunFetch(userDefaultKey: "belongingGroups") || self.reload  {
+                if let belongingGroupIDs = self.userInfo?.belongingGroupIDs, !belongingGroupIDs.isEmpty {
+                    let belongingGroupPredicate = self.apiService.orPredicateGroupByID(ids: belongingGroupIDs, model: Group.keys.id)
+                    let belongingGroups = try await self.apiHandler.list(Group.self, where: belongingGroupPredicate, keyName: "belongingGroups")
+                    self.belongingGroups = belongingGroups
+                }
+            } else {
+                self.belongingGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups") ?? []
+            }
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in

@@ -8,7 +8,6 @@
 import SwiftUI
 import Amplify
 struct GroupDetailView: View {
-    @Environment(\.asGuestKey) private var asGuest
     @StateObject var vm: GroupDetailViewModel
     @EnvironmentObject var router: PageRouter
     var body: some View {
@@ -113,7 +112,7 @@ struct GroupDetailView: View {
     func makeTaskList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                if asGuest {
+                if !vm.asHost {
                     SectionLabel(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
@@ -152,7 +151,7 @@ struct GroupDetailView: View {
     func makeRewardList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                if asGuest {
+                if !vm.asHost {
                     SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{

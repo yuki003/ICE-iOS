@@ -9,7 +9,6 @@ import SwiftUI
 import Amplify
 
 struct CreateRewardsView: View {
-    @Environment(\.asGuestKey) private var asGuest
     @FocusState private var focused: FormField?
     @StateObject var vm: CreateRewardsViewModel
     @State var fieldNum: String = ""

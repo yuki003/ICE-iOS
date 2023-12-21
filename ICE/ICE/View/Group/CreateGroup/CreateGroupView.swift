@@ -9,7 +9,6 @@ import SwiftUI
 import Amplify
 
 struct CreateGroupView: View {
-    @Environment(\.asGuestKey) private var asGuest
     @FocusState private var focused: FormField?
     @StateObject var vm: CreateGroupViewModel
     @EnvironmentObject var router: PageRouter

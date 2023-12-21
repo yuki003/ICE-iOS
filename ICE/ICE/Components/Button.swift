@@ -155,6 +155,7 @@ struct HostUserButton: View {
         Button(action: {
             withAnimation(.linear) {
                 vm.navHostOrGuest = false
+                vm.asHost = true
                 if vm.isSignIn {
                     vm.navSignIn = true
                 } else if vm.isSignUp {
@@ -179,7 +180,6 @@ struct GuestUserButton: View {
         Button(action: {
             withAnimation(.linear) {
                 vm.navHostOrGuest = false
-                vm.asGuest = true
                 if vm.isSignIn {
                     vm.navSignIn = true
                 } else if vm.isSignUp {

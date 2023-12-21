@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "ice05b1bdae_identitypool_05b1bdae",
-    "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "ice05b1bdae",
-    "userPoolName": "ice05b1bdae_userpool_05b1bdae",
+    "identityPoolName": "icebf81ea83_identitypool_bf81ea83",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "icebf81ea83",
+    "userPoolName": "icebf81ea83_userpool_bf81ea83",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -20,7 +20,7 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-      "email"
+      "name"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
@@ -31,29 +31,16 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "ice05b05b1bdae_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "icebf8bf81ea83_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "05b1bdae",
-    "resourceName": "ice05b1bdae",
+    "sharedId": "bf81ea83",
+    "resourceName": "icebf81ea83",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
+    "triggers": {},
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true,
-    "authRoleArn": {
-      "Fn::GetAtt": [
-        "AuthRole",
-        "Arn"
-      ]
-    },
-    "unauthRoleArn": {
-      "Fn::GetAtt": [
-        "UnauthRole",
-        "Arn"
-      ]
-    },
-    "breakCircularDependency": true,
-    "dependsOn": []
+    "useEnabledMfas": true
   }
 }
