@@ -44,7 +44,7 @@
           "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
           "rewardsTableName": "Rewards-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateRewards-52416d65377952676975-build.zip"
+          "s3Key": "amplify-builds/iceCreateRewards-75647452596b4a707158-build.zip"
         }
       },
       "storage": {

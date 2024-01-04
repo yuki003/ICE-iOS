@@ -297,6 +297,7 @@ struct EnabledFlagFillButton: View {
     var body: some View {
         Button(action: {
             withAnimation(.linear(duration: 0.3)) {
+                UIApplication.shared.closeKeyboard()
                 flag.toggle()
             }
         })

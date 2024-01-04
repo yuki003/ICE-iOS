@@ -90,12 +90,14 @@ Link： ice://invite?code=\(groupInfo.id)
     
     @MainActor
     func reloadData() async throws {
-        asyncOperation({
-            
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
-        })
+        do {
+            let predicate = Group.keys.id.eq(self.groupInfo.id)
+            let groupInfo = try await self.apiHandler.list(Group.self, where: predicate, keyName: "belongingGroups")
+            self.groupInfo = groupInfo[0]
+            try await loadData()
+        } catch {
+            alertMessage = error.localizedDescription
+            alert = true
+        }
     }
 }

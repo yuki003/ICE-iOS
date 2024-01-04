@@ -68,7 +68,7 @@ struct GroupDetailView: View {
                     .refreshable {
                         Task {
                             vm.reload = true
-                            try await vm.loadData()
+                            try await vm.reloadData()
                         }
                     }
                 }
