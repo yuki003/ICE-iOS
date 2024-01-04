@@ -188,7 +188,7 @@ struct GuestUserButton: View {
             }
         })
         {
-            Text("招待を受けている方(ゲスト)")
+            Text("招待を受けている方")
                 .font(.footnote.bold())
                 .foregroundStyle(Color(.jade))
         }

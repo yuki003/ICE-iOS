@@ -138,6 +138,7 @@ struct HomeView: View {
                 })
                 .frame(width: 18, height: 18)
             }
+            .padding(.leading, 40)
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
             // group switchable
@@ -166,6 +167,7 @@ struct HomeView: View {
                     .padding(5)
                     .frame(width: screenWidth(), height: 100, alignment: .center)
                     .roundedSection(color: Color(.jade))
+                    .padding(.horizontal, 40)
             }
         }
         .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)

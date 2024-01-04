@@ -56,6 +56,9 @@ struct CreateRewardsView: View {
                         if !vm.createComplete {
                             EnabledFlagFillButton(label: "リワードを作成", color: Color(.jade), flag: $vm.showAlert, condition: vm.formValid.isSuccess == false)
                                 .padding(.vertical)
+                                .onTapGesture {
+                                    UIApplication.shared.closeKeyboard()
+                                }
                         }
                     }
                     .padding(.vertical)

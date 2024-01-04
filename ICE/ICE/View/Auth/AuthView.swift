@@ -92,6 +92,23 @@ struct AuthView: View {
                     )
                 )
             }
+            .onOpenURL(perform: { url in
+                debugPrint(url)
+                if let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+                      let queryItems = components.queryItems {
+                    if let inviteCode = queryItems.first(where: { $0.name == "code" })?.value {
+                        // 招待コードを使って何かする
+                        // 例: サインアップ画面に遷移し、招待コードをセットする
+                        if !inviteCode.isEmpty {
+                            print("code is \(inviteCode)")
+                            vm.signUpOptions.invitedGroupID = inviteCode
+                            vm.isSignUp = true
+                            vm.navSignUp = true
+                        }
+                    }
+                }
+
+            })
         case let .failed(error):
             Text(error.localizedDescription)
         }

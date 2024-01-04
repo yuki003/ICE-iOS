@@ -157,6 +157,7 @@ struct CircleIcon: View {
             .resizable()
     }
 }
+
 struct ArrowTriangleIcon: View {
     var direction: Direction
     var systemName: String {
@@ -173,6 +174,13 @@ struct ArrowTriangleIcon: View {
     }
     var body: some View {
         Image(systemName: systemName)
+            .resizable()
+    }
+}
+
+struct PaperPlaneIcon: View {
+    var body: some View {
+        Image(systemName: "paperplane")
             .resizable()
     }
 }

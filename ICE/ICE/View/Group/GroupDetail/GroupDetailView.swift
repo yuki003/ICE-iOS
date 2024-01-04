@@ -10,6 +10,8 @@ import Amplify
 struct GroupDetailView: View {
     @StateObject var vm: GroupDetailViewModel
     @EnvironmentObject var router: PageRouter
+    
+    @State var inviteFlag: Bool = false
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
@@ -60,6 +62,9 @@ struct GroupDetailView: View {
                             )
                         }
                     }
+                    .sheet(isPresented: $inviteFlag) {
+                        ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
+                    }
                     .refreshable {
                         Task {
                             vm.reload = true
@@ -80,7 +85,11 @@ struct GroupDetailView: View {
     @ViewBuilder
     func makeMemberList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            SectionLabel(text: "メンバー", font: .callout.bold(), color: Color(.indigo), width: 5.0)
+            if vm.asHost {
+                SectionLabelWithContent(text: "メンバー", font: .callout.bold(), color: Color(.indigo), width: 5.0, content: InviteMembersButton(flag: $inviteFlag))
+            } else {
+                SectionLabel(text: "メンバー", font: .callout.bold(), color: Color(.indigo), width: 5.0)
+            }
             HStack(spacing: 10) {
                 if vm.displayUser.count > 0 {
                     ForEach(vm.displayUser.indices, id: \.self) { index in
@@ -183,6 +192,25 @@ struct GroupDetailView: View {
                     Text("他\(vm.tasks.count)のタスク")
                 }
             }
+        }
+    }
+}
+
+struct InviteMembersButton: View {
+    @Binding var flag: Bool
+    var body: some View {
+        Button(action: {
+            flag = true
+        })
+        {
+            HStack(spacing: 5) {
+                PaperPlaneIcon()
+                    .frame(width: 18, height: 18)
+                Text("招待する")
+                    .font(.caption.bold())
+            }
+            .foregroundColor(Color(.indigo))
+            .padding(.leading, 10)
         }
     }
 }

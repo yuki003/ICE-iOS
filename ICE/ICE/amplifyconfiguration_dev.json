@@ -49,19 +49,19 @@
                 "Auth": {
                     "Default": {
                         "authenticationFlowType": "USER_SRP_AUTH",
-                        "socialProviders": [],
-                        "usernameAttributes": [],
-                        "signupAttributes": [
-                            "NAME"
+                        "mfaConfiguration": "OFF",
+                        "mfaTypes": [
+                            "SMS"
                         ],
                         "passwordProtectionSettings": {
                             "passwordPolicyMinLength": 8,
                             "passwordPolicyCharacters": []
                         },
-                        "mfaConfiguration": "OFF",
-                        "mfaTypes": [
-                            "SMS"
+                        "signupAttributes": [
+                            "NAME"
                         ],
+                        "socialProviders": [],
+                        "usernameAttributes": [],
                         "verificationMechanisms": [
                             "EMAIL"
                         ]
