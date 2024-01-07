@@ -260,8 +260,9 @@ final class AuthViewModel: ObservableObject {
                     signInInfo = try await auth.signIn(username: userName + hashedKey, password: password)
                 }
                 if let signInInfo = signInInfo, signInInfo.isSignedIn {
+                    let id = try await Amplify.Auth.getCurrentUser()
                     withAnimation(.easeOut(duration: 0.3)) {
-                        UserDefaults.standard.set("", forKey:"userID")
+                        UserDefaults.standard.set(id.userId, forKey:"userID")
                         UserDefaults.standard.set(asHost, forKey: "asHost")
                         flagInitialize()
                         DispatchQueue.main.async {
