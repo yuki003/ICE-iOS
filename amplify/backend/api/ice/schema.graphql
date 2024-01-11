@@ -52,7 +52,7 @@ type Rewards @model {
   whoGetsPaid: WhoGetsPaid!
   getUserID: [String]
   cost: Int!
-  groupId: String
+  groupID: String
 }
 
 enum FrequencyType {

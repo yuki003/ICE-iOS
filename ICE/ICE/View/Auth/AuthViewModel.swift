@@ -17,11 +17,11 @@ final class AuthViewModel: ObservableObject {
     @Published var codeValid: Validation = .failed()
     @Published var userName: String = ""
     @Published var password: String = ""
-    @Published var email: String = ""
+    @Published var signUpOptions: SignUpOptions = .init()
     @Published var confirmationCode: String = ""
-    var hashedEmail: String = ""
+    var hashedKey: String = ""
     @Published var userID: String = ""
-    @Published var asGuest: Bool = false
+    @Published var asHost: Bool = false
     @Published var isSignIn: Bool = false
     @Published var isSignUp: Bool = false
     
@@ -34,13 +34,11 @@ final class AuthViewModel: ObservableObject {
     @Published var navSignUpConfirm: Bool = false
     
     
-    @Published var authComplete: Bool = false
-    
     @Published var alert: Bool = false
     @Published var alertMessage: String?
     
-    @ObservedObject var auth = AmplifyAuthService()
-    @ObservedObject var apiHandler = APIHandler()
+    @ObservedObject var auth = AmplifyAuthService.shared
+    @ObservedObject var apiHandler = APIHandler.shared
     
     let hashDelimiter = "_hash_"
     
@@ -114,12 +112,15 @@ final class AuthViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
     
-    var emailValidation: AnyPublisher<Validation, Never> {
-        $email
+    var optionsValidation: AnyPublisher<Validation, Never> {
+        $signUpOptions
             .dropFirst()
             .map { value in
-                if !value.isMatch(pattern: Regex.email) {
+                if self.asHost, !value.email.isMatch(pattern: Regex.email) {
                     return .failed(message: "メールアドレスの形式で入力してください。")
+                }
+                if !self.asHost, value.invitedGroupID.isEmpty {
+                    return .failed()
                 }
                 return .success
             }
@@ -128,7 +129,7 @@ final class AuthViewModel: ObservableObject {
     
     var hostSignUpValidation: AnyPublisher<Validation, Never> {
         Publishers.CombineLatest3(
-            emailValidation,
+            optionsValidation,
             userNameValidation,
             passwordValidation
         )
@@ -140,7 +141,7 @@ final class AuthViewModel: ObservableObject {
     
     var signInValidation: AnyPublisher<Validation, Never> {
         Publishers.CombineLatest3(
-            emailValidation,
+            optionsValidation,
             userNameValidation,
             passwordValidation
         )
@@ -156,11 +157,12 @@ final class AuthViewModel: ObservableObject {
         defer { isLoading = false }
         if !userName.isEmpty, !password.isEmpty {
             do {
-                if asGuest {
-                    signUpInfo = try await auth.signUp(username: userName, password: password, email: nil)
-                } else if !email.isEmpty {
-                    hashedEmail = hashDelimiter + String(email.hashed())
-                    signUpInfo = try await auth.signUp(username: userName + hashedEmail , password: password, email: email)
+                if !asHost {
+                    hashedKey = hashDelimiter + String(signUpOptions.invitedGroupID.hashed())
+                    signUpInfo = try await auth.signUp(username: userName + hashedKey, password: password, name: userName, groupID: signUpOptions.invitedGroupID)
+                } else if !signUpOptions.email.isEmpty {
+                    hashedKey = hashDelimiter + String(signUpOptions.email.hashed())
+                    signUpInfo = try await auth.signUp(username: userName + hashedKey , password: password, name: userName, email: signUpOptions.email)
                 } else {
                     throw AmplifyAuthError.signUpFailed
                 }
@@ -174,6 +176,9 @@ final class AuthViewModel: ObservableObject {
                         navSignUpConfirm = true
                     }
                 } else if case .done = signUpInfo?.nextStep {
+                    guard let id = signUpInfo?.userID else { throw AmplifyAuthError.signUpFailed }
+                    UserDefaults.standard.set(id, forKey:"userID")
+                    userID = id
                     try await createUser()
                 } else {
                     throw AmplifyAuthError.signUpFailed
@@ -208,7 +213,7 @@ final class AuthViewModel: ObservableObject {
         defer { isLoading = false }
         if !userName.isEmpty, !confirmationCode.isEmpty {
             do {
-                signUpInfo = try await auth.confirmSignUp(for: userName + hashedEmail, with: confirmationCode)
+                signUpInfo = try await auth.confirmSignUp(for: userName + hashedKey, with: confirmationCode)
                 if let signUpInfo = signUpInfo, signUpInfo.isSignUpComplete {
                     try await createUser()
                 } else {
@@ -232,7 +237,7 @@ final class AuthViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         do {
-            try await auth.resendSignUpCode(for: userName + hashedEmail)
+            try await auth.resendSignUpCode(for: userName + hashedKey)
         } catch {
             alertMessage = APIError.createFailed.localizedDescription
             alert = true
@@ -243,24 +248,27 @@ final class AuthViewModel: ObservableObject {
     func signIn() async throws {
         isLoading = true
         defer { isLoading = false }
-        if !userName.isEmpty, !password.isEmpty, !email.isEmpty  {
-            hashedEmail = hashDelimiter + String(email.hashed())
+        if !userName.isEmpty, !password.isEmpty  {
             do {
-                if asGuest {
-                    signInInfo = try await auth.signIn(username: userName + hashedEmail, password: password)
+                if !asHost {
+                    hashedKey = hashDelimiter + String(signUpOptions.invitedGroupID.hashed())
+                    signInInfo = try await auth.signIn(username: userName + hashedKey, password: password)
                 } else {
-                    signInInfo = try await auth.signIn(username: userName + hashedEmail, password: password)
+                    hashedKey = hashDelimiter + String(signUpOptions.email.hashed())
+                    signInInfo = try await auth.signIn(username: userName + hashedKey, password: password)
                 }
                 if let signInInfo = signInInfo, signInInfo.isSignedIn {
+                    let id = try await Amplify.Auth.getCurrentUser()
                     withAnimation(.easeOut(duration: 0.3)) {
-                        auth.asGuest = asGuest
+                        UserDefaults.standard.set(id.userId, forKey:"userID")
+                        UserDefaults.standard.set(asHost, forKey: "asHost")
                         flagInitialize()
                         DispatchQueue.main.async {
-                            self.authComplete = true
+                            self.auth.isSignedIn = true
                         }
                     }
                 } else if case .confirmSignUp(_) = signInInfo?.nextStep {
-                    try await auth.resendSignUpCode(for: userName + hashedEmail)
+                    try await auth.resendSignUpCode(for: userName + hashedKey)
                     withAnimation(.easeOut(duration: 0.3)) {
                         flagInitialize()
                         navSignUpConfirm = true
@@ -275,7 +283,7 @@ final class AuthViewModel: ObservableObject {
                 alertMessage = error.localizedDescription
                 alert = true
             }
-        } else if !authComplete, !isSignIn {
+        } else if !self.auth.isSignedIn, !isSignIn {
             withAnimation(.easeOut(duration: 0.3)) {
                 isSignIn = true
                 navHostOrGuest = true
@@ -289,12 +297,22 @@ final class AuthViewModel: ObservableObject {
             guard let userID = UserDefaults.standard.string(forKey: "userID"), !userID.isEmpty else {
                 throw AmplifyAuthError.signUpFailed
             }
-            let user = User(userID: userID, userName: userName, accountType: asGuest ? AccountType.guest : AccountType.host)
-            try await apiHandler.create(user)
+            var user = User(userID: userID, userName: userName, accountType: asHost ? AccountType.host : AccountType.guest)
+            if !asHost {
+                user.belongingGroupIDs = [signUpOptions.invitedGroupID]
+                var groupInfo = try await apiHandler.get(Group.self, byId: signUpOptions.invitedGroupID)
+                if let belongingUserIDs = groupInfo.belongingUserIDs, !belongingUserIDs.isEmpty {
+                    groupInfo.belongingUserIDs?.append(userID)
+                } else {
+                    groupInfo.belongingUserIDs = [userID]
+                }
+                try await apiHandler.update(groupInfo, keyName: "belongingGroups")
+            }
+            try await apiHandler.create(user, keyName: "User")
             withAnimation(.easeIn) {
-                auth.asGuest = asGuest
+                UserDefaults.standard.set(asHost, forKey: "asHost")
                 DispatchQueue.main.async {
-                    self.authComplete = true
+                    self.auth.isSignedIn = true
                 }
             }
         } catch {
@@ -307,7 +325,8 @@ final class AuthViewModel: ObservableObject {
     func propertyInitialize() {
         withAnimation(.linear) {
             userName = ""
-            email = ""
+            signUpOptions.email = ""
+            signUpOptions.invitedGroupID = ""
             password = ""
             confirmationCode = ""
         }
@@ -317,7 +336,12 @@ final class AuthViewModel: ObservableObject {
         navSignIn = false
         navSignUp = false
         navSignUpConfirm = false
-        asGuest = false
+        asHost = false
         navHostOrGuest = false
     }
+}
+
+struct SignUpOptions {
+    var email: String = ""
+    var invitedGroupID: String = ""
 }

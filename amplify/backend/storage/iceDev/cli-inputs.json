@@ -2,10 +2,8 @@
   "resourceName": "iceDev",
   "policyUUID": "7ee93b54",
   "bucketName": "icethumbnailsdev",
-  "storageAccess": "authAndGuest",
-  "guestAccess": [
-    "READ"
-  ],
+  "storageAccess": "auth",
+  "guestAccess": [],
   "authAccess": [
     "CREATE_AND_UPDATE",
     "READ"

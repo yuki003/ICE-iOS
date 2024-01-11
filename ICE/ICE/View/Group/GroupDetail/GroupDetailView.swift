@@ -8,9 +8,10 @@
 import SwiftUI
 import Amplify
 struct GroupDetailView: View {
-    @Environment(\.asGuestKey) private var asGuest
     @StateObject var vm: GroupDetailViewModel
     @EnvironmentObject var router: PageRouter
+    
+    @State var inviteFlag: Bool = false
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
@@ -61,10 +62,13 @@ struct GroupDetailView: View {
                             )
                         }
                     }
+                    .sheet(isPresented: $inviteFlag) {
+                        ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
+                    }
                     .refreshable {
                         Task {
                             vm.reload = true
-                            try await vm.loadData()
+                            try await vm.reloadData()
                         }
                     }
                 }
@@ -81,7 +85,11 @@ struct GroupDetailView: View {
     @ViewBuilder
     func makeMemberList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            SectionLabel(text: "メンバー", font: .callout.bold(), color: Color(.indigo), width: 5.0)
+            if vm.asHost {
+                SectionLabelWithContent(text: "メンバー", font: .callout.bold(), color: Color(.indigo), width: 5.0, content: InviteMembersButton(flag: $inviteFlag))
+            } else {
+                SectionLabel(text: "メンバー", font: .callout.bold(), color: Color(.indigo), width: 5.0)
+            }
             HStack(spacing: 10) {
                 if vm.displayUser.count > 0 {
                     ForEach(vm.displayUser.indices, id: \.self) { index in
@@ -113,7 +121,7 @@ struct GroupDetailView: View {
     func makeTaskList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                if asGuest {
+                if !vm.asHost {
                     SectionLabel(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
@@ -152,7 +160,7 @@ struct GroupDetailView: View {
     func makeRewardList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                if asGuest {
+                if !vm.asHost {
                     SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
@@ -184,6 +192,25 @@ struct GroupDetailView: View {
                     Text("他\(vm.tasks.count)のタスク")
                 }
             }
+        }
+    }
+}
+
+struct InviteMembersButton: View {
+    @Binding var flag: Bool
+    var body: some View {
+        Button(action: {
+            flag = true
+        })
+        {
+            HStack(spacing: 5) {
+                PaperPlaneIcon()
+                    .frame(width: 18, height: 18)
+                Text("招待する")
+                    .font(.caption.bold())
+            }
+            .foregroundColor(Color(.indigo))
+            .padding(.leading, 10)
         }
     }
 }

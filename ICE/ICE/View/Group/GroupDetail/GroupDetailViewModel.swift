@@ -14,6 +14,13 @@ final class GroupDetailViewModel: ViewModelBase {
     @Published var groupInfo: Group
     @Published var users: [User] = []
     @Published var selectedUser: User?
+    var invitationBaseText: String { """
+「ICE」アプリのグループ「\(groupInfo.groupName)」からの招待状です！
+グループのミッションを達成してポイントをゲット！
+貯めたポイントを使ってリワードをもらおう！
+Link： ice://invite?code=\(groupInfo.id)
+"""
+    }
     var displayUser: [User] {
         Array(users.prefix(5))
     }
@@ -38,17 +45,6 @@ final class GroupDetailViewModel: ViewModelBase {
     @MainActor
     func loadData() async throws {
         asyncOperation({
-            // 検証中のAPIアクセスを節約するためにコメントアウト＆スタブを導入
-//                        self.users = [User(userID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", userName: "Yuki", accountType: AccountType(rawValue: "HOST")!),
-//                                      User(userID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", userName: "Yuki", accountType: AccountType(rawValue: "HOST")!)]
-//                        self.tasks = [Tasks(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", taskName: "First Task", description: "I will complete developing this app!", iconName: "Programing", frequencyType: FrequencyType.onlyOnce, point: 10000, updatedAt: Temporal.DateTime(Date())),
-//                                      Tasks(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", taskName: "Task2", frequencyType: FrequencyType.periodic, point: 10, updatedAt: Temporal.DateTime(Date()))]
-//                        self.rewards = [Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward1", frequencyType: FrequencyType.onlyOnce, whoGetsPaid: WhoGetsPaid.onlyOne, cost: 100, createdAt: Temporal.DateTime(Date())),
-//                                        Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward2", frequencyType: FrequencyType.periodic, periodicType: PeriodicType.oncePerWeek ,whoGetsPaid: WhoGetsPaid.onlyOne, cost: 1000, createdAt: Temporal.DateTime(Date())),
-//                                        Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward3", frequencyType: FrequencyType.onlyOnce, whoGetsPaid: WhoGetsPaid.onlyOne, cost: 20, createdAt: Temporal.DateTime(Date())),
-//                                        Rewards(createUserID: "7adf414e-d90b-47db-bd1b-b2b9155aafbe", rewardName: "Reward4", frequencyType: FrequencyType.onlyOnce, whoGetsPaid: WhoGetsPaid.onlyOne, cost: 1000, createdAt: Temporal.DateTime(Date()))]
-//            
-            
             if self.apiHandler.isRunFetch(userDefaultKey: "\(self.groupInfo.id)-users") || self.reload {
                 var userIDs:[String?] = []
                 if let hostUserIDs = self.groupInfo.hostUserIDs {
@@ -94,12 +90,14 @@ final class GroupDetailViewModel: ViewModelBase {
     
     @MainActor
     func reloadData() async throws {
-        asyncOperation({
-            
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
-        })
+        do {
+            let predicate = Group.keys.id.eq(self.groupInfo.id)
+            let groupInfo = try await self.apiHandler.list(Group.self, where: predicate, keyName: "belongingGroups")
+            self.groupInfo = groupInfo[0]
+            try await loadData()
+        } catch {
+            alertMessage = error.localizedDescription
+            alert = true
+        }
     }
 }

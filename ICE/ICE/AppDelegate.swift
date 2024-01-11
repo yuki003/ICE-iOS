@@ -42,4 +42,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
     }
+//    
+//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+//        // ディープリンクのURLを解析する
+//        // 例: 招待コードの取得
+//        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+//              let queryItems = components.queryItems else { return false }
+//
+//        if let inviteCode = queryItems.first(where: { $0.name == "code" })?.value {
+//            // 招待コードを使って何かする
+//            // 例: サインアップ画面に遷移し、招待コードをセットする
+//        }
+//        return true
+//    }
+
 }

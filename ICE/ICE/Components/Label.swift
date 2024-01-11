@@ -47,3 +47,24 @@ struct SectionLabelWithAdd: View {
         .foregroundStyle(color)
     }
 }
+
+struct SectionLabelWithContent<Content: View>: View {
+    var text: String
+    let font: Font
+    let color: Color
+    let width: CGFloat
+    let content: Content
+    var body: some View {
+        HStack(alignment: .center, spacing: 10) {
+            Rectangle()
+                .frame(width: width, height: width * 5)
+                .foregroundStyle(color)
+            Text(text)
+                .font(font)
+                .lineLimit(2)
+            content
+            Spacer()
+        }
+        .foregroundStyle(color)
+    }
+}

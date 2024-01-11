@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "api": {
+      "ice": [
+        "Query",
+        "Mutation"
+      ]
+    },
+    "auth": {
+      "icebf81ea83": [
+        "create",
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "env",
+      "environmentVariableName": "ENV"
+    },
+    {
+      "cloudFormationParameterName": "groupTableName",
+      "environmentVariableName": "GROUP_TABLE_NAME"
+    },
+    {
+      "cloudFormationParameterName": "env",
+      "environmentVariableName": "ENV"
+    },
+    {
+      "cloudFormationParameterName": "groupTableName",
+      "environmentVariableName": "GROUP_TABLE_NAME"
+    }
+  ]
+}

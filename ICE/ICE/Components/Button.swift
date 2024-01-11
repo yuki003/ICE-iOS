@@ -155,6 +155,7 @@ struct HostUserButton: View {
         Button(action: {
             withAnimation(.linear) {
                 vm.navHostOrGuest = false
+                vm.asHost = true
                 if vm.isSignIn {
                     vm.navSignIn = true
                 } else if vm.isSignUp {
@@ -179,7 +180,6 @@ struct GuestUserButton: View {
         Button(action: {
             withAnimation(.linear) {
                 vm.navHostOrGuest = false
-                vm.asGuest = true
                 if vm.isSignIn {
                     vm.navSignIn = true
                 } else if vm.isSignUp {
@@ -188,7 +188,7 @@ struct GuestUserButton: View {
             }
         })
         {
-            Text("招待を受けている方(ゲスト)")
+            Text("招待を受けている方")
                 .font(.footnote.bold())
                 .foregroundStyle(Color(.jade))
         }
@@ -297,6 +297,7 @@ struct EnabledFlagFillButton: View {
     var body: some View {
         Button(action: {
             withAnimation(.linear(duration: 0.3)) {
+                UIApplication.shared.closeKeyboard()
                 flag.toggle()
             }
         })

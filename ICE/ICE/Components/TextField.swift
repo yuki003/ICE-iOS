@@ -51,6 +51,27 @@ struct EmailTextField: View {
     }
 }
 
+struct InvitedGroupTextField: View {
+    @Binding var groupID: String
+    @FocusState var focused: AuthField?
+    var isFocused: Bool {
+        return focused == .invitedGroupID
+    }
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            TextField("Invited group ID", text: $groupID)
+                .font(.footnote.bold())
+                .focused($focused, equals: .invitedGroupID)
+                .keyboardType(.emailAddress)
+            
+            ClearButton(text: $groupID)
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 4).stroke(isFocused ? Color(.indigo) : Color.gray))
+        .frame(width: textFieldWidth())
+    }
+}
 
 struct PasswordTextField: View {
     @Binding var password: String

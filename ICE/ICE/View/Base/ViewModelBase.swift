@@ -19,6 +19,7 @@ class ViewModelBase: ObservableObject {
     @Published var state: LoadingState = .idle
     @Published var formValid: Validation = .failed()
     @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
+    @Published var asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
     @Published var alertMessage: String?
     var publishers = Set<AnyCancellable>()
     let jsonDecoder = JSONDecoder()

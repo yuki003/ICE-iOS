@@ -15,7 +15,7 @@ extension Rewards {
     case whoGetsPaid
     case getUserID
     case cost
-    case groupId
+    case groupID
     case createdAt
     case updatedAt
   }
@@ -44,7 +44,7 @@ extension Rewards {
       .field(rewards.whoGetsPaid, is: .required, ofType: .enum(type: WhoGetsPaid.self)),
       .field(rewards.getUserID, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(rewards.cost, is: .required, ofType: .int),
-      .field(rewards.groupId, is: .optional, ofType: .string),
+      .field(rewards.groupID, is: .optional, ofType: .string),
       .field(rewards.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(rewards.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime)
     )

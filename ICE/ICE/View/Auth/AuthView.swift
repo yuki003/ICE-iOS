@@ -89,6 +89,23 @@ struct AuthView: View {
                     )
                 )
             }
+            .onOpenURL(perform: { url in
+                debugPrint(url)
+                if let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+                      let queryItems = components.queryItems {
+                    if let inviteCode = queryItems.first(where: { $0.name == "code" })?.value {
+                        // 招待コードを使って何かする
+                        // 例: サインアップ画面に遷移し、招待コードをセットする
+                        if !inviteCode.isEmpty {
+                            print("code is \(inviteCode)")
+                            vm.signUpOptions.invitedGroupID = inviteCode
+                            vm.isSignUp = true
+                            vm.navSignUp = true
+                        }
+                    }
+                }
+
+            })
         case let .failed(error):
             Text(error.localizedDescription)
         }
@@ -106,11 +123,11 @@ struct AuthView: View {
     @ViewBuilder
     func SignInSection() -> some View {
         VStack(spacing: 20) {
-            if vm.asGuest {
-                // TODO:ゲストユーザーサインイン時の追加情報を検討
+            if !vm.asHost {
+                InvitedGroupTextField(groupID: $vm.signUpOptions.invitedGroupID, focused: _focused)
             } else {
-                EmailTextField(email: $vm.email, focused: _focused)
-                    .validation(vm.emailValidation)
+                EmailTextField(email: $vm.signUpOptions.email, focused: _focused)
+                    .validation(vm.optionsValidation)
             }
             UsernameTextField(userName: $vm.userName, focused: _focused)
                 .validation(vm.userNameValidation)
@@ -120,9 +137,9 @@ struct AuthView: View {
             
             SignInButton(vm: vm)
                 .disabled(vm.signInValid.isSuccess == false)
-                .navigationDestination(isPresented: $vm.authComplete) {
-                    HomeView(vm: .init())
-                }
+//                .navigationDestination(isPresented: $vm.authComplete) {
+//                    HomeView(vm: .init())
+//                }
         }
         .frame(height: 150)
         .padding()
@@ -131,11 +148,11 @@ struct AuthView: View {
     @ViewBuilder
     func SignUpSection() -> some View {
         VStack(spacing: 20) {
-            if vm.asGuest {
-                // TODO:ゲストユーザーサインイン時の追加情報を検討
+            if !vm.asHost {
+                InvitedGroupTextField(groupID: $vm.signUpOptions.invitedGroupID, focused: _focused)
             } else {
-                EmailTextField(email: $vm.email, focused: _focused)
-                    .validation(vm.emailValidation)
+                EmailTextField(email: $vm.signUpOptions.email, focused: _focused)
+                    .validation(vm.optionsValidation)
             }
             UsernameTextField(userName: $vm.userName, focused: _focused)
                 .validation(vm.userNameValidation)
@@ -158,9 +175,9 @@ struct AuthView: View {
             
             ConfirmSignUpButton(vm: vm)
                 .disabled(vm.codeValid.isSuccess == false)
-                .navigationDestination(isPresented: $vm.authComplete) {
-                    HomeView(vm: .init())
-                }
+//                .navigationDestination(isPresented: $vm.authComplete) {
+//                    HomeView(vm: .init())
+//                }
             ActionFillButton(label: "コード再送", action: vm.resendCode, color: Color(.indigo))
         }
         .frame(height: 150)

@@ -2,7 +2,6 @@ import SwiftUI
 import Amplify
 
 struct TemplateView: View {
-    @Environment(\.asGuestKey) private var asGuest
     @StateObject var vm: TemplateViewModel
     var body: some View {
         VStack {

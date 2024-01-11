@@ -98,12 +98,13 @@ var createValidation: AnyPublisher<Validation, Never> {
     func createReward() async throws {
         asyncOperation({
             self.showAlert = false
-            var reward = Rewards(createUserID: self.userID, rewardName: self.rewardName,description: self.rewardDescription.isEmpty ? nil : self.rewardDescription, thumbnailKey: "", frequencyType: self.frequencyAndPeriodic.frequency, whoGetsPaid: self.whoGetsPaid, cost: self.cost, groupId: self.groupID)
-            let key = self.groupID + reward.id
-            reward.thumbnailKey = key
-            try await self.storage.uploadData(self.image, key: key)
-            let thumbnailURL = try await self.storage.getPublicURLForKey(key)
-            reward.thumbnailKey = thumbnailURL
+            var reward = Rewards(createUserID: self.userID, rewardName: self.rewardName,description: self.rewardDescription.isEmpty ? nil : self.rewardDescription, thumbnailKey: "", frequencyType: self.frequencyAndPeriodic.frequency, whoGetsPaid: self.whoGetsPaid, cost: self.cost, groupID: self.groupID)
+            if !self.image.isEmpty() {
+                let key = self.groupID + reward.id
+                reward.thumbnailKey = key
+                try await self.storage.uploadData(self.image, key: key)
+                let thumbnailURL = try await self.storage.getPublicURLForKey(key)
+                reward.thumbnailKey = thumbnailURL            }
             try await self.apiHandler.create(reward, keyName: "\(self.groupID)-rewards")
             self.createComplete = true
         }, apiErrorHandler: { apiError in

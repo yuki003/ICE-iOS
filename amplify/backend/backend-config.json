@@ -20,7 +20,7 @@
     }
   },
   "auth": {
-    "ice05b1bdae": {
+    "icebf81ea83": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -33,7 +33,7 @@
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "EMAIL"
+          "NAME"
         ],
         "socialProviders": [],
         "usernameAttributes": [],
@@ -53,6 +53,52 @@
     },
     "iceCreateGroup": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "iceCreateMemberUser": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "ice"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "icebf81ea83"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "iceCreateRewards": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "ice"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "icebf81ea83"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -119,6 +165,78 @@
         {
           "category": "function",
           "resourceName": "iceCreateGroup"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateMemberUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateMemberUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateMemberUser_env": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateMemberUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateMemberUser_groupTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateMemberUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateMemberUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateMemberUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateRewards_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateRewards"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateRewards_env": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateRewards"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateRewards_groupTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateRewards"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateRewards_rewardsTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateRewards"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateRewards_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateRewards"
         }
       ]
     },

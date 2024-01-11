@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CreateTaskView: View {
-    @Environment(\.asGuestKey) private var asGuest
     @FocusState private var focused: FormField?
     @StateObject var vm: CreateTaskViewModel
     @State var fieldNum: String = ""
