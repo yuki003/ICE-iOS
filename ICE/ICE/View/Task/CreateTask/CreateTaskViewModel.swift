@@ -128,7 +128,4 @@ final class CreateTaskViewModel: ViewModelBase {
         createComplete = false
     }
 }
-//struct FrequencyAndPeriodic {
-//    var frequency: FrequencyType = .onlyOnce
-//    var periodic: PeriodicType?
-//}
+

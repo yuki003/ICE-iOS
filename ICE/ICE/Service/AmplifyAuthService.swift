@@ -22,6 +22,8 @@ class AmplifyAuthService: ObservableObject {
                 self.isSignedIn = true
                 print("In Session")
             } else {
+                let appDomain = Bundle.main.bundleIdentifier
+                UserDefaults.standard.removePersistentDomain(forName: appDomain!)
                 print("Session Expired")
             }
         } catch {

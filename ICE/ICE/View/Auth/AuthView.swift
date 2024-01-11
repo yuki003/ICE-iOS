@@ -43,9 +43,6 @@ struct AuthView: View {
                     }
                     Spacer()
                 }
-                .navigationDestination(isPresented: $vm.authComplete) {
-                    HomeView(vm: .init())
-                }
                 .toolbar {
                     if vm.navSignIn || vm.navSignUp || vm.navSignUpConfirm || vm.navHostOrGuest {
                         ToolbarItem(placement: .navigationBarLeading) {

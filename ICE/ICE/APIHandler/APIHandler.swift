@@ -39,7 +39,7 @@ class APIHandler: ObservableObject {
     }
 
     
-    func get<ModelType: Model>(_ modelType: ModelType.Type, byId id: String, keyName: String = "") async throws -> Model {
+    func get<ModelType: Model>(_ modelType: ModelType.Type, byId id: String, keyName: String = "") async throws -> ModelType {
         do {
             var keyName = keyName
             if keyName.isEmpty {

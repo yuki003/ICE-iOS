@@ -14,7 +14,7 @@ extension View {
     }
     
     func screenWidth() -> CGFloat{
-        return UIScreen.main.bounds.width / 1.2
+        return UIScreen.main.bounds.width - 32
     }
     
     func cardWidth() -> CGFloat{

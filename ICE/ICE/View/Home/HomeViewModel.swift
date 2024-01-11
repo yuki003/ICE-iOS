@@ -45,18 +45,18 @@ final class HomeViewModel: ViewModelBase {
                 self.asHost = true
                 UserDefaults.standard.set(self.asHost, forKey: "asHost")
             }
-            
-            if self.apiHandler.isRunFetch(userDefaultKey: "hostGroups") || self.reload  {
-                if let hostGroupIDs = self.userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {
-                    let hostGroupPredicate = self.apiService.orPredicateGroupByID(ids: hostGroupIDs, model: Group.keys.id)
-                    let hostGroups = try await self.apiHandler.list(Group.self, where: hostGroupPredicate, keyName: "hostGroups")
-                    self.hostGroups = hostGroups.sorted(by: {$0.createdAt! > $1.createdAt!})
-                    
+            if self.asHost {
+                if self.apiHandler.isRunFetch(userDefaultKey: "hostGroups") || self.reload  {
+                    if let hostGroupIDs = self.userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {
+                        let hostGroupPredicate = self.apiService.orPredicateGroupByID(ids: hostGroupIDs, model: Group.keys.id)
+                        let hostGroups = try await self.apiHandler.list(Group.self, where: hostGroupPredicate, keyName: "hostGroups")
+                        self.hostGroups = hostGroups.sorted(by: {$0.createdAt! > $1.createdAt!})
+                        
+                    }
+                } else {
+                    self.hostGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "hostGroups") ?? []
                 }
-            } else {
-                self.hostGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "hostGroups") ?? []
             }
-            
             if self.apiHandler.isRunFetch(userDefaultKey: "belongingGroups") || self.reload  {
                 if let belongingGroupIDs = self.userInfo?.belongingGroupIDs, !belongingGroupIDs.isEmpty {
                     let belongingGroupPredicate = self.apiService.orPredicateGroupByID(ids: belongingGroupIDs, model: Group.keys.id)

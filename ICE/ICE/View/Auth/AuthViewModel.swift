@@ -34,13 +34,11 @@ final class AuthViewModel: ObservableObject {
     @Published var navSignUpConfirm: Bool = false
     
     
-    @Published var authComplete: Bool = false
-    
     @Published var alert: Bool = false
     @Published var alertMessage: String?
     
-    @ObservedObject var auth = AmplifyAuthService()
-    @ObservedObject var apiHandler = APIHandler()
+    @ObservedObject var auth = AmplifyAuthService.shared
+    @ObservedObject var apiHandler = APIHandler.shared
     
     let hashDelimiter = "_hash_"
     
@@ -266,7 +264,7 @@ final class AuthViewModel: ObservableObject {
                         UserDefaults.standard.set(asHost, forKey: "asHost")
                         flagInitialize()
                         DispatchQueue.main.async {
-                            self.authComplete = true
+                            self.auth.isSignedIn = true
                         }
                     }
                 } else if case .confirmSignUp(_) = signInInfo?.nextStep {
@@ -285,7 +283,7 @@ final class AuthViewModel: ObservableObject {
                 alertMessage = error.localizedDescription
                 alert = true
             }
-        } else if !authComplete, !isSignIn {
+        } else if !self.auth.isSignedIn, !isSignIn {
             withAnimation(.easeOut(duration: 0.3)) {
                 isSignIn = true
                 navHostOrGuest = true
@@ -302,12 +300,19 @@ final class AuthViewModel: ObservableObject {
             var user = User(userID: userID, userName: userName, accountType: asHost ? AccountType.host : AccountType.guest)
             if !asHost {
                 user.belongingGroupIDs = [signUpOptions.invitedGroupID]
+                var groupInfo = try await apiHandler.get(Group.self, byId: signUpOptions.invitedGroupID)
+                if let belongingUserIDs = groupInfo.belongingUserIDs, !belongingUserIDs.isEmpty {
+                    groupInfo.belongingUserIDs?.append(userID)
+                } else {
+                    groupInfo.belongingUserIDs = [userID]
+                }
+                try await apiHandler.update(groupInfo, keyName: "belongingGroups")
             }
-            try await apiHandler.create(user)
+            try await apiHandler.create(user, keyName: "User")
             withAnimation(.easeIn) {
                 UserDefaults.standard.set(asHost, forKey: "asHost")
                 DispatchQueue.main.async {
-                    self.authComplete = true
+                    self.auth.isSignedIn = true
                 }
             }
         } catch {

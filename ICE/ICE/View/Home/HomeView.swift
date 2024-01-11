@@ -88,12 +88,14 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
                 Text("自分のグループ")
-                AddButton(action: {
-                    router.path.append(NavigationPathType.createGroup)
-                })
-                .frame(width: 18, height: 18)
+                if vm.asHost {
+                    AddButton(action: {
+                        router.path.append(NavigationPathType.createGroup)
+                    })
+                    .frame(width: 18, height: 18)
+                }
             }
-            .padding(.leading, 40)
+            .padding(.leading)
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
             if !vm.hostGroups.isEmpty {
@@ -109,7 +111,7 @@ struct HomeView: View {
                                 HomeGroupCard(group: group, url: group.thumbnailKey ?? "" , color: Color(.indigo))
                                     .padding(.vertical, 5)
                                 /// イカしたスクロールを実装するのでpaddingで暫定対応
-                                    .padding(.leading, index == 0 ? 40 : 0)
+                                    .padding(.leading, index == 0 ? 16 : 0)
                             }
                         }
                     }
@@ -122,7 +124,7 @@ struct HomeView: View {
                     .frame(width: screenWidth(), height: 100, alignment: .center)
                     .roundedSection(color: Color(.jade))
                 /// イカしたスクロールを実装するのでpaddingで暫定対応
-                    .padding(.horizontal, 40)
+                    .padding(.horizontal)
             }
         }
         .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
@@ -133,17 +135,19 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
                 Text("所属しているグループ")
-                AddButton(action: {
-                    router.path.append(NavigationPathType.createGroup)
-                })
-                .frame(width: 18, height: 18)
+                if vm.asHost {
+                    AddButton(action: {
+                        router.path.append(NavigationPathType.createGroup)
+                    })
+                    .frame(width: 18, height: 18)
+                }
             }
-            .padding(.leading, 40)
+            .padding(.leading)
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
             // group switchable
             if !vm.belongingGroups.isEmpty {
-                ScrollView(.horizontal) {
+                ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(vm.belongingGroups.indices, id: \.self) { index in
                             let group = vm.belongingGroups[index]
@@ -155,7 +159,7 @@ struct HomeView: View {
                                 HomeGroupCard(group: group, url: group.thumbnailKey ?? "" , color: Color(.indigo))
                                     .padding(.vertical, 5)
                                 /// イカしたスクロールを実装するのでpaddingで暫定対応
-                                    .padding(.leading, index == 0 ? 40 : 0)
+                                    .padding(.leading, index == 0 ? 16 : 0)
                             }
                         }
                     }
@@ -167,7 +171,7 @@ struct HomeView: View {
                     .padding(5)
                     .frame(width: screenWidth(), height: 100, alignment: .center)
                     .roundedSection(color: Color(.jade))
-                    .padding(.horizontal, 40)
+                    .padding(.horizontal)
             }
         }
         .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
