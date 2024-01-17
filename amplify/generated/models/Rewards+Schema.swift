@@ -44,7 +44,7 @@ extension Rewards {
       .field(rewards.whoGetsPaid, is: .required, ofType: .enum(type: WhoGetsPaid.self)),
       .field(rewards.getUserID, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(rewards.cost, is: .required, ofType: .int),
-      .field(rewards.groupID, is: .optional, ofType: .string),
+      .field(rewards.groupID, is: .required, ofType: .string),
       .field(rewards.startDate, is: .optional, ofType: .dateTime),
       .field(rewards.endDate, is: .optional, ofType: .dateTime),
       .field(rewards.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),

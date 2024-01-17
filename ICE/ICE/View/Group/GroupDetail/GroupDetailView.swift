@@ -117,6 +117,7 @@ struct GroupDetailView: View {
             .padding(.leading)
         }
     }
+    
     @ViewBuilder
     func makeTaskList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -132,11 +133,7 @@ struct GroupDetailView: View {
             if vm.latestTasks.count > 0 {
                 ForEach(vm.latestTasks.indices, id: \.self) { index in
                     let task = vm.latestTasks[index]
-                    Button(action: {
-                        // タスク詳細に遷移、ポップアップで詳細表示でも可
-                    }) {
-                        ActiveTaskRow(taskName: task.taskName)
-                    }
+                    TaskRow(task: task, action: { try await TasksService().tryTask() }, asHost: vm.asHost)
                     .padding(.leading, 10)
                 }
             } else {
@@ -148,10 +145,18 @@ struct GroupDetailView: View {
             
             if vm.tasks.count > vm.latestTasks.count {
                 Button(action: {
-                    // タスク一覧に遷移、ポップアップで詳細表示でも可
+                    router.path.append(NavigationPathType.taskList(tasks: vm.tasks))
                 }) {
-                    Text("他\(vm.tasks.count)のタスク")
+                    HStack {
+                        Text("他\(vm.tasks.count - vm.latestTasks.count)のタスク")
+                        Image(systemName: "chevron.right")
+                            .frame(width: 10, height: 10)
+                        Spacer()
+                    }
+                    .foregroundStyle(Color.black)
+                    .bold()
                 }
+                .padding(.leading, 10)
             }
         }
     }

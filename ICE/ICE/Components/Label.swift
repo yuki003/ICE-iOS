@@ -13,6 +13,7 @@ struct SectionLabel: View {
     let color: Color
     let width: CGFloat
     var placeHolder: String = ""
+    var space: Bool = true
     var body: some View {
         HStack(alignment: .center, spacing: 5) {
             Rectangle()
@@ -22,7 +23,9 @@ struct SectionLabel: View {
                 .font(font)
                 .foregroundStyle(text.isEmpty ? Color.gray : color)
                 .lineLimit(2)
-            Spacer()
+            if space {
+                Spacer()
+            }
         }
     }
 }

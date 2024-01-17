@@ -8,5 +8,13 @@
 import Foundation
 
 class TasksService: ObservableObject {
-    
+    @MainActor
+    func tryTask() async throws {
+    }
+    @MainActor
+    func applyTaskCompleted() async throws {
+    }
+    @MainActor
+    func cancelApplyTask() async throws {
+    }
 }

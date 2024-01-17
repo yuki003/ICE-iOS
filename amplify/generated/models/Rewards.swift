@@ -12,7 +12,7 @@ public struct Rewards: Model {
   public var whoGetsPaid: WhoGetsPaid
   public var getUserID: [String?]?
   public var cost: Int
-  public var groupID: String?
+  public var groupID: String
   public var startDate: Temporal.DateTime?
   public var endDate: Temporal.DateTime?
   public var createdAt: Temporal.DateTime?
@@ -27,7 +27,7 @@ public struct Rewards: Model {
       whoGetsPaid: WhoGetsPaid,
       getUserID: [String?]? = nil,
       cost: Int,
-      groupID: String? = nil,
+      groupID: String,
       startDate: Temporal.DateTime? = nil,
       endDate: Temporal.DateTime? = nil) {
     self.init(id: id,
@@ -54,7 +54,7 @@ public struct Rewards: Model {
       whoGetsPaid: WhoGetsPaid,
       getUserID: [String?]? = nil,
       cost: Int,
-      groupID: String? = nil,
+      groupID: String,
       startDate: Temporal.DateTime? = nil,
       endDate: Temporal.DateTime? = nil,
       createdAt: Temporal.DateTime? = nil,

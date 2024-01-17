@@ -1,8 +1,15 @@
+//
+//  TaskListView.swift
+//  ICE
+//
+//  Created by 佐藤友貴 on 2024/01/17.
+//
+
 import SwiftUI
 import Amplify
 
-struct TemplateView: View {
-    @StateObject var vm: TemplateViewModel
+struct TaskListView: View {
+    @StateObject var vm: TaskListViewModel
     @EnvironmentObject var router: PageRouter
     var body: some View {
         DestinationHolderView(router: router) {
@@ -21,6 +28,10 @@ struct TemplateView: View {
                 case .loaded:
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .center, spacing: 10) {
+                            ForEach(vm.tasks.indices, id: \.self){ index in
+                                let task = vm.tasks[index]
+                                TaskRow(task: task, action: { try await TasksService().tryTask() }, asHost: vm.asHost)
+                            }
                         }
                         .padding(.vertical)
                         .frame(width: deviceWidth())
@@ -48,13 +59,7 @@ struct TemplateView: View {
                     }
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                }
-            }
+            .userToolbar(state: vm.state, userName: nil, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
         }

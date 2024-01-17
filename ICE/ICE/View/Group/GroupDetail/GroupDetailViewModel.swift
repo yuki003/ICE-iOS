@@ -14,6 +14,7 @@ final class GroupDetailViewModel: ViewModelBase {
     @Published var groupInfo: Group
     @Published var users: [User] = []
     @Published var selectedUser: User?
+    @Published var selectedTask: Tasks?
     var invitationBaseText: String { """
 「ICE」アプリのグループ「\(groupInfo.groupName)」からの招待状です！
 グループのミッションを達成してポイントをゲット！
