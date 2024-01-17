@@ -18,14 +18,14 @@ final class TaskListViewModel: ViewModelBase {
     @Published var flag: Bool = false
     
     // MARK: Instances
-    @Published var task: Tasks
+    @Published var tasks: [Tasks]
     
     // MARK: Validations
     
     // MARK: initializer
-    init(task: Tasks)
+    init(tasks: [Tasks])
     {
-        self.task = task
+        self.tasks = tasks
     }
     @MainActor
     func loadData() async throws {

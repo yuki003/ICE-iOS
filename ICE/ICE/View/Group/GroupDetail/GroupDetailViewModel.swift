@@ -101,14 +101,4 @@ Link： ice://invite?code=\(groupInfo.id)
             alert = true
         }
     }
-    
-    @MainActor
-    func tryTask() async throws {
-        asyncOperation({
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
-        })
-    }
 }

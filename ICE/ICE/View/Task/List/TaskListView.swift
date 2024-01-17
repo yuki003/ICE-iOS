@@ -27,28 +27,10 @@ struct TaskListView: View {
                     Text(error.localizedDescription)
                 case .loaded:
                     ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 20) {
-                            TaskIcon(thumbnail: TaskType(rawValue: vm.task.iconName)!.icon, aspect: 70, selected: true)
-                                .padding(.top)
-                            HStack(alignment: .center, spacing: 10) {
-                                Text(vm.task.taskName)
-                                    .font(.body.bold())
-                                    .lineLimit(2)
-                                Text("\(vm.task.point.comma())pt")
-                                    .font(.body.bold())
-                                    .foregroundStyle(Color(.indigo))
-                            }
-                            GroupDescription(description: vm.task.description)
-                            Divider()
-                            
-                            if let conditions = vm.task.condition, !conditions.isEmpty {
-                                VStack(alignment: .center, spacing: 5) {
-                                    SectionLabel(text: "達成条件", font: .callout.bold(), color: Color(.indigo), width: 3)
-                                    ForEach(conditions.indices, id: \.self) { index in
-                                        let condition = conditions[index]
-//                                        ItemizedRow(name: condition!)
-                                    }
-                                }
+                        VStack(alignment: .center, spacing: 10) {
+                            ForEach(vm.tasks.indices, id: \.self){ index in
+                                let task = vm.tasks[index]
+                                TaskRow(task: task, action: { try await TasksService().tryTask() }, asHost: vm.asHost)
                             }
                         }
                         .padding(.vertical)

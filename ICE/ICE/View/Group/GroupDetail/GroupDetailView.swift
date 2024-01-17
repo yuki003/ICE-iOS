@@ -133,7 +133,7 @@ struct GroupDetailView: View {
             if vm.latestTasks.count > 0 {
                 ForEach(vm.latestTasks.indices, id: \.self) { index in
                     let task = vm.latestTasks[index]
-                    ActiveTaskRow(task: task, action: { try await vm.tryTask() })
+                    TaskRow(task: task, action: { try await TasksService().tryTask() }, asHost: vm.asHost)
                     .padding(.leading, 10)
                 }
             } else {
@@ -145,10 +145,18 @@ struct GroupDetailView: View {
             
             if vm.tasks.count > vm.latestTasks.count {
                 Button(action: {
-                    // タスク一覧に遷移、ポップアップで詳細表示でも可
+                    router.path.append(NavigationPathType.taskList(tasks: vm.tasks))
                 }) {
-                    Text("他\(vm.tasks.count)のタスク")
+                    HStack {
+                        Text("他\(vm.tasks.count - vm.latestTasks.count)のタスク")
+                        Image(systemName: "chevron.right")
+                            .frame(width: 10, height: 10)
+                        Spacer()
+                    }
+                    .foregroundStyle(Color.black)
+                    .bold()
                 }
+                .padding(.leading, 10)
             }
         }
     }

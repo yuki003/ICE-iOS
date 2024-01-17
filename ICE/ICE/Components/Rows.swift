@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct ActiveTaskRow: View {
+struct TaskRow: View {
     let task: Tasks
     @State var isOpen: Bool = false
     let action: () async throws -> Void
+    let asHost: Bool
     var body: some View {
         Button(action: {
             withAnimation(.easeOut(duration: 0.3)){
@@ -18,7 +19,7 @@ struct ActiveTaskRow: View {
             }
         })
         {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .center, spacing: 10) {
                 HStack(alignment: .center, spacing: 10) {
                     TaskIcon(thumbnail: TaskType(rawValue: task.iconName)!.icon, aspect: 30, selected: true)
                     Text(task.taskName)
@@ -32,9 +33,12 @@ struct ActiveTaskRow: View {
                 }
                 if isOpen {
                     if let description = task.description {
-                        Text(description)
-                            .font(.footnote.bold())
-                            .foregroundStyle(Color.black)
+                        HStack {
+                            Text(description)
+                                .font(.footnote.bold())
+                                .foregroundStyle(Color.black)
+                        Spacer()
+                        }
                     }
                     Divider()
                     if let conditions = task.condition, !conditions.isEmpty {
@@ -63,8 +67,17 @@ struct ActiveTaskRow: View {
                             }
                         }
                     }
-                    
-                    ActionFillButton(label: "チャレンジする", action: action, color: Color(.indigo))
+                    if asHost {
+                        HStack(spacing: 20) {
+                            ActionFillButton(label: "編集する", action: action, color: Color(.indigo))
+                                .frame(width: (screenWidth() - 84) / 2)
+                            ActionFillButton(label: "インサイト", action: action, color: Color(.jade))
+                                .frame(width: (screenWidth() - 84) / 2)
+                        }
+                        .frame(width: (screenWidth() - 84))
+                    } else {
+                        ActionFillButton(label: "チャレンジする", action: action, color: Color(.indigo))
+                    }
                 }
             }
         }
