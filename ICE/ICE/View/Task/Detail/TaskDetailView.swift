@@ -1,8 +1,15 @@
+//
+//  TaskDetailView.swift
+//  ICE
+//
+//  Created by 佐藤友貴 on 2024/01/17.
+//
+
 import SwiftUI
 import Amplify
 
-struct TemplateView: View {
-    @StateObject var vm: TemplateViewModel
+struct TaskDetailView: View {
+    @StateObject var vm: TaskDetailViewModel
     @EnvironmentObject var router: PageRouter
     var body: some View {
         DestinationHolderView(router: router) {
