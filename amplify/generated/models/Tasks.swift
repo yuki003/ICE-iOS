@@ -7,11 +7,11 @@ public struct Tasks: Model {
   public var createUserID: String
   public var taskName: String
   public var description: String?
-  public var iconName: String?
+  public var iconName: String
   public var frequencyType: FrequencyType
   public var condition: [String?]?
   public var point: Int
-  public var groupID: String?
+  public var groupID: String
   public var startDate: Temporal.DateTime?
   public var endDate: Temporal.DateTime?
   public var createdAt: Temporal.DateTime?
@@ -21,11 +21,11 @@ public struct Tasks: Model {
       createUserID: String,
       taskName: String,
       description: String? = nil,
-      iconName: String? = nil,
+      iconName: String,
       frequencyType: FrequencyType,
       condition: [String?]? = nil,
       point: Int,
-      groupID: String? = nil,
+      groupID: String,
       startDate: Temporal.DateTime? = nil,
       endDate: Temporal.DateTime? = nil) {
     self.init(id: id,
@@ -46,11 +46,11 @@ public struct Tasks: Model {
       createUserID: String,
       taskName: String,
       description: String? = nil,
-      iconName: String? = nil,
+      iconName: String,
       frequencyType: FrequencyType,
       condition: [String?]? = nil,
       point: Int,
-      groupID: String? = nil,
+      groupID: String,
       startDate: Temporal.DateTime? = nil,
       endDate: Temporal.DateTime? = nil,
       createdAt: Temporal.DateTime? = nil,

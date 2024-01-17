@@ -59,7 +59,7 @@ struct CreateTaskView: View {
                                 ForEach(vm.conditions.indices, id: \.self) { index in
                                     let condition = vm.conditions[index]
                                     if !condition.isEmpty {
-                                        ItemizedRow(name: condition)
+                                        ItemizedRow(name: condition, font: .callout.bold(), onUnderLine: true)
                                     }
                                 }
                             }

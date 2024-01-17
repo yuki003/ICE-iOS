@@ -51,7 +51,10 @@ struct CreateRewardsView: View {
                         
                         VStack(spacing: 10) {
                             Toggle(isOn: $vm.isLimited) {
-                                SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
+                                HStack {
+                                    SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
+                                    
+                                Spacer()}
                             }
                             .toggleStyle(SwitchToggleStyle(tint: Color(.indigo)))
                             .padding(.trailing)

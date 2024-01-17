@@ -117,6 +117,7 @@ struct GroupDetailView: View {
             .padding(.leading)
         }
     }
+    
     @ViewBuilder
     func makeTaskList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -132,11 +133,7 @@ struct GroupDetailView: View {
             if vm.latestTasks.count > 0 {
                 ForEach(vm.latestTasks.indices, id: \.self) { index in
                     let task = vm.latestTasks[index]
-                    Button(action: {
-                        // タスク詳細に遷移、ポップアップで詳細表示でも可
-                    }) {
-                        ActiveTaskRow(taskName: task.taskName)
-                    }
+                    ActiveTaskRow(task: task, action: { try await vm.tryTask() })
                     .padding(.leading, 10)
                 }
             } else {

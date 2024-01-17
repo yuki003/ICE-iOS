@@ -14,6 +14,7 @@ final class GroupDetailViewModel: ViewModelBase {
     @Published var groupInfo: Group
     @Published var users: [User] = []
     @Published var selectedUser: User?
+    @Published var selectedTask: Tasks?
     var invitationBaseText: String { """
 「ICE」アプリのグループ「\(groupInfo.groupName)」からの招待状です！
 グループのミッションを達成してポイントをゲット！
@@ -99,5 +100,15 @@ Link： ice://invite?code=\(groupInfo.id)
             alertMessage = error.localizedDescription
             alert = true
         }
+    }
+    
+    @MainActor
+    func tryTask() async throws {
+        asyncOperation({
+        }, apiErrorHandler: { apiError in
+            self.setErrorMessage(apiError)
+        }, errorHandler: { error in
+            self.setErrorMessage(error)
+        })
     }
 }

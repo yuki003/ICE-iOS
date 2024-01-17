@@ -33,11 +33,11 @@ type Tasks @model {
   createUserID: String!
   taskName: String!
   description: String
-  iconName: String
+  iconName: String!
   frequencyType: FrequencyType!
   condition: [String]
   point: Int!
-  groupID: String
+  groupID: String!
   startDate: AWSDateTime
   endDate: AWSDateTime
 }
@@ -52,7 +52,7 @@ type Rewards @model {
   whoGetsPaid: WhoGetsPaid!
   getUserID: [String]
   cost: Int!
-  groupID: String
+  groupID: String!
   startDate: AWSDateTime
   endDate: AWSDateTime
 }
