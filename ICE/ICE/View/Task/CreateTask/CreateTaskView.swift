@@ -72,23 +72,24 @@ struct CreateTaskView: View {
                                 .validation(vm.pointValidation)
                         }
                         
-                        //setting frequency and periodical
-                        frequencyPicker()
+                        //setting frequency
+                        FrequencyPicker(label: "くりかえし", frequencyType: $vm.frequencyType)
                         
-                        if vm.frequencyAndPeriodic.frequency == .periodic {
-                            periodicPicker()
+                        VStack(spacing: 10) {
+                            Toggle(isOn: $vm.isLimited) {
+                                SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
+                            }
+                            .toggleStyle(SwitchToggleStyle(tint: Color(.indigo)))
+                            .padding(.trailing)
+                            
+                            if vm.isLimited {
+                                PeriodPicker(start: $vm.startDate, end: $vm.endDate)
+                            }
                         }
                         Spacer()
                         if !vm.createComplete {
                             EnabledFlagFillButton(label: "タスクを作成", color: Color(.jade), flag: $vm.showAlert, condition: vm.formValid.isSuccess == false)
                                 .padding(.vertical)
-                        }
-                        
-                        Button(action:{
-                            router.path.removeLast()
-                        })
-                        {
-                            Text("戻る")
                         }
                     }
                     .padding(.vertical)
@@ -134,58 +135,6 @@ struct CreateTaskView: View {
         })
         {
             TaskIcon(thumbnail: vm.taskType.icon, aspect: 70, selected: true)
-        }
-    }
-    
-    private func frequencyPicker() -> some View {
-        VStack(alignment: .leading, spacing: 5) {
-            SectionLabel(text: "タスクの頻度", font: .callout.bold(), color: Color(.indigo), width: 3)
-            Menu {
-                ForEach(FrequencyType.allCases, id: \.self) { type in
-                    Button(vm.enumUtil.translateFrequencyType(frequency: type), action: {
-                        vm.frequencyAndPeriodic.frequency = type
-                    })
-                }
-            } label: {
-                HStack(alignment: .center, spacing: 0) {
-                    Text(vm.translatedFrequency)
-                        .font(.callout.bold())
-                        .foregroundStyle(Color.black)
-                        .frame(width: screenWidth() / 2.5)
-                    Spacer()
-                    ArrowTriangleIcon(direction: Direction.down)
-                        .frame(width: 10, height: 10)
-                        .foregroundStyle(Color.black)
-                }
-                .padding(.vertical)
-                .frame(width: screenWidth() / 2.2, height: 30)
-            }
-        }
-    }
-    
-    private func periodicPicker() -> some View {
-        VStack(alignment: .leading, spacing: 5) {
-            SectionLabel(text: "タイミング", font: .callout.bold(), color: Color(.indigo), width: 3)
-            Menu {
-                ForEach(PeriodicType.allCases, id: \.self) { type in
-                    Button(vm.enumUtil.translatePeriodicType(periodic: type)!, action: {
-                        vm.frequencyAndPeriodic.periodic = type
-                    })
-                }
-            } label: {
-                HStack(alignment: .center, spacing: 0) {
-                    Text(vm.translatedPeriodic ?? "選択してください")
-                        .font(.callout.bold())
-                        .foregroundStyle(Color.black)
-                        .frame(width: screenWidth() / 2.5)
-                    Spacer()
-                    ArrowTriangleIcon(direction: Direction.down)
-                        .frame(width: 10, height: 10)
-                        .foregroundStyle(Color.black)
-                }
-                .padding(.vertical)
-                .frame(width: screenWidth() / 2.2, height: 30)
-            }
         }
     }
 }
