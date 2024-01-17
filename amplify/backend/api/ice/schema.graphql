@@ -35,10 +35,11 @@ type Tasks @model {
   description: String
   iconName: String
   frequencyType: FrequencyType!
-  periodicType: PeriodicType
   condition: [String]
   point: Int!
   groupID: String
+  startDate: AWSDateTime
+  endDate: AWSDateTime
 }
 
 type Rewards @model {
@@ -48,19 +49,16 @@ type Rewards @model {
   description: String
   thumbnailKey: String
   frequencyType: FrequencyType!
-  periodicType: PeriodicType
   whoGetsPaid: WhoGetsPaid!
   getUserID: [String]
   cost: Int!
   groupID: String
+  startDate: AWSDateTime
+  endDate: AWSDateTime
 }
 
 enum FrequencyType {
   ONLY_ONCE
-  PERIODIC
-}
-
-enum PeriodicType {
   EVERY_DAY
   WEEK_DAY
   HOLIDAY

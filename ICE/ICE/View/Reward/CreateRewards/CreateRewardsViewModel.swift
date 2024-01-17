@@ -15,11 +15,14 @@ final class CreateRewardsViewModel: ViewModelBase {
     @Published var rewardName: String = ""
     @Published var rewardDescription: String = ""
     @Published var cost: Int = 0
-    @Published var frequencyAndPeriodic: FrequencyAndPeriodic = .init()
+    @Published var startDate: Date = Date()
+    @Published var endDate: Date = Date()
+    @Published var frequencyType: FrequencyType = .onlyOnce
     @Published var whoGetsPaid: WhoGetsPaid = .onlyOne
     let groupID: String
     
     // MARK: Flags
+    @Published var isLimited: Bool = false
     @Published var showImagePicker: Bool = false
     @Published var createComplete: Bool = false
     
@@ -31,16 +34,6 @@ final class CreateRewardsViewModel: ViewModelBase {
             .dropFirst()
             .map { value in
                 if value.isEmpty {
-                    return .failed()
-                }
-                return .success
-            }
-            .eraseToAnyPublisher()
-    }
-    var frequencyAndPeriodicValidation: AnyPublisher<Validation, Never> {
-        $frequencyAndPeriodic
-            .map { value in
-                if value.frequency == .periodic, value.periodic == nil {
                     return .failed()
                 }
                 return .success
@@ -64,13 +57,12 @@ final class CreateRewardsViewModel: ViewModelBase {
     }
 
 var createValidation: AnyPublisher<Validation, Never> {
-    Publishers.CombineLatest3 (
+    Publishers.CombineLatest (
         rewardNameValidation,
-        frequencyAndPeriodicValidation,
         costValidation
     )
-    .map { v1, v2, v3 in
-        [v1, v2, v3].allSatisfy(\.isSuccess) ? .success : .failed()
+    .map { v1, v2 in
+        [v1, v2].allSatisfy(\.isSuccess) ? .success : .failed()
     }
     .eraseToAnyPublisher()
 }
@@ -98,13 +90,21 @@ var createValidation: AnyPublisher<Validation, Never> {
     func createReward() async throws {
         asyncOperation({
             self.showAlert = false
-            var reward = Rewards(createUserID: self.userID, rewardName: self.rewardName,description: self.rewardDescription.isEmpty ? nil : self.rewardDescription, thumbnailKey: "", frequencyType: self.frequencyAndPeriodic.frequency, whoGetsPaid: self.whoGetsPaid, cost: self.cost, groupID: self.groupID)
+            var reward = Rewards(createUserID: self.userID, rewardName: self.rewardName,description: self.rewardDescription.isEmpty ? nil : self.rewardDescription, thumbnailKey: "", frequencyType: self.frequencyType, whoGetsPaid: self.whoGetsPaid, cost: self.cost, groupID: self.groupID)
+            
+            if self.isLimited {
+                reward.startDate = Temporal.DateTime(self.startDate)
+                reward.endDate = Temporal.DateTime(self.endDate)
+            }
+            
             if !self.image.isEmpty() {
                 let key = self.groupID + reward.id
                 reward.thumbnailKey = key
                 try await self.storage.uploadData(self.image, key: key)
                 let thumbnailURL = try await self.storage.getPublicURLForKey(key)
-                reward.thumbnailKey = thumbnailURL            }
+                reward.thumbnailKey = thumbnailURL
+            }
+            
             try await self.apiHandler.create(reward, keyName: "\(self.groupID)-rewards")
             self.createComplete = true
         }, apiErrorHandler: { apiError in
@@ -119,8 +119,7 @@ var createValidation: AnyPublisher<Validation, Never> {
         rewardName = ""
         rewardDescription = ""
         cost = 0
-        frequencyAndPeriodic.frequency = .onlyOnce
-        frequencyAndPeriodic.periodic = nil
+        frequencyType = .onlyOnce
         createComplete = false
     }
 }

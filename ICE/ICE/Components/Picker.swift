@@ -53,17 +53,18 @@ struct ImagePicker: UIViewControllerRepresentable {
 
 struct FrequencyPicker: View {
     @ObservedObject var enumUtil = EnumUtility()
-    @Binding var frequencyAndPeriodic: FrequencyAndPeriodic
+    let label: String
+    @Binding var frequencyType: FrequencyType
     var translatedFrequency: String {
-        enumUtil.translateFrequencyType(frequency: frequencyAndPeriodic.frequency)
+        enumUtil.translateFrequencyType(frequency: frequencyType)
     }
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            SectionLabel(text: "発生頻度", font: .callout.bold(), color: Color(.indigo), width: 3)
+            SectionLabel(text: label, font: .callout.bold(), color: Color(.indigo), width: 3)
             Menu {
                 ForEach(FrequencyType.allCases, id: \.self) { type in
                     Button(enumUtil.translateFrequencyType(frequency: type), action: {
-                        frequencyAndPeriodic.frequency = type
+                        frequencyType = type
                     })
                 }
             } label: {
@@ -83,45 +84,6 @@ struct FrequencyPicker: View {
         }
     }
 }
-
-struct PeriodicPicker: View {
-    @ObservedObject var enumUtil = EnumUtility()
-    @Binding var frequencyAndPeriodic: FrequencyAndPeriodic
-    var translatedPeriodic: String? {
-        enumUtil.translatePeriodicType(periodic: frequencyAndPeriodic.periodic)
-    }
-    var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            SectionLabel(text: "タイミング", font: .callout.bold(), color: Color(.indigo), width: 3)
-            Menu {
-                ForEach(PeriodicType.allCases, id: \.self) { type in
-                    Button(enumUtil.translatePeriodicType(periodic: type)!, action: {
-                        frequencyAndPeriodic.periodic = type
-                    })
-                }
-            } label: {
-                HStack(alignment: .center, spacing: 20) {
-                    Text(translatedPeriodic ?? "選択してください")
-                        .font(.callout.bold())
-                        .foregroundStyle(Color.black)
-                    ArrowTriangleIcon(direction: Direction.down)
-                        .frame(width: 10, height: 10)
-                        .foregroundStyle(Color.black)
-                    Spacer()
-                }
-                .padding(.vertical)
-                .padding(.leading)
-                .frame(width: textFieldWidth(), height: 30)
-            }
-        }
-    }
-}
-
-struct FrequencyAndPeriodic {
-    var frequency: FrequencyType = .onlyOnce
-    var periodic: PeriodicType?
-}
-
 
 struct WhoGetsPaidPicker: View {
     @ObservedObject var enumUtil = EnumUtility()
@@ -153,5 +115,136 @@ struct WhoGetsPaidPicker: View {
                 .frame(width: textFieldWidth(), height: 30)
             }
         }
+    }
+}
+
+struct PeriodPicker: View {
+    @Binding var start: Date
+    @Binding var end: Date
+    @State var showPicker: Bool = false
+    @State var editStartDate: Bool = false
+    @ViewBuilder
+    private func dateLabel(_ date: Date) -> some View {
+        HStack {
+            Text("\(date.toFormat("yyyy/MM/dd"))")
+            Image(systemName: "calendar")
+        }
+        .foregroundStyle(Color.black)
+    }
+    var body: some View {
+        if showPicker {
+            VStack(alignment: .center, spacing: 10) {
+                Text(editStartDate ? "スタート" : "エンド")
+                    .font(.callout.bold())
+                CustomDatePicker(
+                    showDatePicker: $showPicker,
+                    start: $start,
+                    savedDate: editStartDate ? $start : $end,
+                    selectedDate: editStartDate ? start : end,
+                    editStartDate: $editStartDate
+                )
+                .animation(.linear, value: start)
+                .transition(.opacity)
+            }
+        } else {
+            HStack(spacing: 5) {
+                VStack(alignment: .center, spacing: 10) {
+                    Text("スタート")
+                        .font(.body.bold())
+                    Button {
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            editStartDate = true
+                            showPicker.toggle()
+                        }
+                    } label: {
+                        VStack(spacing: 2) {
+                            dateLabel(start)
+                            Rectangle()
+                                .foregroundStyle(Color(.indigo))
+                                .frame(width: 140, height: 2)
+                        }
+                    }
+                    .background()
+                }
+                .frame(width: (screenWidth() - 30) / 2)
+                Text("to")
+                    .font(.body.bold())
+                VStack(alignment: .center, spacing: 10) {
+                    Text("エンド")
+                        .font(.body.bold())
+                    Button {
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            editStartDate = false
+                            showPicker.toggle()
+                        }
+                    } label: {
+                        VStack(spacing: 2) {
+                            dateLabel(end)
+                            Rectangle()
+                                .foregroundStyle(Color(.indigo))
+                                .frame(width: 140, height: 2)
+                        }
+                    }
+                    .background()
+                }
+                .frame(width: (screenWidth() - 30) / 2)
+            }
+            .frame(width: screenWidth())
+        }
+    }
+}
+
+struct CustomDatePicker: View {
+    @Binding var showDatePicker: Bool
+    @Binding var start: Date
+    @Binding var savedDate: Date
+    @State var selectedDate: Date = Date()
+    @Binding var editStartDate: Bool
+    var dayAfterStart: Date {
+        if !editStartDate {
+            return Calendar.current.date(byAdding: .day, value: 1, to: start)!
+        } else {
+            return Date()
+        }
+    }
+    
+    var body: some View {
+        VStack {
+            if editStartDate {
+                DatePicker(
+                    "",
+                    selection: $selectedDate,
+                    displayedComponents: .date
+                )
+                .datePickerStyle(.graphical)
+            } else {
+                DatePicker(
+                    "",
+                    selection: $selectedDate,
+                    in: dayAfterStart...,
+                    displayedComponents: .date
+                )
+                .datePickerStyle(.graphical)
+            }
+            Divider()
+            HStack {
+                Button("キャンセル") {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        showDatePicker = false
+                    }
+                }
+                Spacer()
+                Button("決定") {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        savedDate = selectedDate
+                        showDatePicker = false
+                    }
+                }
+            }
+            .padding(.vertical, 15)
+            .padding(.horizontal, 10)
+        }
+        .padding(.horizontal, 20)
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(.indigo), lineWidth: 2))
     }
 }

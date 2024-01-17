@@ -11,10 +11,11 @@ extension Tasks {
     case description
     case iconName
     case frequencyType
-    case periodicType
     case condition
     case point
     case groupID
+    case startDate
+    case endDate
     case createdAt
     case updatedAt
   }
@@ -39,10 +40,11 @@ extension Tasks {
       .field(tasks.description, is: .optional, ofType: .string),
       .field(tasks.iconName, is: .optional, ofType: .string),
       .field(tasks.frequencyType, is: .required, ofType: .enum(type: FrequencyType.self)),
-      .field(tasks.periodicType, is: .optional, ofType: .enum(type: PeriodicType.self)),
       .field(tasks.condition, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(tasks.point, is: .required, ofType: .int),
       .field(tasks.groupID, is: .optional, ofType: .string),
+      .field(tasks.startDate, is: .optional, ofType: .dateTime),
+      .field(tasks.endDate, is: .optional, ofType: .dateTime),
       .field(tasks.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(tasks.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime)
     )

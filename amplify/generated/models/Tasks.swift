@@ -9,10 +9,11 @@ public struct Tasks: Model {
   public var description: String?
   public var iconName: String?
   public var frequencyType: FrequencyType
-  public var periodicType: PeriodicType?
   public var condition: [String?]?
   public var point: Int
   public var groupID: String?
+  public var startDate: Temporal.DateTime?
+  public var endDate: Temporal.DateTime?
   public var createdAt: Temporal.DateTime?
   public var updatedAt: Temporal.DateTime?
   
@@ -22,20 +23,22 @@ public struct Tasks: Model {
       description: String? = nil,
       iconName: String? = nil,
       frequencyType: FrequencyType,
-      periodicType: PeriodicType? = nil,
       condition: [String?]? = nil,
       point: Int,
-      groupID: String? = nil) {
+      groupID: String? = nil,
+      startDate: Temporal.DateTime? = nil,
+      endDate: Temporal.DateTime? = nil) {
     self.init(id: id,
       createUserID: createUserID,
       taskName: taskName,
       description: description,
       iconName: iconName,
       frequencyType: frequencyType,
-      periodicType: periodicType,
       condition: condition,
       point: point,
       groupID: groupID,
+      startDate: startDate,
+      endDate: endDate,
       createdAt: nil,
       updatedAt: nil)
   }
@@ -45,10 +48,11 @@ public struct Tasks: Model {
       description: String? = nil,
       iconName: String? = nil,
       frequencyType: FrequencyType,
-      periodicType: PeriodicType? = nil,
       condition: [String?]? = nil,
       point: Int,
       groupID: String? = nil,
+      startDate: Temporal.DateTime? = nil,
+      endDate: Temporal.DateTime? = nil,
       createdAt: Temporal.DateTime? = nil,
       updatedAt: Temporal.DateTime? = nil) {
       self.id = id
@@ -57,10 +61,11 @@ public struct Tasks: Model {
       self.description = description
       self.iconName = iconName
       self.frequencyType = frequencyType
-      self.periodicType = periodicType
       self.condition = condition
       self.point = point
       self.groupID = groupID
+      self.startDate = startDate
+      self.endDate = endDate
       self.createdAt = createdAt
       self.updatedAt = updatedAt
   }

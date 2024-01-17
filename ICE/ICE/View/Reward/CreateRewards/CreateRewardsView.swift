@@ -44,14 +44,23 @@ struct CreateRewardsView: View {
                                 .validation(vm.costValidation)
                         }
                         
-                        //setting frequency and periodical
-                        FrequencyPicker(frequencyAndPeriodic: $vm.frequencyAndPeriodic)
+                        WhoGetsPaidPicker(whoGetsPaid: $vm.whoGetsPaid)
                         
-                        if vm.frequencyAndPeriodic.frequency == .periodic {
-                            PeriodicPicker(frequencyAndPeriodic: $vm.frequencyAndPeriodic)
+                        //setting frequency
+                        FrequencyPicker(label: "くりかえし", frequencyType: $vm.frequencyType)
+                        
+                        VStack(spacing: 10) {
+                            Toggle(isOn: $vm.isLimited) {
+                                SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
+                            }
+                            .toggleStyle(SwitchToggleStyle(tint: Color(.indigo)))
+                            .padding(.trailing)
+                            
+                            if vm.isLimited {
+                                PeriodPicker(start: $vm.startDate, end: $vm.endDate)
+                            }
                         }
                         
-                        WhoGetsPaidPicker(whoGetsPaid: $vm.whoGetsPaid)
                         Spacer()
                         if !vm.createComplete {
                             EnabledFlagFillButton(label: "リワードを作成", color: Color(.jade), flag: $vm.showAlert, condition: vm.formValid.isSuccess == false)

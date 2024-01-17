@@ -11,11 +11,12 @@ extension Rewards {
     case description
     case thumbnailKey
     case frequencyType
-    case periodicType
     case whoGetsPaid
     case getUserID
     case cost
     case groupID
+    case startDate
+    case endDate
     case createdAt
     case updatedAt
   }
@@ -40,11 +41,12 @@ extension Rewards {
       .field(rewards.description, is: .optional, ofType: .string),
       .field(rewards.thumbnailKey, is: .optional, ofType: .string),
       .field(rewards.frequencyType, is: .required, ofType: .enum(type: FrequencyType.self)),
-      .field(rewards.periodicType, is: .optional, ofType: .enum(type: PeriodicType.self)),
       .field(rewards.whoGetsPaid, is: .required, ofType: .enum(type: WhoGetsPaid.self)),
       .field(rewards.getUserID, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(rewards.cost, is: .required, ofType: .int),
       .field(rewards.groupID, is: .optional, ofType: .string),
+      .field(rewards.startDate, is: .optional, ofType: .dateTime),
+      .field(rewards.endDate, is: .optional, ofType: .dateTime),
       .field(rewards.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(rewards.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime)
     )

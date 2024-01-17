@@ -17,16 +17,16 @@ final class CreateTaskViewModel: ViewModelBase {
     @Published var condition: String = ""
     @Published var conditions: [String] = []
     @Published var point: Int = 0
-    @Published var frequencyAndPeriodic: FrequencyAndPeriodic = .init()
+    @Published var startDate: Date = Date()
+    @Published var endDate: Date = Date()
+    @Published var frequencyType: FrequencyType = .onlyOnce
     var translatedFrequency: String {
-        enumUtil.translateFrequencyType(frequency: frequencyAndPeriodic.frequency)
-    }
-    var translatedPeriodic: String? {
-        enumUtil.translatePeriodicType(periodic: frequencyAndPeriodic.periodic)
+        enumUtil.translateFrequencyType(frequency: frequencyType)
     }
     let groupID: String
     
     // MARK: Flags
+    @Published var isLimited: Bool = false
     @Published var showIconSelector: Bool = false
     @Published var createComplete: Bool = false
     
@@ -42,17 +42,6 @@ final class CreateTaskViewModel: ViewModelBase {
             }
             .eraseToAnyPublisher()
     }
-    var frequencyAndPeriodicValidation: AnyPublisher<Validation, Never> {
-        $frequencyAndPeriodic
-            .map { value in
-                if value.frequency == .periodic, value.periodic == nil {
-                    return .failed()
-                }
-                return .success
-            }
-            .eraseToAnyPublisher()
-    }
-
     var pointValidation: AnyPublisher<Validation, Never> {
         $point
             .dropFirst()
@@ -69,13 +58,12 @@ final class CreateTaskViewModel: ViewModelBase {
     }
     
     var createValidation: AnyPublisher<Validation, Never> {
-        Publishers.CombineLatest3 (
+        Publishers.CombineLatest (
             groupNameValidation,
-            frequencyAndPeriodicValidation,
             pointValidation
         )
-        .map { v1, v2, v3 in
-            [v1, v2, v3].allSatisfy(\.isSuccess) ? .success : .failed()
+        .map { v1, v2 in
+            [v1, v2].allSatisfy(\.isSuccess) ? .success : .failed()
         }
         .eraseToAnyPublisher()
     }
@@ -99,7 +87,13 @@ final class CreateTaskViewModel: ViewModelBase {
             if !self.condition.isEmpty {
                 self.conditions.append(self.condition)
             }
-            let task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyAndPeriodic.frequency, periodicType: self.frequencyAndPeriodic.periodic, condition: self.conditions, point: self.point, groupID: self.groupID)
+            var task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyType, condition: self.conditions, point: self.point, groupID: self.groupID)
+            
+            if self.isLimited {
+                task.startDate = Temporal.DateTime(self.startDate)
+                task.endDate = Temporal.DateTime(self.endDate)
+            }
+            
             try await self.apiHandler.create(task, keyName: "\(self.groupID)-tasks")
             self.createComplete = true
         }, apiErrorHandler: { apiError in
@@ -123,9 +117,7 @@ final class CreateTaskViewModel: ViewModelBase {
         condition = ""
         conditions = []
         point = 0
-        frequencyAndPeriodic.frequency = .onlyOnce
-        frequencyAndPeriodic.periodic = nil
+        frequencyType = .onlyOnce
         createComplete = false
     }
 }
-
