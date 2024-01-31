@@ -12,6 +12,9 @@ struct TaskRow: View {
     @State var isOpen: Bool = false
     let action: () async throws -> Void
     let asHost: Bool
+    var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
+    var status: BelongingTaskStatus
+    @EnvironmentObject var router: PageRouter
     var body: some View {
         Button(action: {
             withAnimation(.easeOut(duration: 0.3)){
@@ -26,10 +29,13 @@ struct TaskRow: View {
                         .font(.callout.bold())
                         .foregroundStyle(Color.black)
                     Spacer()
+                    if status != .accept {
+                        StatusLabel(label: status.rawValue, color: status.color, font: .callout.bold())
+                    }
                     Text("\(task.point.comma())pt")
                         .font(.callout.bold())
                         .foregroundStyle(Color(.indigo))
-                        .padding(.trailing)
+                        .padding(.trailing, 10)
                 }
                 if isOpen {
                     if let description = task.description {
@@ -69,21 +75,28 @@ struct TaskRow: View {
                     }
                     if asHost {
                         HStack(spacing: 20) {
-                            ActionFillButton(label: "編集する", action: action, color: Color(.indigo))
+                            ActionFillButton(label: "編集する", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
                                 .frame(width: (screenWidth() - 84) / 2)
-                            ActionFillButton(label: "インサイト", action: action, color: Color(.jade))
+                            ActionFillButton(label: "インサイト", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.jade))
                                 .frame(width: (screenWidth() - 84) / 2)
                         }
                         .frame(width: (screenWidth() - 84))
                     } else {
-                        ActionFillButton(label: "チャレンジする", action: action, color: Color(.indigo))
+                        switch status {
+                        case .accept:
+                            ActionFillButton(label: "挑戦する", action: action, color: Color(.indigo))
+                        case .receiving:
+                            ActionFillButton(label: "報告する", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.jade))
+                        case .completed:
+                            ActionFillButton(label: "記録を見る", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
+                        }
                     }
                 }
             }
         }
         .padding(.vertical, 10)
         .padding(.horizontal)
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(.jade), lineWidth: 2))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(status.color, lineWidth: 2))
         .frame(maxWidth: screenWidth(), maxHeight: 1000)
     }
 }

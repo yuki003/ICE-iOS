@@ -62,14 +62,14 @@ class ViewModelBase: ObservableObject {
                 }
             } catch let error as APIError {
                 apiErrorHandler(error)
-                withAnimation(.linear) {
-                    state = .failed(error)
-                }
+//                withAnimation(.linear) {
+//                    state = .failed(error)
+//                }
             } catch {
                 errorHandler(error)
-                withAnimation(.linear) {
-                    state = .failed(error)
-                }
+//                withAnimation(.linear) {
+//                    state = .failed(error)
+//                }
             }
         }
     }

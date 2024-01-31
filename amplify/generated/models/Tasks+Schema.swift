@@ -7,6 +7,8 @@ extension Tasks {
    public enum CodingKeys: String, ModelKey {
     case id
     case createUserID
+    case receivingUserIDs
+    case completedUserIDs
     case taskName
     case description
     case iconName
@@ -36,6 +38,8 @@ extension Tasks {
     model.fields(
       .field(tasks.id, is: .required, ofType: .string),
       .field(tasks.createUserID, is: .required, ofType: .string),
+      .field(tasks.receivingUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(tasks.completedUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(tasks.taskName, is: .required, ofType: .string),
       .field(tasks.description, is: .optional, ofType: .string),
       .field(tasks.iconName, is: .required, ofType: .string),

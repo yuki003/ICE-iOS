@@ -71,3 +71,17 @@ struct SectionLabelWithContent<Content: View>: View {
         .foregroundStyle(color)
     }
 }
+
+struct StatusLabel: View {
+    let label: String
+    let color: Color
+    let font: Font
+    var body: some View {
+        Text(label)
+            .padding(.vertical, 3)
+            .padding(.horizontal, 10)
+            .font(font)
+            .foregroundStyle(color)
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(color, lineWidth: 2))
+    }
+}

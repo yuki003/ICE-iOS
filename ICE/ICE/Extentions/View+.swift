@@ -68,5 +68,12 @@ extension View {
     func popupTaskIconSelector(isPresented: Binding<Bool>, taskType: Binding<TaskType>, color: Color = Color(.indigo), buttonLabel: String = "決定") -> some View {
         modifier(PopupTaskIconModifier(isPresented: isPresented, taskType: taskType, color: color, buttonLabel: buttonLabel))
     }
+    
+    func alertStacked(isPresented: Binding<Bool>, content: () -> Alert) -> some View {
+        overlay(
+            EmptyView().alert(isPresented: isPresented, content: content),
+            alignment: .bottomTrailing
+        )
+    }
 }
 

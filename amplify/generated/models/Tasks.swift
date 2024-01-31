@@ -5,6 +5,8 @@ import Foundation
 public struct Tasks: Model {
   public let id: String
   public var createUserID: String
+  public var receivingUserIDs: [String?]?
+  public var completedUserIDs: [String?]?
   public var taskName: String
   public var description: String?
   public var iconName: String
@@ -19,6 +21,8 @@ public struct Tasks: Model {
   
   public init(id: String = UUID().uuidString,
       createUserID: String,
+      receivingUserIDs: [String?]? = nil,
+      completedUserIDs: [String?]? = nil,
       taskName: String,
       description: String? = nil,
       iconName: String,
@@ -30,6 +34,8 @@ public struct Tasks: Model {
       endDate: Temporal.DateTime? = nil) {
     self.init(id: id,
       createUserID: createUserID,
+      receivingUserIDs: receivingUserIDs,
+      completedUserIDs: completedUserIDs,
       taskName: taskName,
       description: description,
       iconName: iconName,
@@ -44,6 +50,8 @@ public struct Tasks: Model {
   }
   internal init(id: String = UUID().uuidString,
       createUserID: String,
+      receivingUserIDs: [String?]? = nil,
+      completedUserIDs: [String?]? = nil,
       taskName: String,
       description: String? = nil,
       iconName: String,
@@ -57,6 +65,8 @@ public struct Tasks: Model {
       updatedAt: Temporal.DateTime? = nil) {
       self.id = id
       self.createUserID = createUserID
+      self.receivingUserIDs = receivingUserIDs
+      self.completedUserIDs = completedUserIDs
       self.taskName = taskName
       self.description = description
       self.iconName = iconName

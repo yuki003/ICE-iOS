@@ -10,6 +10,7 @@ import Amplify
 
 struct TaskListView: View {
     @StateObject var vm: TaskListViewModel
+    @StateObject var taskService: TaskService
     @EnvironmentObject var router: PageRouter
     var body: some View {
         DestinationHolderView(router: router) {
@@ -28,10 +29,7 @@ struct TaskListView: View {
                 case .loaded:
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .center, spacing: 10) {
-                            ForEach(vm.tasks.indices, id: \.self){ index in
-                                let task = vm.tasks[index]
-                                TaskRow(task: task, action: { try await TasksService().tryTask() }, asHost: vm.asHost)
-                            }
+                            taskService.taskListBuilder(vm.tasks, router)
                         }
                         .padding(.vertical)
                         .frame(width: deviceWidth())

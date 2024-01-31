@@ -19,6 +19,7 @@ struct PopupActionAlertModifier: ViewModifier {
             .overlay {
                 if isPresented {
                     GrayBackgroundView()
+                        .ignoresSafeArea()
 
                     VStack(spacing: 15) {
                         if let titleText = title {
