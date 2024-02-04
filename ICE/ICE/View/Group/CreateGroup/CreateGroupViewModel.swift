@@ -59,10 +59,8 @@ final class CreateGroupViewModel: ViewModelBase {
             self.showAlert = false
             var group = Group(groupName: self.groupName, description: self.groupDescription.isEmpty ? nil : self.groupDescription , thumbnailKey: "", hostUserIDs: [self.userID])
             let key = self.userID + group.id
-            group.thumbnailKey = key
-            try await self.storage.uploadData(self.image, key: key)
-            let thumbnailURL = try await self.storage.getPublicURLForKey(key)
-            group.thumbnailKey = thumbnailURL
+            let url = try await self.storage.uploadData(self.image, key: key)
+            group.thumbnailKey = url
             try await self.apiHandler.create(group, keyName: "hostGroups")
             self.createComplete = true
         }, apiErrorHandler: { apiError in

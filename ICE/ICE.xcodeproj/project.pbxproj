@@ -58,6 +58,9 @@
 		B64E1CD12AD38CC500A876CC /* AWSPluginsCore in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CD02AD38CC500A876CC /* AWSPluginsCore */; };
 		B64E1CD32AD38CC500A876CC /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = B64E1CD22AD38CC500A876CC /* Amplify */; };
 		B64E1CD72AD3923E00A876CC /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64E1CD62AD3923E00A876CC /* Error.swift */; };
+		B650B44D2B6A021B00CF5BF5 /* TaskReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B650B44C2B6A021B00CF5BF5 /* TaskReportViewModel.swift */; };
+		B650B44F2B6A022300CF5BF5 /* TaskReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B650B44E2B6A022300CF5BF5 /* TaskReportView.swift */; };
+		B650B4522B6A487700CF5BF5 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B650B4512B6A487700CF5BF5 /* CameraView.swift */; };
 		B651F7552B01A3D400AE6FF6 /* PopupModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B651F7542B01A3D400AE6FF6 /* PopupModifier.swift */; };
 		B65C8E9F2B0870270083080D /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C8E9E2B0870270083080D /* GroupDetailView.swift */; };
 		B65C8EA12B0870480083080D /* GroupDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C8EA02B0870480083080D /* GroupDetailViewModel.swift */; };
@@ -173,6 +176,9 @@
 		B64E1CBF2AD38B5B00A876CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B64E1CD42AD3916600A876CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B64E1CD62AD3923E00A876CC /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		B650B44C2B6A021B00CF5BF5 /* TaskReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReportViewModel.swift; sourceTree = "<group>"; };
+		B650B44E2B6A022300CF5BF5 /* TaskReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReportView.swift; sourceTree = "<group>"; };
+		B650B4512B6A487700CF5BF5 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		B651F7542B01A3D400AE6FF6 /* PopupModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupModifier.swift; sourceTree = "<group>"; };
 		B65C8E9E2B0870270083080D /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		B65C8EA02B0870480083080D /* GroupDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewModel.swift; sourceTree = "<group>"; };
@@ -442,6 +448,23 @@
 			path = Enum;
 			sourceTree = "<group>";
 		};
+		B650B44B2B6A020800CF5BF5 /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				B650B44C2B6A021B00CF5BF5 /* TaskReportViewModel.swift */,
+				B650B44E2B6A022300CF5BF5 /* TaskReportView.swift */,
+			);
+			path = Report;
+			sourceTree = "<group>";
+		};
+		B650B4502B6A486700CF5BF5 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				B650B4512B6A487700CF5BF5 /* CameraView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 		B65C8E9D2B086E260083080D /* GroupDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,6 +485,7 @@
 		B6865FAF2AD8258A003C9CFF /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B650B4502B6A486700CF5BF5 /* Camera */,
 				B6FEEA2B2AFCBADE0040725E /* Base */,
 				B62C9C952AE5116E0048A166 /* RootView.swift */,
 				B6B9E7D32AE9F3520056D175 /* NavigationLink.swift */,
@@ -527,6 +551,7 @@
 		B6BD49A62AF0F20700349C7A /* Task */ = {
 			isa = PBXGroup;
 			children = (
+				B650B44B2B6A020800CF5BF5 /* Report */,
 				B635F5522B5793DB009F63D1 /* List */,
 				B62AAE202B0B405F004862F2 /* CreateTask */,
 			);
@@ -756,6 +781,7 @@
 				B62AAE222B0B4078004862F2 /* CreateTaskView.swift in Sources */,
 				B62AAE1A2B09A161004862F2 /* Tasks.swift in Sources */,
 				B646BD2A2B590F0F002FC9B4 /* TaskReports.swift in Sources */,
+				B650B44D2B6A021B00CF5BF5 /* TaskReportViewModel.swift in Sources */,
 				B6BD49AB2AF0F23C00349C7A /* TemplateViewModel.swift in Sources */,
 				B61BE9622ADD29E0003BC55B /* AmplifyAuthService.swift in Sources */,
 				B68565BD2AE94EBA002C8413 /* LoadingModifier.swift in Sources */,
@@ -794,6 +820,7 @@
 				B62AAE1B2B09A161004862F2 /* Tasks+Schema.swift in Sources */,
 				B62AAE2F2B144D39004862F2 /* General.swift in Sources */,
 				B6B49DB12AFB30E900CF0E6A /* Int+.swift in Sources */,
+				B650B4522B6A487700CF5BF5 /* CameraView.swift in Sources */,
 				B646BD292B590F0F002FC9B4 /* GroupPointsHistory.swift in Sources */,
 				B635F5512B56608A009F63D1 /* Date+.swift in Sources */,
 				B646BD282B590F0F002FC9B4 /* ReportStatus.swift in Sources */,
@@ -812,6 +839,7 @@
 				B61BE96A2AE0B6C2003BC55B /* HomeView.swift in Sources */,
 				B62AAE022B08A6D1004862F2 /* Type.swift in Sources */,
 				B62C9C982AE5FAB40048A166 /* HomeViewModel.swift in Sources */,
+				B650B44F2B6A022300CF5BF5 /* TaskReportView.swift in Sources */,
 				B6B9E7DA2AEDF2990056D175 /* Image.swift in Sources */,
 				B6F2C04E2ADC225000960084 /* FocusField.swift in Sources */,
 			);

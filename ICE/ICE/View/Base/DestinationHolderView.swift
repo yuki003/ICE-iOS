@@ -38,6 +38,8 @@ struct DestinationHolderView<Content:View>: View {
                         CreateRewardsView(vm: .init(groupID: groupID))
                     case .taskList(tasks: let tasks):
                         TaskListView(vm: .init(tasks: tasks), taskService: .init())
+                    case .taskReport(task: let task):
+                        TaskReportView(vm: .init(task: task))
                     }
                 }
         }

@@ -22,7 +22,7 @@ extension View {
     }
     
     func textFieldWidth() -> CGFloat{
-        return UIScreen.main.bounds.width / 1.5
+        return UIScreen.main.bounds.width - 96
     }
     
     func commonButtonWidth() -> CGFloat{

@@ -87,7 +87,7 @@ final class CreateTaskViewModel: ViewModelBase {
             if !self.condition.isEmpty {
                 self.conditions.append(self.condition)
             }
-            var task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyType, condition: self.conditions, point: self.point, groupID: self.groupID)
+            var task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyType, condition: self.conditions, point: self.point, groupID: self.groupID, hasPendingReport: false)
             
             if self.isLimited {
                 task.startDate = Temporal.DateTime(self.startDate)

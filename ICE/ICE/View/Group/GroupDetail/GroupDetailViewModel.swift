@@ -44,8 +44,8 @@ Link： ice://invite?code=\(groupInfo.id)
     
     @MainActor
     func loadData() async throws {
-        asyncOperation({
-            if self.apiHandler.isRunFetch(userDefaultKey: "\(self.groupInfo.id)-users") || self.reload {
+        asyncOperation({ [self] in
+            if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-users") || self.reload {
                 var userIDs:[String?] = []
                 if let hostUserIDs = self.groupInfo.hostUserIDs {
                     userIDs.append(contentsOf: hostUserIDs)

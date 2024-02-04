@@ -205,6 +205,7 @@ struct UnderLineNumField: View {
 struct DescriptionTextEditor: View {
     @Binding var description: String
     @FocusState var focused: FormField?
+    var placeholder: String = "説明を入力(任意)"
     var isFocused: Bool {
         return focused == .description
     }
@@ -217,7 +218,7 @@ struct DescriptionTextEditor: View {
                 .padding(.horizontal, 10)
                 .overlay {
                     if description.isEmpty {
-                        Text("説明を入力(任意)")
+                        Text(placeholder)
                             .frame(width: 100, alignment: .topLeading)
                             .font(.footnote.bold())
                             .foregroundStyle(Color.gray)

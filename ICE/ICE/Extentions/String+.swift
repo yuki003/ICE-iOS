@@ -31,4 +31,8 @@ extension String {
         let hashedData = SHA256.hash(data: data)
         return hashedData.compactMap { String(format: "%02x", $0) }.joined()
     }
+    
+    var isNotEmpty: Bool {
+        !self.isEmpty
+    }
 }

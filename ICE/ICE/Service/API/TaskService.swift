@@ -79,7 +79,7 @@ final class TaskService: ViewModelBase {
         ForEach(taskList.indices, id: \.self) { index in
             let task = taskList[index]
             var status: BelongingTaskStatus {
-                if let receivingUserIDs = task.receivingUserIDs, receivingUserIDs.contains(where: { $0 == self.userID}) {
+                if let receivingUserIDs = task.receivingUserIDs, (receivingUserIDs.contains(where: { $0 == self.userID}) || self.asHost) {
                     return .receiving
                 } else if let completedUserIDs = task.completedUserIDs, completedUserIDs.contains(where: { $0 == self.userID}) {
                     return .completed

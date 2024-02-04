@@ -14,6 +14,7 @@ public struct Tasks: Model {
   public var condition: [String?]?
   public var point: Int
   public var groupID: String
+  public var hasPendingReport: Bool
   public var startDate: Temporal.DateTime?
   public var endDate: Temporal.DateTime?
   public var createdAt: Temporal.DateTime?
@@ -30,6 +31,7 @@ public struct Tasks: Model {
       condition: [String?]? = nil,
       point: Int,
       groupID: String,
+      hasPendingReport: Bool,
       startDate: Temporal.DateTime? = nil,
       endDate: Temporal.DateTime? = nil) {
     self.init(id: id,
@@ -43,6 +45,7 @@ public struct Tasks: Model {
       condition: condition,
       point: point,
       groupID: groupID,
+      hasPendingReport: hasPendingReport,
       startDate: startDate,
       endDate: endDate,
       createdAt: nil,
@@ -59,6 +62,7 @@ public struct Tasks: Model {
       condition: [String?]? = nil,
       point: Int,
       groupID: String,
+      hasPendingReport: Bool,
       startDate: Temporal.DateTime? = nil,
       endDate: Temporal.DateTime? = nil,
       createdAt: Temporal.DateTime? = nil,
@@ -74,6 +78,7 @@ public struct Tasks: Model {
       self.condition = condition
       self.point = point
       self.groupID = groupID
+      self.hasPendingReport = hasPendingReport
       self.startDate = startDate
       self.endDate = endDate
       self.createdAt = createdAt

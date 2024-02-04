@@ -16,6 +16,7 @@ extension Tasks {
     case condition
     case point
     case groupID
+    case hasPendingReport
     case startDate
     case endDate
     case createdAt
@@ -47,6 +48,7 @@ extension Tasks {
       .field(tasks.condition, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(tasks.point, is: .required, ofType: .int),
       .field(tasks.groupID, is: .required, ofType: .string),
+      .field(tasks.hasPendingReport, is: .required, ofType: .bool),
       .field(tasks.startDate, is: .optional, ofType: .dateTime),
       .field(tasks.endDate, is: .optional, ofType: .dateTime),
       .field(tasks.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),

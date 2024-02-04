@@ -37,7 +37,7 @@ struct PopupActionAlertModifier: ViewModifier {
 
                         HStack (alignment: .center, spacing: 10) {
                             FlagFillButton(label: "キャンセル", color: Color.red, flag: $isPresented)
-                            ActionFillButton(label: actionLabel, action: action, color: color)
+                            ActionWithFlagFillButton(label: actionLabel, action: action, color: color, flag: $isPresented)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -117,7 +117,7 @@ struct PopupDismissAndActionAlertModifier: ViewModifier {
 
                         HStack (alignment: .center, spacing: 10) {
                             DismissRoundedButton(label: dismissLabel, color: Color(.indigo))
-                            ActionFillButton(label: actionLabel, action: action, color: Color(.jade))
+                            ActionWithFlagFillButton(label: actionLabel, action: action, color: Color(.jade), flag: $isPresented)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -154,7 +154,6 @@ struct PopupTaskIconModifier: ViewModifier {
                         ScrollView {
                             // グリッドレイアウトを使用
                             LazyVGrid(columns: layout, spacing: 20) {
-                                //                        HStack (alignment: .center, spacing: 10) {
                                 ForEach(TaskType.allCases.indices, id: \.self) { index in
                                     Button(action: {
                                         selectedStates = Array(repeating: false, count: TaskType.allCases.count)
@@ -168,13 +167,11 @@ struct PopupTaskIconModifier: ViewModifier {
                                 }
                             }
                         }
-                        //                        }
-                        ActionFillButton(label: buttonLabel, action: {
+                        ActionWithFlagFillButton(label: buttonLabel, action: {
                             selected = false
                             taskType = select
                             select = .defaultIcon
-                            isPresented = false
-                        }, color: color)
+                        }, color: color, flag: $isPresented)
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2, maxHeight: 300)
                     .padding()

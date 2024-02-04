@@ -184,3 +184,17 @@ struct PaperPlaneIcon: View {
             .resizable()
     }
 }
+
+struct CameraOnRectangleIcon: View {
+    var body: some View {
+        Image(systemName: "camera.on.rectangle")
+            .resizable()
+    }
+}
+
+struct XMarkCircleFillIcon: View {
+    var body: some View {
+        Image(systemName: "xmark.circle.fill")
+            .resizable()
+    }
+}

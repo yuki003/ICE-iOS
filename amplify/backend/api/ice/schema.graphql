@@ -51,6 +51,7 @@ type Tasks @model {
   condition: [String]
   point: Int!
   groupID: String!
+  hasPendingReport: Boolean!
   startDate: AWSDateTime
   endDate: AWSDateTime
 }

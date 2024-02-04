@@ -29,7 +29,7 @@ struct TaskRow: View {
                         .font(.callout.bold())
                         .foregroundStyle(Color.black)
                     Spacer()
-                    if status != .accept {
+                    if status != .accept, !asHost {
                         StatusLabel(label: status.rawValue, color: status.color, font: .callout.bold())
                     }
                     Text("\(task.point.comma())pt")
@@ -75,8 +75,13 @@ struct TaskRow: View {
                     }
                     if asHost {
                         HStack(spacing: 20) {
-                            ActionFillButton(label: "編集する", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
-                                .frame(width: (screenWidth() - 84) / 2)
+                            if status == .accept {
+                                ActionFillButton(label: "編集する", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
+                                    .frame(width: (screenWidth() - 84) / 2)
+                            } else  {
+                                ActionFillButton(label: "編集する", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
+                                    .frame(width: (screenWidth() - 84) / 2)
+                            }
                             ActionFillButton(label: "インサイト", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.jade))
                                 .frame(width: (screenWidth() - 84) / 2)
                         }
@@ -86,7 +91,7 @@ struct TaskRow: View {
                         case .accept:
                             ActionFillButton(label: "挑戦する", action: action, color: Color(.indigo))
                         case .receiving:
-                            ActionFillButton(label: "報告する", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.jade))
+                            ActionFillButton(label: "報告する", action: {router.path.append(NavigationPathType.taskReport(task: task))}, color: Color(.jade))
                         case .completed:
                             ActionFillButton(label: "記録を見る", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
                         }

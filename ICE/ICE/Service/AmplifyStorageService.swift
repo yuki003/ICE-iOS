@@ -13,8 +13,8 @@ class AmplifyStorageService: ObservableObject {
     static let shared = AmplifyStorageService()
     var userDefaultKeys: [String] = []
     let defaults = UserDefaults.standard
-    func uploadData(_ image: UIImage, key: String) async throws {
-        guard let jpegData = image.jpegData(compressionQuality: 0.5) else { return }
+    func uploadData(_ image: UIImage, key: String) async throws -> String? {
+        guard let jpegData = image.jpegData(compressionQuality: 0.5) else { return nil }
         let data = Data(jpegData)
         let uploadTask = Amplify.Storage.uploadData(
             key: key,
@@ -26,8 +26,12 @@ class AmplifyStorageService: ObservableObject {
             }
         }
         let value = try await uploadTask.value
+        
 //        appendImageUserDefault(image: image, keyName: "")
         print("Completed: \(value)")
+        
+        let url = try await getPublicURLForKey(key)
+        return url
     }
     
     func getPublicURLForKey(_ key: String) async throws -> String {
@@ -57,7 +61,7 @@ class AmplifyStorageService: ObservableObject {
             return UIImage()
         }
     }
-//    
+//
 //    func appendImageUserDefault(image: UIImage, keyName: String) {
 //        // 新しい画像をDataに変換
 //        guard let imageData = image.jpegData(compressionQuality: 1.0) else {

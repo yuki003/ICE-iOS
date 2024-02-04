@@ -51,6 +51,22 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "iceCreateAndUpdateTaskReports": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "ice"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "iceCreateGroup": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -133,6 +149,46 @@
         {
           "category": "function",
           "resourceName": "S3Triggerdba0fdfb"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateAndUpdateTaskReports_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateAndUpdateTaskReports"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateAndUpdateTaskReports_env": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateAndUpdateTaskReports"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateAndUpdateTaskReports_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateAndUpdateTaskReports"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateAndUpdateTaskReports_taskReportsTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateAndUpdateTaskReports"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceCreateAndUpdateTaskReports_tasksTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceCreateAndUpdateTaskReports"
         }
       ]
     },

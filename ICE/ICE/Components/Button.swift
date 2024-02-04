@@ -289,6 +289,30 @@ struct ActionFillButton: View {
     }
 }
 
+struct ActionWithFlagFillButton: View {
+    var label: String
+    let action: () async throws -> Void
+    let color: Color
+    @Binding var flag: Bool
+    var body: some View {
+        Button(action: {
+            Task {
+                try await action()
+                flag.toggle()
+            }
+        })
+        {
+            Text(label)
+                .font(.callout.bold())
+                .padding(.vertical, 10)
+                .padding(.horizontal, 20)
+                .background(color)
+                .foregroundStyle(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+        }
+    }
+}
+
 struct EnabledFlagFillButton: View {
     var label: String
     let color: Color
