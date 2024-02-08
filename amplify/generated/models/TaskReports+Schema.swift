@@ -8,6 +8,7 @@ extension TaskReports {
     case id
     case taskID
     case reportUserID
+    case pictureKey
     case picture1
     case picture2
     case picture3
@@ -37,6 +38,7 @@ extension TaskReports {
       .field(taskReports.id, is: .required, ofType: .string),
       .field(taskReports.taskID, is: .required, ofType: .string),
       .field(taskReports.reportUserID, is: .required, ofType: .string),
+      .field(taskReports.pictureKey, is: .optional, ofType: .string),
       .field(taskReports.picture1, is: .optional, ofType: .string),
       .field(taskReports.picture2, is: .optional, ofType: .string),
       .field(taskReports.picture3, is: .optional, ofType: .string),

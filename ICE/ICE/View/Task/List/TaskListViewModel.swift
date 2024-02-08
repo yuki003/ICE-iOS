@@ -39,17 +39,17 @@ final class TaskListViewModel: ViewModelBase {
             self.setErrorMessage(error)
         })
     }
-    @MainActor
-    func taskButtonAction(_ status: BelongingTaskStatus, _ task: Tasks) {
-        selectedTask = task
-        switch status {
-        case .accept:
-            receiveTaskOrder = true
-        case .receiving:
-            navToTaskReport = true
-        case .completed:
-            navToTaskReport = true
-        }
-    }
+//    @MainActor
+//    func taskButtonAction(_ status: BelongingTaskStatus, _ task: Tasks) {
+//        selectedTask = task
+//        switch status {
+//        case .accept:
+//            receiveTaskOrder = true
+//        case .receiving:
+//            navToTaskReport = true
+//        case .completed:
+//            navToTaskReport = true
+//        }
+//    }
 }
 

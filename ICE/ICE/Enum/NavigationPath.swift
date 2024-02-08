@@ -16,6 +16,7 @@ enum NavigationPathType: Hashable {
     case createReward(groupID: String)
     case taskList(tasks: [Tasks])
     case taskReport(task: Tasks)
+    case taskApproval(task: Tasks)
 
     func hash(into hasher: inout Hasher) {
         switch self {
@@ -34,7 +35,11 @@ enum NavigationPathType: Hashable {
             hasher.combine(5)
             hasher.combine(tasks.indices)
         case .taskReport(let task):
-            hasher.combine(5)
+            hasher.combine(6)
+            hasher.combine(task.id)
+        case .taskApproval(task: let task):
+            hasher.combine(7)
+            hasher.combine(task.id)
         }
     }
 
@@ -47,6 +52,8 @@ enum NavigationPathType: Hashable {
         case (.taskList(let tasks1), .taskList(let tasks2)):
             return tasks1.indices == tasks2.indices
         case (.taskReport(let task1), .taskReport(let task2)):
+            return task1.id == task2.id
+        case (.taskApproval(let task1), .taskApproval(let task2)):
             return task1.id == task2.id
         default:
             return false

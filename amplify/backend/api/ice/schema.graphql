@@ -60,6 +60,7 @@ type TaskReports @model {
   id: ID!
   taskID: String!
   reportUserID: String!
+  pictureKey: String
   picture1: String
   picture2: String
   picture3: String
@@ -105,4 +106,5 @@ enum ReportStatus {
   PENDING
   APPROVED
   REJECTED
+  DELETED
 }

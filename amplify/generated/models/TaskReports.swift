@@ -6,6 +6,7 @@ public struct TaskReports: Model {
   public let id: String
   public var taskID: String
   public var reportUserID: String
+  public var pictureKey: String?
   public var picture1: String?
   public var picture2: String?
   public var picture3: String?
@@ -20,6 +21,7 @@ public struct TaskReports: Model {
   public init(id: String = UUID().uuidString,
       taskID: String,
       reportUserID: String,
+      pictureKey: String? = nil,
       picture1: String? = nil,
       picture2: String? = nil,
       picture3: String? = nil,
@@ -31,6 +33,7 @@ public struct TaskReports: Model {
     self.init(id: id,
       taskID: taskID,
       reportUserID: reportUserID,
+      pictureKey: pictureKey,
       picture1: picture1,
       picture2: picture2,
       picture3: picture3,
@@ -45,6 +48,7 @@ public struct TaskReports: Model {
   internal init(id: String = UUID().uuidString,
       taskID: String,
       reportUserID: String,
+      pictureKey: String? = nil,
       picture1: String? = nil,
       picture2: String? = nil,
       picture3: String? = nil,
@@ -58,6 +62,7 @@ public struct TaskReports: Model {
       self.id = id
       self.taskID = taskID
       self.reportUserID = reportUserID
+      self.pictureKey = pictureKey
       self.picture1 = picture1
       self.picture2 = picture2
       self.picture3 = picture3

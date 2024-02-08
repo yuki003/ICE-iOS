@@ -2,8 +2,9 @@
 import Amplify
 import Foundation
 
-public enum ReportStatus: String, EnumPersistable {
+public enum ReportStatus: String, EnumPersistable, CaseIterable {
   case pending = "PENDING"
   case approved = "APPROVED"
   case rejected = "REJECTED"
+  case deleted = "DELETED"
 }

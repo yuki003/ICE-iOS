@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct PopupActionAlertModifier: ViewModifier {
     @Binding var isPresented: Bool
@@ -181,10 +182,34 @@ struct PopupTaskIconModifier: ViewModifier {
             }
     }
 }
+
+struct PopupImageModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let url: String
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isPresented {
+                    GrayBackgroundView()
+
+                    VStack(spacing: 15) {
+                        KFImage(URL(string: url))
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: UIScreen.main.bounds.width - 32, height: UIScreen.main.bounds.width - 32)
+                            .background(Color.clear)
+                            .scaledToFit()
+                        FlagFillButton(label: "閉じる", color: Color(.indigo), flag: $isPresented)
+                    }
+                    .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
+                }
+            }
+    }
+}
 struct GrayBackgroundView: View {
     var body: some View {
         Rectangle()
-            .fill(Color(.black).opacity(0.5))
+            .fill(Color(.black).opacity(0.8))
             .ignoresSafeArea()
     }
 }

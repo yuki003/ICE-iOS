@@ -46,6 +46,8 @@
 		B635F5542B5793F3009F63D1 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B635F5532B5793F3009F63D1 /* TaskListView.swift */; };
 		B635F5562B579405009F63D1 /* TaskListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B635F5552B579405009F63D1 /* TaskListViewModel.swift */; };
 		B639BD292B46B2A0005DE609 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B639BD282B46B2A0005DE609 /* UIApplication+.swift */; };
+		B6402B192B70BBB900F6CBCD /* TaskApprovalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6402B182B70BBB900F6CBCD /* TaskApprovalViewModel.swift */; };
+		B6402B1B2B70BBDA00F6CBCD /* TaskApprovalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6402B1A2B70BBDA00F6CBCD /* TaskApprovalView.swift */; };
 		B646BD262B590F0F002FC9B4 /* GroupPointsHistory+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B646BD212B590F0F002FC9B4 /* GroupPointsHistory+Schema.swift */; };
 		B646BD272B590F0F002FC9B4 /* TaskReports+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B646BD222B590F0F002FC9B4 /* TaskReports+Schema.swift */; };
 		B646BD282B590F0F002FC9B4 /* ReportStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B646BD232B590F0F002FC9B4 /* ReportStatus.swift */; };
@@ -167,6 +169,8 @@
 		B635F5532B5793F3009F63D1 /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
 		B635F5552B579405009F63D1 /* TaskListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewModel.swift; sourceTree = "<group>"; };
 		B639BD282B46B2A0005DE609 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
+		B6402B182B70BBB900F6CBCD /* TaskApprovalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskApprovalViewModel.swift; sourceTree = "<group>"; };
+		B6402B1A2B70BBDA00F6CBCD /* TaskApprovalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskApprovalView.swift; sourceTree = "<group>"; };
 		B646BD212B590F0F002FC9B4 /* GroupPointsHistory+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GroupPointsHistory+Schema.swift"; sourceTree = "<group>"; };
 		B646BD222B590F0F002FC9B4 /* TaskReports+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TaskReports+Schema.swift"; sourceTree = "<group>"; };
 		B646BD232B590F0F002FC9B4 /* ReportStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportStatus.swift; sourceTree = "<group>"; };
@@ -432,6 +436,15 @@
 			path = List;
 			sourceTree = "<group>";
 		};
+		B6402B172B70BBA500F6CBCD /* Approval */ = {
+			isa = PBXGroup;
+			children = (
+				B6402B182B70BBB900F6CBCD /* TaskApprovalViewModel.swift */,
+				B6402B1A2B70BBDA00F6CBCD /* TaskApprovalView.swift */,
+			);
+			path = Approval;
+			sourceTree = "<group>";
+		};
 		B64E1CD52AD3923000A876CC /* Enum */ = {
 			isa = PBXGroup;
 			children = (
@@ -551,6 +564,7 @@
 		B6BD49A62AF0F20700349C7A /* Task */ = {
 			isa = PBXGroup;
 			children = (
+				B6402B172B70BBA500F6CBCD /* Approval */,
 				B650B44B2B6A020800CF5BF5 /* Report */,
 				B635F5522B5793DB009F63D1 /* List */,
 				B62AAE202B0B405F004862F2 /* CreateTask */,
@@ -801,6 +815,7 @@
 				B62AAE1D2B09A1E4004862F2 /* TaskService.swift in Sources */,
 				B61160412B2958A800489E95 /* CreateRewardsViewModel.swift in Sources */,
 				B64E1CC02AD38B5B00A876CC /* AppDelegate.swift in Sources */,
+				B6402B192B70BBB900F6CBCD /* TaskApprovalViewModel.swift in Sources */,
 				B6B9E7D62AECEC660056D175 /* Notice.swift in Sources */,
 				B6FEEA262AFC8D5B0040725E /* Label.swift in Sources */,
 				B62C9C942AE3C4E60048A166 /* ValidationModifier.swift in Sources */,
@@ -809,6 +824,7 @@
 				B6B9E7EF2AEF37350056D175 /* AccountType.swift in Sources */,
 				B6BD49B02AF0FAE100349C7A /* CreateGroupViewModel.swift in Sources */,
 				B62AAE242B0B408E004862F2 /* CreateTaskViewModel.swift in Sources */,
+				B6402B1B2B70BBDA00F6CBCD /* TaskApprovalView.swift in Sources */,
 				B69A76C32AE3B6EF009228EC /* Validation.swift in Sources */,
 				B62AAE2D2B144A53004862F2 /* EnumUtility.swift in Sources */,
 				B61E206C2AC9247000EF3CEB /* ContentView.swift in Sources */,

@@ -69,6 +69,10 @@ extension View {
         modifier(PopupTaskIconModifier(isPresented: isPresented, taskType: taskType, color: color, buttonLabel: buttonLabel))
     }
     
+    func popupImage(isPresented: Binding<Bool>, url: String) -> some View {
+        modifier(PopupImageModifier(isPresented: isPresented, url: url))
+    }
+    
     func alertStacked(isPresented: Binding<Bool>, content: () -> Alert) -> some View {
         overlay(
             EmptyView().alert(isPresented: isPresented, content: content),

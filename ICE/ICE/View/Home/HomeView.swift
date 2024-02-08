@@ -99,7 +99,7 @@ struct HomeView: View {
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
             if !vm.hostGroups.isEmpty {
-                ScrollView(.horizontal) {
+                ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(vm.hostGroups.indices, id: \.self) { index in
                             let group = vm.hostGroups[index]

@@ -110,7 +110,7 @@ class APIHandler: ObservableObject {
             switch result {
             case .success(let updatedModel):
                 print("Successfully updated model: \(updatedModel)")
-                appendUserDefault(model: updatedModel, keyName: keyName)
+                replaceUserDefault(model: updatedModel, keyName: keyName)
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
                 throw APIError.updateFailed
@@ -168,6 +168,17 @@ class APIHandler: ObservableObject {
             value == keyName
         }) {
             userDefaultKeys.append(keyName)
+        }
+    }
+    
+    func replaceUserDefault<ModelType: Model>(model: ModelType, keyName: String) {
+        if let savedData = defaults.data(forKey: keyName) {
+            UserDefaults.standard.removeObject(forKey: keyName)
+            
+            guard let data = try? jsonEncoder.encode(model) else {
+                return
+            }
+            defaults.set(data, forKey: "\(keyName)")
         }
     }
     

@@ -87,7 +87,10 @@ final class TaskService: ViewModelBase {
                     return .accept
                 }
             }
-            TaskRow(task: task, action: {self.receiveConfirmation = true}, asHost: self.asHost, status: status)
+            TaskRow(task: task, action: {
+                self.selectedTask = task
+                self.receiveConfirmation = true
+            }, asHost: self.asHost, status: status)
             .padding(.leading, 10)
         }
     }

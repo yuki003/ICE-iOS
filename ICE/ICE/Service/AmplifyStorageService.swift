@@ -30,7 +30,10 @@ class AmplifyStorageService: ObservableObject {
 //        appendImageUserDefault(image: image, keyName: "")
         print("Completed: \(value)")
         
-        let url = try await getPublicURLForKey(key)
+        let publicURL = try await getPublicURLForKey(key)
+        
+        let url = publicURL.cutOutBefore(keyword: key)
+        
         return url
     }
     
@@ -59,6 +62,48 @@ class AmplifyStorageService: ObservableObject {
             return image
         } else {
             return UIImage()
+        }
+    }
+    
+    func deleteData(key: String) async throws {
+        do {
+            let removedKey = try await Amplify.Storage.remove(key: key)
+            print("Deleted \(removedKey)")
+        } catch  let error as StorageError {
+            switch error {
+            case .configuration(_, _, _):
+                print("configuration exception")
+                print(error)
+            case .service(let description, _, _):
+                print("service exception")
+                print(error)
+                if description.contains("Invalid verification code"){
+                    throw AmplifyAuthError.notAuthorized
+                }
+            case .unknown(_, _):
+                print("unknown exception")
+                print(error)
+            case .validation(_, _, _, _):
+                print("validation exception")
+                print(error)
+            case .accessDenied(_, _, _):
+                print("configuration exception")
+                print(error)
+            case .authError(_, _, _):
+                print("configuration exception")
+                print(error)
+            case .httpStatusError(_, _, _):
+                print("configuration exception")
+                print(error)
+            case .keyNotFound(_, _, _, _):
+                print("configuration exception")
+                print(error)
+            case .localFileNotFound(_, _, _):
+                print("configuration exception")
+                print(error)
+            }
+            print("An error occurred while confirming sign up \(error)")
+            throw error
         }
     }
 //

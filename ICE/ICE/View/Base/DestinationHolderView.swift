@@ -40,6 +40,8 @@ struct DestinationHolderView<Content:View>: View {
                         TaskListView(vm: .init(tasks: tasks), taskService: .init())
                     case .taskReport(task: let task):
                         TaskReportView(vm: .init(task: task))
+                    case .taskApproval(task: let task):
+                        TaskApprovalView(vm: .init(task: task))
                     }
                 }
         }

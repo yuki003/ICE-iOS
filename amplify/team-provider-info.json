@@ -51,7 +51,7 @@
           "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
           "taskReportsTableName": "TaskReports-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateAndUpdateTaskReports-387478576e7534414e6e-build.zip"
+          "s3Key": "amplify-builds/iceCreateAndUpdateTaskReports-384769434b6342677a67-build.zip"
         }
       },
       "storage": {
