@@ -133,6 +133,22 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "iceTaskApproval": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "ice"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -333,6 +349,38 @@
         {
           "category": "function",
           "resourceName": "iceCreateTasks"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceTaskApproval_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceTaskApproval"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceTaskApproval_env": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceTaskApproval"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceTaskApproval_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceTaskApproval"
+        }
+      ]
+    },
+    "AMPLIFY_function_iceTaskApproval_tasksTableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iceTaskApproval"
         }
       ]
     }

@@ -63,30 +63,9 @@ final class TaskApprovalViewModel: ViewModelBase {
     func reportApprove() async {
         asyncOperation({ [self] in
             if let selectedReport = selectedReport  {
-                var pointHistoryModel: GroupPointsHistory
-                let pointHistoryPredicate = GroupPointsHistory.keys.userID.eq(selectedReport.reportUserID)
-                var pointHistory = try await apiHandler.list(GroupPointsHistory.self, where: pointHistoryPredicate, keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
-                if pointHistory.isEmpty {
-                    pointHistoryModel = GroupPointsHistory(userID: selectedReport.reportUserID, completedTaskID: [task.id], total: task.point, pending: 0, spent: 0, amount: task.point)
-                    try await apiHandler.create(pointHistoryModel, keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
-                } else {
-                    pointHistory[0].total = pointHistory[0].total + task.point
-                    pointHistory[0].amount = pointHistory[0].amount + task.point
-                    if let completedTask = pointHistory[0].completedTaskID {
-                        pointHistory[0].completedTaskID?.append(task.id)
-                    } else {
-                        pointHistory[0].completedTaskID = [task.id]
-                    }
-                    try await apiHandler.update(pointHistory[0], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
-                }
+                try await updateGroupPointHistory(selectedReport: selectedReport)
+                try await updateTaskReport(selectedReport: selectedReport)
                 
-                var selectedReport = selectedReport
-                if comment.isNotEmpty {
-                    selectedReport.approvedComment = comment
-                }
-                selectedReport.status = .approved
-                selectedReport.reportVersion = selectedReport.reportVersion! + 1
-                try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
             }
             approveComplete = true
         }, apiErrorHandler: { apiError in
@@ -95,6 +74,36 @@ final class TaskApprovalViewModel: ViewModelBase {
             self.setErrorMessage(error)
         })
     }
+    
+    func updateGroupPointHistory(selectedReport: TaskReports) async throws {
+        var pointHistoryModel: GroupPointsHistory
+        let pointHistoryPredicate = GroupPointsHistory.keys.userID.eq(selectedReport.reportUserID)
+        var pointHistory = try await apiHandler.list(GroupPointsHistory.self, where: pointHistoryPredicate, keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
+        if pointHistory.isEmpty {
+            pointHistoryModel = GroupPointsHistory(userID: selectedReport.reportUserID, completedTaskID: [task.id], total: task.point, pending: 0, spent: 0, amount: task.point)
+            try await apiHandler.create(pointHistoryModel, keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
+        } else {
+            pointHistory[0].total = pointHistory[0].total + task.point
+            pointHistory[0].amount = pointHistory[0].amount + task.point
+            if let completedTask = pointHistory[0].completedTaskID {
+                pointHistory[0].completedTaskID?.append(task.id)
+            } else {
+                pointHistory[0].completedTaskID = [task.id]
+            }
+            try await apiHandler.update(pointHistory[0], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
+        }
+    }
+    
+    func updateTaskReport(selectedReport: TaskReports) async throws {
+        var selectedReport = selectedReport
+        if comment.isNotEmpty {
+            selectedReport.approvedComment = comment
+        }
+        selectedReport.status = .approved
+        selectedReport.reportVersion = selectedReport.reportVersion! + 1
+        try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
+    }
+    
     @MainActor
     func reportReject() async {
         asyncOperation({ [self] in

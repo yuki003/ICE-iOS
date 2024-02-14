@@ -44,7 +44,7 @@ final class TaskReportViewModel: ViewModelBase {
     func loadData() async throws {
         asyncOperation({ [self] in
             if apiHandler.isRunFetch(userDefaultKey: "\(task.id)-report") || reload {
-                let reportPredicate = keys.taskID.eq(task.id) && keys.reportUserID.eq(userID)
+                let reportPredicate = keys.taskID.eq(task.id) && keys.reportUserID.eq(userID) && keys.status.ne(ReportStatus.approved)
                 let reportList = try await apiHandler.list(TaskReports.self, where: reportPredicate, keyName: "\(task.id)-report")
                 if !reportList.isEmpty {
                     taskReports = reportList[0]
@@ -54,11 +54,11 @@ final class TaskReportViewModel: ViewModelBase {
                 }
             }
             else {
-                let report = try self.apiHandler.decodeUserDefault(modelType: TaskReports.self, key: "\(task.id)-report")
+                let report = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")
                 if let report = report {
-                    taskReports = report
-                    let reportIndex = report.reportVersion! - 1
-                    self.report = report.reports![reportIndex] ?? ""
+                    taskReports = report[0]
+                    let reportIndex = report[0].reportVersion! - 1
+                    self.report = report[0].reports![reportIndex] ?? ""
                     images = fetchImages(taskReports?.picture1,taskReports?.picture2,taskReports?.picture3)
                 }
             }
