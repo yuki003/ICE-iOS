@@ -130,6 +130,46 @@ struct PopupDismissAndActionAlertModifier: ViewModifier {
     }
 }
 
+struct PopupAlertModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    var title: String?
+    let text: String
+    var color: Color
+    var buttonLabel: String
+    let action: () async throws -> Void
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isPresented {
+                    GrayBackgroundView()
+
+                    VStack(spacing: 15) {
+                        if let titleText = title {
+                            Text(titleText)
+                                .foregroundColor(Color.black)
+                                .font(.callout.bold())
+                                .padding(.top)
+                        }
+
+                        Text(text)
+                            .foregroundColor(Color.black)
+                            .font(.footnote.bold())
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.bottom, 15)
+
+                        HStack (alignment: .center, spacing: 10) {
+                            ActionWithFlagFillButton(label: buttonLabel, action: action, color: Color(.jade), flag: $isPresented)
+                        }
+                    }
+                    .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
+                    .padding()
+                    .background()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+            }
+    }
+}
+
 struct PopupTaskIconModifier: ViewModifier {
     @Binding var isPresented: Bool
     @Binding var taskType: TaskType

@@ -43,24 +43,31 @@ final class TaskReportViewModel: ViewModelBase {
     @MainActor
     func loadData() async throws {
         asyncOperation({ [self] in
-            if apiHandler.isRunFetch(userDefaultKey: "\(task.id)-report") || reload {
-                let reportPredicate = keys.taskID.eq(task.id) && keys.reportUserID.eq(userID) && keys.status.ne(ReportStatus.approved)
+//            if apiHandler.isRunFetch(userDefaultKey: "\(task.id)-report") || reload {
+                let reportPredicate = keys.taskID.eq(task.id) && keys.reportUserID.eq(userID)
                 let reportList = try await apiHandler.list(TaskReports.self, where: reportPredicate, keyName: "\(task.id)-report")
                 if !reportList.isEmpty {
                     taskReports = reportList[0]
-                    let reportIndex = reportList[0].reportVersion! - 1
-                    report = reportList[0].reports![reportIndex] ?? ""
-                    images = fetchImages(taskReports?.picture1,taskReports?.picture2,taskReports?.picture3)
+//                    let reportIndex = reportList[0].reportVersion! - 1
+//                    report = reportList[0].reports![reportIndex] ?? ""
+//                    images = fetchImages(taskReports?.picture1,taskReports?.picture2,taskReports?.picture3)
                 }
-            }
-            else {
-                let report = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")
-                if let report = report {
-                    taskReports = report[0]
-                    let reportIndex = report[0].reportVersion! - 1
-                    self.report = report[0].reports![reportIndex] ?? ""
-                    images = fetchImages(taskReports?.picture1,taskReports?.picture2,taskReports?.picture3)
+//            } else {
+//                let report = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")
+//                if let report = report {
+//                    taskReports = report[0]
+////                    let reportIndex = report[0].reportVersion! - 1
+////                    self.report = report[0].reports![reportIndex] ?? ""
+////                    images = fetchImages(taskReports?.picture1,taskReports?.picture2,taskReports?.picture3)
+//                }
+//            }
+            
+            if let taskReports = taskReports {
+                if taskReports.status == ReportStatus.pending {
+                    let reportIndex = taskReports.reportVersion! - 1
+                    report = taskReports.reports![reportIndex] ?? ""
                 }
+                images = fetchImages(taskReports.picture1,taskReports.picture2,taskReports.picture3)
             }
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
@@ -126,6 +133,15 @@ final class TaskReportViewModel: ViewModelBase {
                     taskReports.reports?.removeLast()
                 }
                 taskReports.reports?.append(report)
+                if taskReports.status == ReportStatus.rejected {
+                    taskReports.status = .pending
+                    let ids = task.rejectedUserIDs?.filter({ $0 != taskReports.reportUserID})
+                    task.rejectedUserIDs = ids
+                    task.receivingUserIDs?.append(taskReports.reportUserID)
+                }
+                if taskReports.rejectedComment?.count == taskReports.reportVersion {
+                    taskReports.reportVersion = taskReports.reportVersion! + 1
+                }
                 if images.count < 3 {
                     taskReports.picture3 = nil
                     if images.count < 2 {
@@ -142,11 +158,18 @@ final class TaskReportViewModel: ViewModelBase {
                         }
                     }
                 }
+                let newTaskList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(task.groupID)-tasks")?.filter({$0.id != task.id})
+                apiHandler.replaceUserDefault(models: newTaskList ?? [], keyName: "\(task.groupID)-tasks")
+                try await apiHandler.update(task, keyName: "\(task.groupID)-tasks")
+                
+                let newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")?.filter({$0.id != taskReports.id})
+                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-report")
                 try await apiHandler.update(taskReports, keyName: "\(task.id)-report")
             } else {
                 model.reports = [report]
                 try await apiHandler.create(model, keyName: "\(task.id)-report")
             }
+            
             reportComplete = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
@@ -194,6 +217,8 @@ final class TaskReportViewModel: ViewModelBase {
             if let taskReports = taskReports {
                 model.reports = taskReports.reports
                 model.reports?.append(report)
+                var newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")?.filter({$0.id != model.id})
+                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-report")
                 try await apiHandler.update(model, keyName: "\(task.id)-report")
             } else {
                 model.reports = [report]

@@ -57,7 +57,7 @@
           "env": "dev",
           "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceTaskApproval-476d326967483338696c-build.zip"
+          "s3Key": "amplify-builds/iceTaskApproval-4a6b4d416d6766375236-build.zip"
         }
       },
       "storage": {

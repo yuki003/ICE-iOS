@@ -17,9 +17,7 @@ struct GroupDetailView: View {
         DestinationHolderView(router: router) {
             VStack {
                 switch vm.state {
-                case .idle:
-                    Color.clear.onAppear { vm.state = .loading }
-                case .loading:
+                case .idle, .loading:
                     LoadingView().onAppear{
                         Task {
                             try await vm.loadData()
@@ -57,12 +55,15 @@ struct GroupDetailView: View {
                         .popupActionAlert(isPresented: $taskService.receiveConfirmation,
                                           title:"このタスクに挑戦しますか？",
                                           text: "",
-                                          action: {Task {
-                                                       try await taskService.receiveTaskOrder(groupID: vm.groupInfo.id)
-                                                       vm.state = .idle
-                                                      }},
+                                          action: { Task {
+                                                            try await taskService.receiveTaskOrder(groupID: vm.groupInfo.id)
+                                                         }
+                                                    },
                                           actionLabel: "挑戦する")
                     }
+                    .popupAlert(isPresented: $taskService.taskReceived, title: "タスクを受注しました！", text: "タスクを完了してポイントをもらおう！", action: {
+                        vm.state = .idle
+                    })
                     .sheet(isPresented: $inviteFlag) {
                         ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
                     }
@@ -74,6 +75,8 @@ struct GroupDetailView: View {
                     }
                 }
             }
+            .loading(isLoading: $vm.isLoading)
+            .loading(isLoading: $taskService.isLoading)
             .userToolbar(state: vm.state, userName: nil, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

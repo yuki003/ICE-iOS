@@ -11,6 +11,7 @@ import SwiftUI
 final class TaskService: ViewModelBase {
     @Published var selectedTask: Tasks?
     @Published var receiveConfirmation: Bool = false
+    @Published var taskReceived: Bool = false
     @Published var navToTaskReport: Bool = false
     @Published var navToTaskHistory: Bool = false
     @Published var navToTaskEdit: Bool = false
@@ -18,17 +19,19 @@ final class TaskService: ViewModelBase {
     
     @MainActor
     func receiveTaskOrder(groupID: String) async throws {
-        asyncOperation({
-            if let selectedTask = self.selectedTask  {
+        asyncOperation({ [self] in
+            if let selectedTask = selectedTask  {
                 var selectedTask = selectedTask
-                if let receivingUserID = selectedTask.receivingUserIDs, !receivingUserID.contains(where: { $0 == self.userID}) {
-                    selectedTask.receivingUserIDs?.append(self.userID)
+                if let receivingUserID = selectedTask.receivingUserIDs, !receivingUserID.contains(where: { $0 == userID}) {
+                    selectedTask.receivingUserIDs?.append(userID)
                 } else {
-                    selectedTask.receivingUserIDs = [self.userID]
+                    selectedTask.receivingUserIDs = [userID]
                 }
-                try await self.apiHandler.update(selectedTask, keyName: "\(groupID)-tasks")
+                var newList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(groupID)-tasks")?.filter({$0.id != selectedTask.id})
+                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(groupID)-tasks")
+                try await apiHandler.update(selectedTask, keyName: "\(groupID)-tasks")
             }
-            self.receiveConfirmation = false
+            taskReceived = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in
@@ -81,6 +84,8 @@ final class TaskService: ViewModelBase {
             var status: BelongingTaskStatus {
                 if let receivingUserIDs = task.receivingUserIDs, (receivingUserIDs.contains(where: { $0 == self.userID}) || self.asHost) {
                     return .receiving
+                } else if let completedUserIDs = task.rejectedUserIDs, completedUserIDs.contains(where: { $0 == self.userID}) {
+                    return .rejected
                 } else if let completedUserIDs = task.completedUserIDs, completedUserIDs.contains(where: { $0 == self.userID}) {
                     return .completed
                 } else {

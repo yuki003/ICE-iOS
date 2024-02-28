@@ -6,6 +6,7 @@ public struct Tasks: Model {
   public let id: String
   public var createUserID: String
   public var receivingUserIDs: [String?]?
+  public var rejectedUserIDs: [String?]?
   public var completedUserIDs: [String?]?
   public var taskName: String
   public var description: String?
@@ -23,6 +24,7 @@ public struct Tasks: Model {
   public init(id: String = UUID().uuidString,
       createUserID: String,
       receivingUserIDs: [String?]? = nil,
+      rejectedUserIDs: [String?]? = nil,
       completedUserIDs: [String?]? = nil,
       taskName: String,
       description: String? = nil,
@@ -37,6 +39,7 @@ public struct Tasks: Model {
     self.init(id: id,
       createUserID: createUserID,
       receivingUserIDs: receivingUserIDs,
+      rejectedUserIDs: rejectedUserIDs,
       completedUserIDs: completedUserIDs,
       taskName: taskName,
       description: description,
@@ -54,6 +57,7 @@ public struct Tasks: Model {
   internal init(id: String = UUID().uuidString,
       createUserID: String,
       receivingUserIDs: [String?]? = nil,
+      rejectedUserIDs: [String?]? = nil,
       completedUserIDs: [String?]? = nil,
       taskName: String,
       description: String? = nil,
@@ -70,6 +74,7 @@ public struct Tasks: Model {
       self.id = id
       self.createUserID = createUserID
       self.receivingUserIDs = receivingUserIDs
+      self.rejectedUserIDs = rejectedUserIDs
       self.completedUserIDs = completedUserIDs
       self.taskName = taskName
       self.description = description

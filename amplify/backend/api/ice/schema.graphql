@@ -43,6 +43,7 @@ type Tasks @model {
   id: ID!
   createUserID: String!
   receivingUserIDs: [String]
+  rejectedUserIDs: [String]
   completedUserIDs: [String]
   taskName: String!
   description: String

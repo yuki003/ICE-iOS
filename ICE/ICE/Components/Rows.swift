@@ -99,8 +99,10 @@ struct TaskRow: View {
                             ActionFillButton(label: "挑戦する", action: action, color: Color(.indigo))
                         case .receiving:
                             ActionFillButton(label: "報告する", action: {router.path.append(NavigationPathType.taskReport(task: task))}, color: Color(.jade))
+                        case .rejected:
+                            ActionFillButton(label: "再報告する", action: {router.path.append(NavigationPathType.taskReport(task: task))}, color: Color(.jade))
                         case .completed:
-                            ActionFillButton(label: "記録を見る", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
+                            ActionFillButton(label: "記録を見る", action: {router.path.append(NavigationPathType.taskReport(task: task))}, color: Color(.indigo))
                         }
                     }
                 }

@@ -110,7 +110,7 @@ class APIHandler: ObservableObject {
             switch result {
             case .success(let updatedModel):
                 print("Successfully updated model: \(updatedModel)")
-                replaceUserDefault(model: updatedModel, keyName: keyName)
+                appendUserDefault(model: updatedModel, keyName: keyName)
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
                 throw APIError.updateFailed
@@ -171,11 +171,11 @@ class APIHandler: ObservableObject {
         }
     }
     
-    func replaceUserDefault<ModelType: Model>(model: ModelType, keyName: String) {
+    func replaceUserDefault<M: Model>(models: [M], keyName: String) {
         if let savedData = defaults.data(forKey: keyName) {
             UserDefaults.standard.removeObject(forKey: keyName)
             
-            guard let data = try? jsonEncoder.encode(model) else {
+            guard let data = try? jsonEncoder.encode(models) else {
                 return
             }
             defaults.set(data, forKey: "\(keyName)")
@@ -195,7 +195,7 @@ class APIHandler: ObservableObject {
     }
     
     func decodeUserDefault<T: Decodable>(modelType: T.Type, key: String) throws -> T? {
-        let keyList = userDefaultKeys.filter({ $0.contains(key)})
+        let keyList = userDefaultKeys.filter({ $0.elementsEqual(key)})
         if !(keyList.count == 1) {
             throw DeveloperError.userDefaultKeyDuplicated
         }

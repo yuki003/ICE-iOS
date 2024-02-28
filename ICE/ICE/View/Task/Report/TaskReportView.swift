@@ -124,7 +124,7 @@ struct TaskReportView: View {
                         .offset(x: 40, y: 40)
                     }
                 }
-                if vm.images.count < 3 {
+                if vm.images.count < 3, vm.taskReports?.status != .approved {
                     Button(action:{
                         isShowConfirmation = true
                     })
@@ -140,23 +140,69 @@ struct TaskReportView: View {
                     }
                 }
             }
-            if vm.taskReports?.status == ReportStatus.approved || vm.taskReports?.status == ReportStatus.deleted {
-                if let report = vm.taskReports?.reports?.last, let text = report {
-                    VStack(alignment: .leading, spacing: 5) {
-                        SectionLabel(text: "報告内容", font: .footnote.bold(), color: Color(.jade), width: 3)
-                        Text(text)
-                            .font(.footnote.bold())
-                            .foregroundStyle(Color.black)
+                if let taskReports = vm.taskReports, let reports = taskReports.reports {
+                    SectionLabel(text: "報告内容", font: .footnote.bold(), color: Color(.jade), width: 3)
+                    HStack {
+                        Thumbnail(type: ThumbnailType.user, aspect: 30)
+                            .padding(.leading, 50)
+                        Spacer()
+                        if let rejectedComment = vm.taskReports?.rejectedComment, rejectedComment.count > 0 {
+                            Thumbnail(type: ThumbnailType.user, aspect: 30)
+                                .padding(.trailing, 50)
+                        }
+                    }
+                    .frame(width: screenWidth())
+                    ForEach(reports.indices, id:\.self) { index in
+                        let report = reports[index]
+                        if let leftText = report {
+                            HStack(spacing: 10) {
+                                Text(leftText)
+                                    .font(.footnote.bold())
+                                    .foregroundStyle(Color.black)
+                                Spacer()
+                            }
+                        }
+                        if let rejectedComment = vm.taskReports?.rejectedComment, rejectedComment.count > index {
+                            let rejectedComment = taskReports.rejectedComment?[index]
+                            if let rightText = rejectedComment {
+                                HStack(spacing: 10) {
+                                    Spacer()
+                                    Text(rightText)
+                                        .font(.footnote.bold())
+                                        .foregroundStyle(Color.black)
+                                }
+                            }
+                        }
+                    }
+                    if taskReports.status == .approved {
+                        HStack(spacing: 10) {
+                            Spacer()
+                            Text(taskReports.approvedComment!)
+                                .font(.footnote.bold())
+                                .foregroundStyle(Color.black)
+                        }
+                        Text("\(taskReports.updatedAt!.foundationDate.toFormat("yyyy/MM/dd HH:mm"))に承認されました")
+                            .font(.callout.bold())
+                            .foregroundStyle(Color(.indigo))
+                    } else if taskReports.status == .deleted {
+                            Text("\(taskReports.updatedAt!.foundationDate.toFormat("yyyy/MM/dd HH:mm"))に取り消しされました")
+                                .font(.callout.bold())
+                                .foregroundStyle(Color(.jade))
+                    } else {
+                        DescriptionTextEditor(description: $vm.report, focused: _focused, placeholder: "タスク報告を書こう")
                     }
                 }
-            } else {
+            
+            if vm.taskReports == nil {
                 DescriptionTextEditor(description: $vm.report, focused: _focused, placeholder: "タスク報告を書こう")
             }
-            
             if vm.taskReports == nil {
                 EnabledFlagFillButton(label: "報告", color: Color(.indigo), flag: $vm.submitReport, condition: !(vm.taskReports == nil || vm.taskReports?.status == ReportStatus.rejected))
                     .padding(.vertical)
-            } else if vm.taskReports?.status != ReportStatus.deleted {
+            } else if vm.taskReports?.status == ReportStatus.rejected {
+                FlagFillButton(label: "再報告", color: Color(.indigo), flag: $vm.submitReport)
+                    .padding(.vertical)
+            } else if vm.taskReports?.status == ReportStatus.pending {
                 HStack(spacing: 20) {
                     FlagFillButton(label: "取り消す", color: Color(.indigo), flag: $vm.deleteReport)
                         .padding(.vertical)

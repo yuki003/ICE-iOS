@@ -8,6 +8,7 @@ extension Tasks {
     case id
     case createUserID
     case receivingUserIDs
+    case rejectedUserIDs
     case completedUserIDs
     case taskName
     case description
@@ -40,6 +41,7 @@ extension Tasks {
       .field(tasks.id, is: .required, ofType: .string),
       .field(tasks.createUserID, is: .required, ofType: .string),
       .field(tasks.receivingUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(tasks.rejectedUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(tasks.completedUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(tasks.taskName, is: .required, ofType: .string),
       .field(tasks.description, is: .optional, ofType: .string),

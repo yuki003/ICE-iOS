@@ -85,11 +85,13 @@ final class TaskApprovalViewModel: ViewModelBase {
         } else {
             pointHistory[0].total = pointHistory[0].total + task.point
             pointHistory[0].amount = pointHistory[0].amount + task.point
-            if let completedTask = pointHistory[0].completedTaskID {
+            if pointHistory[0].completedTaskID != nil {
                 pointHistory[0].completedTaskID?.append(task.id)
             } else {
                 pointHistory[0].completedTaskID = [task.id]
             }
+            var newList = try self.apiHandler.decodeUserDefault(modelType: [GroupPointsHistory].self, key: "\(task.id)-\(selectedReport.reportUserID)-point")?.filter({$0.id != pointHistory[0].id})
+            apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
             try await apiHandler.update(pointHistory[0], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
         }
     }
@@ -101,6 +103,8 @@ final class TaskApprovalViewModel: ViewModelBase {
         }
         selectedReport.status = .approved
         selectedReport.reportVersion = selectedReport.reportVersion! + 1
+        var newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-reports")?.filter({$0.id != selectedReport.id})
+        apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-reports")
         try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
     }
     
@@ -117,8 +121,23 @@ final class TaskApprovalViewModel: ViewModelBase {
                     }
                 }
                 selectedReport.status = .rejected
-                selectedReport.reportVersion = selectedReport.reportVersion! + 1
+                var newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-reports")?.filter({$0.id != selectedReport.id})
+                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-reports")
                 try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
+                
+                if let receivingUserIDs = task.receivingUserIDs, receivingUserIDs.contains(selectedReport.reportUserID) {
+                    task.hasPendingReport = false
+                    let ids = receivingUserIDs.filter({ $0 != selectedReport.reportUserID})
+                    task.receivingUserIDs = ids
+                    if task.rejectedUserIDs != nil {
+                        task.rejectedUserIDs!.append(selectedReport.reportUserID)
+                    } else {
+                        task.rejectedUserIDs = [selectedReport.reportUserID]
+                    }
+                    var newList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(task.groupID)-tasks")?.filter({$0.id != task.id})
+                    apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.groupID)-tasks")
+                    try await self.apiHandler.update(task, keyName: "\(task.groupID)-tasks")
+                }
             }
             rejectComplete = true
         }, apiErrorHandler: { apiError in

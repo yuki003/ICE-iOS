@@ -36,12 +36,17 @@ def lambda_handler(event, context):
                         continue
 
                     receiving_user_ids = task.get('receivingUserIDs', [])
+                    rejected_user_ids = task.get('rejectedUserIDs', [])
                     completed_user_ids = task.get('completedUserIDs', [])
 
                     # receivingUserIDsからreportUserIDを削除
                     if report_user_id in receiving_user_ids:
                         receiving_user_ids.remove(report_user_id)
 
+                    # receivingUserIDsからreportUserIDを削除
+                    if report_user_id in rejected_user_ids:
+                        rejected_user_ids.remove(report_user_id)
+                        
                     # completedUserIDsにreportUserIDを追加
                     if report_user_id not in completed_user_ids:
                         completed_user_ids.append(report_user_id)
