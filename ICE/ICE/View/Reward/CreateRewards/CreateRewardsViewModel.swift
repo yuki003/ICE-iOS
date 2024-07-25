@@ -99,10 +99,8 @@ var createValidation: AnyPublisher<Validation, Never> {
             
             if !self.image.isEmpty() {
                 let key = self.groupID + reward.id
-                reward.thumbnailKey = key
-                try await self.storage.uploadData(self.image, key: key)
-                let thumbnailURL = try await self.storage.getPublicURLForKey(key)
-                reward.thumbnailKey = thumbnailURL
+                let url = try await self.storage.uploadData(self.image, key: key)
+                reward.thumbnailKey = url
             }
             
             try await self.apiHandler.create(reward, keyName: "\(self.groupID)-rewards")

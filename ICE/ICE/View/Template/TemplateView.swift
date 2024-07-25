@@ -26,17 +26,9 @@ struct TemplateView: View {
                         .frame(width: deviceWidth())
                         .alert(isPresented: $vm.alert) {
                             Alert(
-                                title: Text(
-                                    "エラー"
-                                ),
-                                message: Text(
-                                    vm.alertMessage ?? "操作をやり直してください。"
-                                ),
-                                dismissButton: .default(
-                                    Text(
-                                        "閉じる"
-                                    )
-                                )
+                                title: Text("エラー"),
+                                message: Text(vm.alertMessage ?? "操作をやり直してください。"),
+                                dismissButton: .default(Text("閉じる"))
                             )
                         }
                     }

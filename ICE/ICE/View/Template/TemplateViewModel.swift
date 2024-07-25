@@ -18,7 +18,7 @@ final class TemplateViewModel: ViewModelBase {
     // MARK: initializer
     @MainActor
     func loadData() async throws {
-        asyncOperation({
+        asyncOperation({ [self] in
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in

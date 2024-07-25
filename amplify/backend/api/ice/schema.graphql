@@ -28,9 +28,23 @@ type Group @model {
   rewardIDs: [String]
 }
 
+type GroupPointsHistory @model {
+  id: ID!
+  userID: String!
+  completedTaskID: [ID]
+  receivedRewardID: [ID]
+  total: Int!
+  pending: Int!
+  spent: Int!
+  amount: Int!
+}
+
 type Tasks @model {
   id: ID!
   createUserID: String!
+  receivingUserIDs: [String]
+  rejectedUserIDs: [String]
+  completedUserIDs: [String]
   taskName: String!
   description: String
   iconName: String!
@@ -38,8 +52,24 @@ type Tasks @model {
   condition: [String]
   point: Int!
   groupID: String!
+  hasPendingReport: Boolean!
   startDate: AWSDateTime
   endDate: AWSDateTime
+}
+
+type TaskReports @model {
+  id: ID!
+  taskID: String!
+  reportUserID: String!
+  pictureKey: String
+  picture1: String
+  picture2: String
+  picture3: String
+  reports: [String]
+  rejectedComment:[String]
+  approvedComment: String
+  status: ReportStatus
+  reportVersion: Int
 }
 
 type Rewards @model {
@@ -71,4 +101,11 @@ enum WhoGetsPaid {
   ONLY_ONE
   EVERYBODY
   LIMITED
+}
+
+enum ReportStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DELETED
 }

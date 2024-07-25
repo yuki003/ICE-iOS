@@ -7,6 +7,9 @@ extension Tasks {
    public enum CodingKeys: String, ModelKey {
     case id
     case createUserID
+    case receivingUserIDs
+    case rejectedUserIDs
+    case completedUserIDs
     case taskName
     case description
     case iconName
@@ -14,6 +17,7 @@ extension Tasks {
     case condition
     case point
     case groupID
+    case hasPendingReport
     case startDate
     case endDate
     case createdAt
@@ -36,6 +40,9 @@ extension Tasks {
     model.fields(
       .field(tasks.id, is: .required, ofType: .string),
       .field(tasks.createUserID, is: .required, ofType: .string),
+      .field(tasks.receivingUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(tasks.rejectedUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(tasks.completedUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(tasks.taskName, is: .required, ofType: .string),
       .field(tasks.description, is: .optional, ofType: .string),
       .field(tasks.iconName, is: .required, ofType: .string),
@@ -43,6 +50,7 @@ extension Tasks {
       .field(tasks.condition, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(tasks.point, is: .required, ofType: .int),
       .field(tasks.groupID, is: .required, ofType: .string),
+      .field(tasks.hasPendingReport, is: .required, ofType: .bool),
       .field(tasks.startDate, is: .optional, ofType: .dateTime),
       .field(tasks.endDate, is: .optional, ofType: .dateTime),
       .field(tasks.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),

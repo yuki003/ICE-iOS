@@ -43,3 +43,19 @@ enum APIType: CaseIterable {
     case get
     case list
 }
+
+//enum HostTaskActionType: String, Hashable {
+//    case edit
+//    case insight
+//}
+//
+//extension HostTaskActionType {
+//    var color: Color {
+//        switch self {
+//        case .edit:
+//            return Color(.indigo)
+//        case .insight:
+//            return Color(.jade)
+//        }
+//    }
+//}

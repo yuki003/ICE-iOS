@@ -171,6 +171,17 @@ class APIHandler: ObservableObject {
         }
     }
     
+    func replaceUserDefault<M: Model>(models: [M], keyName: String) {
+        if let savedData = defaults.data(forKey: keyName) {
+            UserDefaults.standard.removeObject(forKey: keyName)
+            
+            guard let data = try? jsonEncoder.encode(models) else {
+                return
+            }
+            defaults.set(data, forKey: "\(keyName)")
+        }
+    }
+    
     func setUserDefault<M: Model>(models: [M], keyName: String) {
         guard let data = try? jsonEncoder.encode(models) else {
             return
@@ -184,7 +195,7 @@ class APIHandler: ObservableObject {
     }
     
     func decodeUserDefault<T: Decodable>(modelType: T.Type, key: String) throws -> T? {
-        let keyList = userDefaultKeys.filter({ $0.contains(key)})
+        let keyList = userDefaultKeys.filter({ $0.elementsEqual(key)})
         if !(keyList.count == 1) {
             throw DeveloperError.userDefaultKeyDuplicated
         }

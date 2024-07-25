@@ -31,7 +31,7 @@
           "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
           "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateTasks-42353657757177464c38-build.zip"
+          "s3Key": "amplify-builds/iceCreateTasks-524842505a324d415135-build.zip"
         },
         "iceCreateMemberUser": {
           "env": "dev",
@@ -45,6 +45,19 @@
           "rewardsTableName": "Rewards-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
           "s3Key": "amplify-builds/iceCreateRewards-75647452596b4a707158-build.zip"
+        },
+        "iceCreateAndUpdateTaskReports": {
+          "env": "dev",
+          "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
+          "taskReportsTableName": "TaskReports-osqdzys545b2jhvrdngnvdt57i-dev",
+          "deploymentBucketName": "amplify-ice-dev-165429-deployment",
+          "s3Key": "amplify-builds/iceCreateAndUpdateTaskReports-7a6b5a694f7677584f6b-build.zip"
+        },
+        "iceTaskApproval": {
+          "env": "dev",
+          "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
+          "deploymentBucketName": "amplify-ice-dev-165429-deployment",
+          "s3Key": "amplify-builds/iceTaskApproval-4a6b4d416d6766375236-build.zip"
         }
       },
       "storage": {

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "BabyCare.png",
+      "filename" : "Babycare 3.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "BabyCare 1.png",
+      "filename" : "Babycare 4.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "BabyCare 2.png",
+      "filename" : "Babycare.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

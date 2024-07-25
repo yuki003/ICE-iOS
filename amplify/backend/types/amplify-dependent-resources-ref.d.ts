@@ -25,6 +25,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     },
+    "iceCreateAndUpdateTaskReports": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "iceCreateGroup": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -47,6 +54,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string"
     },
     "iceCreateTasks": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "iceTaskApproval": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

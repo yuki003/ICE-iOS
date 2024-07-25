@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct PopupActionAlertModifier: ViewModifier {
     @Binding var isPresented: Bool
@@ -19,6 +20,7 @@ struct PopupActionAlertModifier: ViewModifier {
             .overlay {
                 if isPresented {
                     GrayBackgroundView()
+                        .ignoresSafeArea()
 
                     VStack(spacing: 15) {
                         if let titleText = title {
@@ -36,7 +38,7 @@ struct PopupActionAlertModifier: ViewModifier {
 
                         HStack (alignment: .center, spacing: 10) {
                             FlagFillButton(label: "キャンセル", color: Color.red, flag: $isPresented)
-                            ActionFillButton(label: actionLabel, action: action, color: color)
+                            ActionWithFlagFillButton(label: actionLabel, action: action, color: color, flag: $isPresented)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -116,7 +118,47 @@ struct PopupDismissAndActionAlertModifier: ViewModifier {
 
                         HStack (alignment: .center, spacing: 10) {
                             DismissRoundedButton(label: dismissLabel, color: Color(.indigo))
-                            ActionFillButton(label: actionLabel, action: action, color: Color(.jade))
+                            ActionWithFlagFillButton(label: actionLabel, action: action, color: Color(.jade), flag: $isPresented)
+                        }
+                    }
+                    .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
+                    .padding()
+                    .background()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+            }
+    }
+}
+
+struct PopupAlertModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    var title: String?
+    let text: String
+    var color: Color
+    var buttonLabel: String
+    let action: () async throws -> Void
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isPresented {
+                    GrayBackgroundView()
+
+                    VStack(spacing: 15) {
+                        if let titleText = title {
+                            Text(titleText)
+                                .foregroundColor(Color.black)
+                                .font(.callout.bold())
+                                .padding(.top)
+                        }
+
+                        Text(text)
+                            .foregroundColor(Color.black)
+                            .font(.footnote.bold())
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.bottom, 15)
+
+                        HStack (alignment: .center, spacing: 10) {
+                            ActionWithFlagFillButton(label: buttonLabel, action: action, color: Color(.jade), flag: $isPresented)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -153,7 +195,6 @@ struct PopupTaskIconModifier: ViewModifier {
                         ScrollView {
                             // グリッドレイアウトを使用
                             LazyVGrid(columns: layout, spacing: 20) {
-                                //                        HStack (alignment: .center, spacing: 10) {
                                 ForEach(TaskType.allCases.indices, id: \.self) { index in
                                     Button(action: {
                                         selectedStates = Array(repeating: false, count: TaskType.allCases.count)
@@ -167,13 +208,11 @@ struct PopupTaskIconModifier: ViewModifier {
                                 }
                             }
                         }
-                        //                        }
-                        ActionFillButton(label: buttonLabel, action: {
+                        ActionWithFlagFillButton(label: buttonLabel, action: {
                             selected = false
                             taskType = select
                             select = .defaultIcon
-                            isPresented = false
-                        }, color: color)
+                        }, color: color, flag: $isPresented)
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2, maxHeight: 300)
                     .padding()
@@ -183,10 +222,34 @@ struct PopupTaskIconModifier: ViewModifier {
             }
     }
 }
+
+struct PopupImageModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let url: String
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isPresented {
+                    GrayBackgroundView()
+
+                    VStack(spacing: 15) {
+                        KFImage(URL(string: url))
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: UIScreen.main.bounds.width - 32, height: UIScreen.main.bounds.width - 32)
+                            .background(Color.clear)
+                            .scaledToFit()
+                        FlagFillButton(label: "閉じる", color: Color(.indigo), flag: $isPresented)
+                    }
+                    .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
+                }
+            }
+    }
+}
 struct GrayBackgroundView: View {
     var body: some View {
         Rectangle()
-            .fill(Color(.black).opacity(0.5))
+            .fill(Color(.black).opacity(0.8))
             .ignoresSafeArea()
     }
 }

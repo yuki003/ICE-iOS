@@ -178,9 +178,43 @@ struct ArrowTriangleIcon: View {
     }
 }
 
+struct ChevronIcon: View {
+    var direction: Direction
+    var systemName: String {
+        switch direction {
+        case .up:
+            "chevron.up"
+        case .down:
+            "chevron.down"
+        case .right:
+            "chevron.right"
+        case .left:
+            "chevron.left"
+        }
+    }
+    var body: some View {
+        Image(systemName: systemName)
+            .resizable()
+    }
+}
+
 struct PaperPlaneIcon: View {
     var body: some View {
         Image(systemName: "paperplane")
+            .resizable()
+    }
+}
+
+struct CameraOnRectangleIcon: View {
+    var body: some View {
+        Image(systemName: "camera.on.rectangle")
+            .resizable()
+    }
+}
+
+struct XMarkCircleFillIcon: View {
+    var body: some View {
+        Image(systemName: "xmark.circle.fill")
             .resizable()
     }
 }

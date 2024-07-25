@@ -306,6 +306,8 @@ final class AuthViewModel: ObservableObject {
                 } else {
                     groupInfo.belongingUserIDs = [userID]
                 }
+                var newList = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups")?.filter({$0.id != groupInfo.id})
+                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "belongingGroups")
                 try await apiHandler.update(groupInfo, keyName: "belongingGroups")
             }
             try await apiHandler.create(user, keyName: "User")

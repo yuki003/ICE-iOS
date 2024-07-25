@@ -9,6 +9,7 @@ import SwiftUI
 import Amplify
 struct GroupDetailView: View {
     @StateObject var vm: GroupDetailViewModel
+    @StateObject var taskService: TaskService
     @EnvironmentObject var router: PageRouter
     
     @State var inviteFlag: Bool = false
@@ -16,9 +17,7 @@ struct GroupDetailView: View {
         DestinationHolderView(router: router) {
             VStack {
                 switch vm.state {
-                case .idle:
-                    Color.clear.onAppear { vm.state = .loading }
-                case .loading:
+                case .idle, .loading:
                     LoadingView().onAppear{
                         Task {
                             try await vm.loadData()
@@ -48,20 +47,23 @@ struct GroupDetailView: View {
                         .frame(width: deviceWidth())
                         .alert(isPresented: $vm.alert) {
                             Alert(
-                                title: Text(
-                                    "エラー"
-                                ),
-                                message: Text(
-                                    vm.alertMessage ?? "操作をやり直してください。"
-                                ),
-                                dismissButton: .default(
-                                    Text(
-                                        "閉じる"
-                                    )
-                                )
+                                title: Text("エラー"),
+                                message: Text(vm.alertMessage ?? "操作をやり直してください。"),
+                                dismissButton: .default(Text("閉じる"))
                             )
                         }
+                        .popupActionAlert(isPresented: $taskService.receiveConfirmation,
+                                          title:"このタスクに挑戦しますか？",
+                                          text: "",
+                                          action: { Task {
+                                                            try await taskService.receiveTaskOrder(groupID: vm.groupInfo.id)
+                                                         }
+                                                    },
+                                          actionLabel: "挑戦する")
                     }
+                    .popupAlert(isPresented: $taskService.taskReceived, title: "タスクを受注しました！", text: "タスクを完了してポイントをもらおう！", action: {
+                        vm.state = .idle
+                    })
                     .sheet(isPresented: $inviteFlag) {
                         ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
                     }
@@ -73,6 +75,8 @@ struct GroupDetailView: View {
                     }
                 }
             }
+            .loading(isLoading: $vm.isLoading)
+            .loading(isLoading: $taskService.isLoading)
             .userToolbar(state: vm.state, userName: nil, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -131,11 +135,7 @@ struct GroupDetailView: View {
                 }
             }
             if vm.latestTasks.count > 0 {
-                ForEach(vm.latestTasks.indices, id: \.self) { index in
-                    let task = vm.latestTasks[index]
-                    TaskRow(task: task, action: { try await TasksService().tryTask() }, asHost: vm.asHost)
-                    .padding(.leading, 10)
-                }
+                taskService.taskListBuilder(vm.latestTasks, router)
             } else {
                 Text("タスクを設定しましょう！")
                     .font(.callout.bold())

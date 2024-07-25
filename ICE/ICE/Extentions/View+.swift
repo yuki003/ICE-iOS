@@ -22,7 +22,7 @@ extension View {
     }
     
     func textFieldWidth() -> CGFloat{
-        return UIScreen.main.bounds.width / 1.5
+        return UIScreen.main.bounds.width - 96
     }
     
     func commonButtonWidth() -> CGFloat{
@@ -65,8 +65,23 @@ extension View {
         modifier(PopupDismissAndActionAlertModifier(isPresented: isPresented, title: title, text: text, dismissLabel: dismissLabel, actionLabel: actionLabel, action: action))
     }
     
+    func popupAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, color: Color = Color(.indigo), dismissLabel: String = "閉じる", action: @escaping () async throws -> Void) -> some View {
+        modifier(PopupAlertModifier(isPresented: isPresented, title: title, text: text, color: color, buttonLabel: dismissLabel, action: action))
+    }
+    
     func popupTaskIconSelector(isPresented: Binding<Bool>, taskType: Binding<TaskType>, color: Color = Color(.indigo), buttonLabel: String = "決定") -> some View {
         modifier(PopupTaskIconModifier(isPresented: isPresented, taskType: taskType, color: color, buttonLabel: buttonLabel))
+    }
+    
+    func popupImage(isPresented: Binding<Bool>, url: String) -> some View {
+        modifier(PopupImageModifier(isPresented: isPresented, url: url))
+    }
+    
+    func alertStacked(isPresented: Binding<Bool>, content: () -> Alert) -> some View {
+        overlay(
+            EmptyView().alert(isPresented: isPresented, content: content),
+            alignment: .bottomTrailing
+        )
     }
 }
 

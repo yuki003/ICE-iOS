@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "api": {
+      "ice": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "env",
+      "environmentVariableName": "ENV"
+    },
+    {
+      "cloudFormationParameterName": "tasksTableName",
+      "environmentVariableName": "TASKS_TABLE_NAME"
+    }
+  ]
+}
