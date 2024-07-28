@@ -24,9 +24,14 @@ final class CreateRewardsViewModel: ViewModelBase {
     // MARK: Flags
     @Published var isLimited: Bool = false
     @Published var showImagePicker: Bool = false
-    @Published var createComplete: Bool = false
     
     // MARK: Instances
+    @Published var createRewardsAlertProp: PopupAlertProperties = .init(title: "作成しますか？",
+                                                                        text:"""
+                                                                             入力した内容でリワードを作成します。
+                                                                             リワードはのちに編集することもできます。
+                                                                             """)
+    @Published var createdRewardsAlertProp: PopupAlertProperties = .init(title: "作成完了!!", text: "グループ画面から作ったリワードを確認できます。")
     
     // MARK: Validations
     var rewardNameValidation: AnyPublisher<Validation, Never> {
@@ -89,7 +94,7 @@ var createValidation: AnyPublisher<Validation, Never> {
     @MainActor
     func createReward() async throws {
         asyncOperation({
-            self.showAlert = false
+            self.createRewardsAlertProp.isPresented = false
             var reward = Rewards(createUserID: self.userID, rewardName: self.rewardName,description: self.rewardDescription.isEmpty ? nil : self.rewardDescription, thumbnailKey: "", frequencyType: self.frequencyType, whoGetsPaid: self.whoGetsPaid, cost: self.cost, groupID: self.groupID)
             
             if self.isLimited {
@@ -104,7 +109,7 @@ var createValidation: AnyPublisher<Validation, Never> {
             }
             
             try await self.apiHandler.create(reward, keyName: "\(self.groupID)-rewards")
-            self.createComplete = true
+            self.createdRewardsAlertProp.isPresented = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in
@@ -118,6 +123,6 @@ var createValidation: AnyPublisher<Validation, Never> {
         rewardDescription = ""
         cost = 0
         frequencyType = .onlyOnce
-        createComplete = false
+        createdRewardsAlertProp.isPresented = false
     }
 }

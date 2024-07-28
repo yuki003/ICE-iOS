@@ -19,16 +19,14 @@ final class TaskApprovalViewModel: ViewModelBase {
     let keys = TaskReports.keys
     
     // MARK: Flags
-    @Published var approve: Bool = false
-    @Published var reject: Bool = false
-    @Published var approveComplete: Bool = false
-    @Published var rejectComplete: Bool = false
     @Published var showImage: Bool = false
     
     // MARK: Instances
     @Published var task: Tasks
     @Published var reportsWithUsers: [ReportWithUserInfo] = []
     @Published var selectedReport: TaskReports?
+    @Published var approvedAlertProp: PopupAlertProperties = .init(title: "承認完了！", text: "ポイントがユーザーに付与されました。")
+    @Published var rejectedAlertProp: PopupAlertProperties = .init(title: "却下しました", text: "レポートを却下しました。次の報告を待ちましょう。")
     
     // MARK: Validations
     
@@ -67,7 +65,7 @@ final class TaskApprovalViewModel: ViewModelBase {
                 try await updateTaskReport(selectedReport: selectedReport)
                 
             }
-            approveComplete = true
+            approvedAlertProp.isPresented = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in
@@ -139,7 +137,7 @@ final class TaskApprovalViewModel: ViewModelBase {
                     try await self.apiHandler.update(task, keyName: "\(task.groupID)-tasks")
                 }
             }
-            rejectComplete = true
+            rejectedAlertProp.isPresented = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in

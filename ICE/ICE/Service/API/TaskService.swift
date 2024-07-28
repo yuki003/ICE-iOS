@@ -10,12 +10,17 @@ import SwiftUI
 
 final class TaskService: ViewModelBase {
     @Published var selectedTask: Tasks?
-    @Published var receiveConfirmation: Bool = false
-    @Published var taskReceived: Bool = false
     @Published var navToTaskReport: Bool = false
     @Published var navToTaskHistory: Bool = false
     @Published var navToTaskEdit: Bool = false
     @Published var navToTaskInsight: Bool = false
+    @Published var receiveConfirmAlertProp: PopupAlertProperties = .init(title:"このタスクに挑戦しますか？")
+    @Published var taskReceivedAlertProp: PopupAlertProperties = .init(title: "タスクを受注しました！", text: "タスクを完了してポイントをもらおう！")
+
+    
+    override init() {
+        super.init()
+    }
     
     @MainActor
     func receiveTaskOrder(groupID: String) async throws {
@@ -31,7 +36,7 @@ final class TaskService: ViewModelBase {
                 apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(groupID)-tasks")
                 try await apiHandler.update(selectedTask, keyName: "\(groupID)-tasks")
             }
-            taskReceived = true
+            taskReceivedAlertProp.isPresented = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in
@@ -94,7 +99,7 @@ final class TaskService: ViewModelBase {
             }
             TaskRow(task: task, action: {
                 self.selectedTask = task
-                self.receiveConfirmation = true
+                self.receiveConfirmAlertProp.isPresented = true
             }, asHost: self.asHost, status: status)
             .padding(.leading, 10)
         }

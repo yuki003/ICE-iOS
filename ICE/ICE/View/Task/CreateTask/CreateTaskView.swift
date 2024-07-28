@@ -88,7 +88,7 @@ struct CreateTaskView: View {
                         }
                         Spacer()
                         if !vm.createComplete {
-                            EnabledFlagFillButton(label: "タスクを作成", color: Color(.jade), flag: $vm.showAlert, condition: vm.formValid.isSuccess == false)
+                            EnabledFlagFillButton(label: "タスクを作成", color: Color(.jade), flag: $vm.createTaskAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
                                 .padding(.vertical)
                         }
                     }
@@ -96,7 +96,7 @@ struct CreateTaskView: View {
                     .padding(.horizontal, 20)
                     .padding(.top)
                     .frame(width: deviceWidth())
-                    .alert(isPresented: $vm.alert) {
+                    .alert(isPresented: $vm.ErrorAlert) {
                         Alert(
                             title: Text(
                                 "エラー"
@@ -112,13 +112,9 @@ struct CreateTaskView: View {
                         )
                     }
                     .popupTaskIconSelector(isPresented: $vm.showIconSelector, taskType: $vm.taskType)
-                    .popupActionAlert(isPresented: $vm.showAlert, title: "作成しますか？",
-                                      text:"""
-                                           入力した内容でタスクを作成します。
-                                           作成したタスクはのちに編集することもできます。
-                                           """
+                    .popupActionAlert(prop: $vm.createTaskAlertProp
                                       , action: { Task { try await vm.createTask()} }, actionLabel: "作成")
-                    .popupDismissAndActionAlert(isPresented: $vm.createComplete, title: "タスク作成完了!!", text: "グループ画面から作ったタスクを確認できます。", dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける", action: { vm.initialization() })
+                    .popupDismissAndActionAlert(prop: $vm.createTaskAlertProp, dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける", action: { vm.initialization() })
                 }
             }
         }

@@ -17,14 +17,16 @@ final class TaskReportViewModel: ViewModelBase {
     let keys = TaskReports.keys
     
     // MARK: Flags
-    @Published var submitReport: Bool = false
     @Published var editReport: Bool = false
-    @Published var deleteReport: Bool = false
-    @Published var reportComplete: Bool = false
     
     // MARK: Instances
     @Published var task: Tasks
     @Published var taskReports: TaskReports?
+    @Published var submitAlertProp: PopupAlertProperties = .init(text: "この内容で報告しますか？")
+    @Published var deleteAlertProp: PopupAlertProperties = .init(title: "レポートを取り消しますか？", text: "取り消したタスクは再チャレンジできません。")
+    @Published var completedAlertProp: PopupAlertProperties = .init(title: "報告完了!!", text: "ホストの承認を受けるとポイントゲット！")
+
+    
     var alreadyReported: Bool {
         taskReports != nil
     }
@@ -78,7 +80,7 @@ final class TaskReportViewModel: ViewModelBase {
     @MainActor
     func repotTask() async throws {
         asyncOperation({ [self] in
-            submitReport = false
+            submitAlertProp.isPresented = false
             var baseKey = task.id
             var key: String = ""
             var model = TaskReports(taskID: task.id, reportUserID: userID, status: ReportStatus.pending, reportVersion: (taskReports?.reportVersion ?? 0) + 1)
@@ -170,7 +172,7 @@ final class TaskReportViewModel: ViewModelBase {
                 try await apiHandler.create(model, keyName: "\(task.id)-report")
             }
             
-            reportComplete = true
+            completedAlertProp.isPresented = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in
@@ -191,7 +193,7 @@ final class TaskReportViewModel: ViewModelBase {
     @MainActor
     func deleteTask() async throws {
         asyncOperation({ [self] in
-            deleteReport = false
+            deleteAlertProp.isPresented = false
             var model = TaskReports(taskID: task.id, reportUserID: userID, status: ReportStatus.pending, reportVersion: (taskReports?.reportVersion ?? 0) + 1)
             
             if images.count > 0, images[0].isNotEmpty() {
@@ -224,7 +226,7 @@ final class TaskReportViewModel: ViewModelBase {
                 model.reports = [report]
                 try await apiHandler.create(model, keyName: "\(task.id)-report")
             }
-            reportComplete = true
+            completedAlertProp.isPresented = true
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in

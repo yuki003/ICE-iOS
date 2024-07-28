@@ -97,7 +97,7 @@ Link： ice://invite?code=\(groupInfo.id)
             try await loadData()
         } catch {
             alertMessage = error.localizedDescription
-            alert = true
+            ErrorAlert = true
         }
     }
 }

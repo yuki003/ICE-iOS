@@ -28,7 +28,7 @@ struct CreateGroupView: View {
             case .loaded:
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 20) {
-                        if !vm.createComplete {
+                        if !vm.createGroupAlertProp.isPresented {
                             groupImageSection()
                                 .validation(vm.thumbnailValidation, alignmentCenter: true)
                             UnderLineTextField(text: $vm.groupName, focused: _focused, field: FormField.name, placeHolder: "グループ名を入力")
@@ -54,10 +54,10 @@ struct CreateGroupView: View {
                         }
                         CreateGroupCard(groupName: vm.groupName, image: vm.image, description: vm.groupDescription, color: vm.groupName.isEmpty ? Color.gray : Color(.indigo))
                         
-                        if vm.createComplete {
+                        if vm.createGroupAlertProp.isPresented {
                             DismissRoundedButton(label: "ホームに戻る", color: Color(.indigo))
                         } else {
-                            EnabledFlagFillButton(label: "グループを作成", color: Color(.jade), flag: $vm.showAlert, condition: vm.buttonDisabled)
+                            EnabledFlagFillButton(label: "グループを作成", color: Color(.jade), flag: $vm.createGroupAlertProp.isPresented, condition: vm.buttonDisabled)
                                 .padding(.vertical)
                         }
                         
@@ -65,7 +65,7 @@ struct CreateGroupView: View {
                     .frame(width: deviceWidth())
                     .padding(.vertical)
                     //                        .popupDismissAlert(isPresented: $vm.createComplete, title: "グループ作成完了!!", text: "ホーム画面から新しく作成したグループを確認してください。", buttonLabel: "ホームに戻る")
-                    .popupActionAlert(isPresented: $vm.showAlert, title: "グループを作成します", text: "現在の内容でグループを作成します。グループ詳細画面から内容を更新することができます。", action: vm.createGroup, actionLabel: "作成")
+                    .popupActionAlert(prop: $vm.createGroupAlertProp, action: vm.createGroup, actionLabel: "作成")
                     .onAppear {
                         if vm.groupName.isEmpty {
                             vm.buttonDisabled = true

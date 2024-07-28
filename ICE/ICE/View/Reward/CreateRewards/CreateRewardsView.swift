@@ -65,8 +65,8 @@ struct CreateRewardsView: View {
                         }
                         
                         Spacer()
-                        if !vm.createComplete {
-                            EnabledFlagFillButton(label: "リワードを作成", color: Color(.jade), flag: $vm.showAlert, condition: vm.formValid.isSuccess == false)
+                        if !vm.createdRewardsAlertProp.isPresented {
+                            EnabledFlagFillButton(label: "リワードを作成", color: Color(.jade), flag: $vm.createRewardsAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
                                 .padding(.vertical)
                         }
                     }
@@ -74,7 +74,7 @@ struct CreateRewardsView: View {
                     .padding(.horizontal, 20)
                     .padding(.top)
                     .frame(width: deviceWidth())
-                    .alert(isPresented: $vm.alert) {
+                    .alert(isPresented: $vm.ErrorAlert) {
                         Alert(
                             title: Text(
                                 "エラー"
@@ -89,13 +89,8 @@ struct CreateRewardsView: View {
                             )
                         )
                     }
-                    .popupActionAlert(isPresented: $vm.showAlert, title: "作成しますか？",
-                                      text:"""
-                                           入力した内容でリワードを作成します。
-                                           リワードはのちに編集することもできます。
-                                           """
-                                      , action: { Task { try await vm.createReward()} }, actionLabel: "作成")
-                    .popupDismissAndActionAlert(isPresented: $vm.createComplete, title: "作成完了!!", text: "グループ画面から作ったリワードを確認できます。", dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける", action: { vm.initialization() })
+                    .popupActionAlert(prop: $vm.createRewardsAlertProp, action: { Task { try await vm.createReward()} }, actionLabel: "作成")
+                    .popupDismissAndActionAlert(prop: $vm.createRewardsAlertProp, dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける", action: { vm.initialization() })
                 }
             }
         }

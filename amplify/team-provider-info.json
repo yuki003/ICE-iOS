@@ -114,7 +114,9 @@
           "rewardsTableName": "Rewards-ncesakvf3veofbfk64el5p6sd4-prod",
           "deploymentBucketName": "amplify-ice-prod-165724-deployment",
           "s3Key": "amplify-builds/iceCreateRewards-75647452596b4a707158-build.zip"
-        }
+        },
+        "iceCreateAndUpdateTaskReports": {},
+        "iceTaskApproval": {}
       },
       "storage": {
         "iceDev": {}

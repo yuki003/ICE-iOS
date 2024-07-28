@@ -33,7 +33,7 @@ struct TaskListView: View {
                         }
                         .padding(.vertical)
                         .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.alert) {
+                        .alert(isPresented: $vm.ErrorAlert) {
                             Alert(
                                 title: Text(
                                     "エラー"

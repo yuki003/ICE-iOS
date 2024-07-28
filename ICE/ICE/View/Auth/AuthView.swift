@@ -11,104 +11,81 @@ struct AuthView: View {
     @StateObject var vm: AuthViewModel
     @FocusState private var focused: AuthField?
     var body: some View {
-        switch vm.state {
-        case .idle:
-            Color.clear.onAppear { vm.state = .loading }
-        case .loading:
-            Color.clear.onAppear { vm.state = .loaded }
-        case .loaded:
-            NavigationStack {
-                VStack(alignment: .center, spacing: 25) {
-                    icon()
-                        .padding(.top, 70)
-                    if vm.navHostOrGuest {
-                        HostOrGuestSection()
-                            .transition(.opacity)
-                    } else if vm.navSignIn {
-                        SignInSection()
-                            .transition(.opacity)
-                    } else if vm.navSignUp {
-                        SignUpSection()
-                            .transition(.opacity)
-                    } else if vm.navSignUpConfirm {
-                        ConfirmationCodeSection()
-                            .transition(.opacity)
-                    } else {
-                        VStack(spacing: 20){
-                            SignInButton(vm: vm)
-                            SignUpButton(vm: vm)
-                        }
-                        .frame(height: 120)
-                        .padding()
+        NavigationStack {
+            VStack(alignment: .center, spacing: 25) {
+                icon()
+                    .padding(.top, 70)
+                if vm.navHostOrGuest {
+                    HostOrGuestSection()
+                        .transition(.opacity)
+                } else if vm.navSignIn {
+                    SignInSection()
+                        .transition(.opacity)
+                } else if vm.navSignUp {
+                    SignUpSection()
+                        .transition(.opacity)
+                } else if vm.navSignUpConfirm {
+                    ConfirmationCodeSection()
+                        .transition(.opacity)
+                } else {
+                    VStack(spacing: 20){
+                        SignInButton(vm: vm)
+                        SignUpButton(vm: vm)
                     }
-                    Spacer()
+                    .frame(height: 120)
+                    .padding()
                 }
-                .toolbar {
-                    if vm.navSignIn || vm.navSignUp || vm.navSignUpConfirm || vm.navHostOrGuest {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(action: {
-                                if vm.navHostOrGuest {
-                                    vm.flagInitialize()
-                                    vm.isSignIn = false
-                                    vm.isSignUp = false
-                                } else if vm.navSignIn || vm.navSignUp {
-                                    vm.propertyInitialize()
-                                    vm.flagInitialize()
-                                    vm.navHostOrGuest = true
-                                } else if vm.navSignUpConfirm {
-                                    vm.flagInitialize()
-                                    vm.navSignUp = true
-                                }
-                            }) {
-                                Image(systemName: "chevron.left")
-                                    .font(.callout)
-                                    .foregroundStyle(Color(.indigo))
+                Spacer()
+            }
+            .toolbar {
+                if vm.navSignIn || vm.navSignUp || vm.navSignUpConfirm || vm.navHostOrGuest {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            if vm.navHostOrGuest {
+                                vm.flagInitialize()
+                                vm.isSignIn = false
+                                vm.isSignUp = false
+                            } else if vm.navSignIn || vm.navSignUp {
+                                vm.propertyInitialize()
+                                vm.flagInitialize()
+                                vm.navHostOrGuest = true
+                            } else if vm.navSignUpConfirm {
+                                vm.flagInitialize()
+                                vm.navSignUp = true
                             }
-                        }
-                    } else {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Text("")
+                        }) {
+                            Image(systemName: "chevron.left")
                                 .font(.callout)
+                                .foregroundStyle(Color(.indigo))
                         }
+                    }
+                } else {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Text("")
+                            .font(.callout)
                     }
                 }
             }
-            .loading(isLoading: $vm.isLoading)
-            .alert(isPresented: $vm.alert) {
-                Alert(
-                    title: Text(
-                        "認証エラー"
-                    ),
-                    message: Text(
-                        vm.alertMessage ?? "操作をやり直してください。"
-                    ),
-                    dismissButton: .default(
-                        Text(
-                            "閉じる"
-                        )
-                    )
-                )
-            }
-            .onOpenURL(perform: { url in
-                debugPrint(url)
-                if let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
-                      let queryItems = components.queryItems {
-                    if let inviteCode = queryItems.first(where: { $0.name == "code" })?.value {
-                        // 招待コードを使って何かする
-                        // 例: サインアップ画面に遷移し、招待コードをセットする
-                        if !inviteCode.isEmpty {
-                            print("code is \(inviteCode)")
-                            vm.signUpOptions.invitedGroupID = inviteCode
-                            vm.isSignUp = true
-                            vm.navSignUp = true
-                        }
-                    }
-                }
-
-            })
-        case let .failed(error):
-            Text(error.localizedDescription)
         }
+        .loading(isLoading: $vm.isLoading)
+        .popupAlert(prop: $vm.errorPopAlertProp, action: {})
+        .onOpenURL(perform: { url in
+            debugPrint(url)
+            if let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+               let queryItems = components.queryItems {
+                if let inviteCode = queryItems.first(where: { $0.name == "code" })?.value {
+                    // 招待コードを使って何かする
+                    // 例: サインアップ画面に遷移し、招待コードをセットする
+                    if !inviteCode.isEmpty {
+                        print("code is \(inviteCode)")
+                        vm.signUpOptions.invitedGroupID = inviteCode
+                        vm.isSignUp = true
+                        vm.navSignUp = true
+                    }
+                }
+            }
+            
+        })
     }
     @ViewBuilder
     func HostOrGuestSection() -> some View {

@@ -20,6 +20,12 @@ final class CreateTaskViewModel: ViewModelBase {
     @Published var startDate: Date = Date()
     @Published var endDate: Date = Date()
     @Published var frequencyType: FrequencyType = .onlyOnce
+    @Published var createTaskAlertProp: PopupAlertProperties = .init(title: "作成しますか？",
+                                                                     text:"""
+                                                                          入力した内容でタスクを作成します。
+                                                                          作成したタスクはのちに編集することもできます。
+                                                                          """
+)
     var translatedFrequency: String {
         enumUtil.translateFrequencyType(frequency: frequencyType)
     }
@@ -83,7 +89,7 @@ final class CreateTaskViewModel: ViewModelBase {
     @MainActor
     func createTask() async throws {
         asyncOperation({
-            self.showAlert = false
+            self.createTaskAlertProp.isPresented = false
             if !self.condition.isEmpty {
                 self.conditions.append(self.condition)
             }

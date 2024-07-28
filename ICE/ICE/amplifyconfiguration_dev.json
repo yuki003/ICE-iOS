@@ -9,7 +9,7 @@
                     "endpoint": "https://ir4gcg3rf5d2fcn4qidpd5tyaa.appsync-api.ap-northeast-1.amazonaws.com/graphql",
                     "region": "ap-northeast-1",
                     "authorizationType": "API_KEY",
-                    "apiKey": "da2-lyhkhbovrrczzahpajrgnmhrsy"
+                    "apiKey": "da2-eaq3i53tsvhjbhftixen2z4bb4"
                 }
             }
         }
@@ -27,7 +27,7 @@
                         "ApiUrl": "https://ir4gcg3rf5d2fcn4qidpd5tyaa.appsync-api.ap-northeast-1.amazonaws.com/graphql",
                         "Region": "ap-northeast-1",
                         "AuthMode": "API_KEY",
-                        "ApiKey": "da2-lyhkhbovrrczzahpajrgnmhrsy",
+                        "ApiKey": "da2-eaq3i53tsvhjbhftixen2z4bb4",
                         "ClientDatabasePrefix": "ice_API_KEY"
                     }
                 },

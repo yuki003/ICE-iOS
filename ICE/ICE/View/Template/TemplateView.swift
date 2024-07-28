@@ -24,7 +24,7 @@ struct TemplateView: View {
                         }
                         .padding(.vertical)
                         .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.alert) {
+                        .alert(isPresented: $vm.ErrorAlert) {
                             Alert(
                                 title: Text("エラー"),
                                 message: Text(vm.alertMessage ?? "操作をやり直してください。"),

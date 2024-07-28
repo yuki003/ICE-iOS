@@ -45,23 +45,18 @@ struct GroupDetailView: View {
                         }
                         .padding()
                         .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.alert) {
+                        .alert(isPresented: $vm.ErrorAlert) {
                             Alert(
                                 title: Text("エラー"),
                                 message: Text(vm.alertMessage ?? "操作をやり直してください。"),
                                 dismissButton: .default(Text("閉じる"))
                             )
                         }
-                        .popupActionAlert(isPresented: $taskService.receiveConfirmation,
-                                          title:"このタスクに挑戦しますか？",
-                                          text: "",
-                                          action: { Task {
-                                                            try await taskService.receiveTaskOrder(groupID: vm.groupInfo.id)
-                                                         }
-                                                    },
+                        .popupActionAlert(prop: $taskService.receiveConfirmAlertProp,
+                                          action: { Task { try await taskService.receiveTaskOrder(groupID: vm.groupInfo.id)}},
                                           actionLabel: "挑戦する")
                     }
-                    .popupAlert(isPresented: $taskService.taskReceived, title: "タスクを受注しました！", text: "タスクを完了してポイントをもらおう！", action: {
+                    .popupAlert(prop: $taskService.taskReceivedAlertProp, action: {
                         vm.state = .idle
                     })
                     .sheet(isPresented: $inviteFlag) {

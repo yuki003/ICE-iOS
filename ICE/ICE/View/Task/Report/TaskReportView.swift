@@ -13,7 +13,7 @@ struct TaskReportView: View {
     @StateObject var vm: TaskReportViewModel
     @EnvironmentObject var router: PageRouter
     @FocusState private var focused: FormField?
-    @State private var showImageDeleteAlert: Bool = false
+    @State var imageDeleteAlertProp: PopupAlertProperties = .init(text: "画像を削除しますか？")
     @State private var isShowCameraView: Bool = false
     @State private var isShowPhotoLibrary: Bool = false
     @State private var isShowConfirmation: Bool = false
@@ -41,7 +41,7 @@ struct TaskReportView: View {
                         }
                         .padding()
                         .frame(width: screenWidth())
-                        .alert(isPresented: $vm.alert) {
+                        .alert(isPresented: $vm.ErrorAlert) {
                             Alert(
                                 title: Text("エラー"),
                                 message: Text(vm.alertMessage ?? "操作をやり直してください。"),
@@ -74,14 +74,14 @@ struct TaskReportView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .loading(isLoading: $vm.isLoading)
-            .popupActionAlert(isPresented: $vm.submitReport, text: "この内容で報告しますか？", action: { try await vm.repotTask() }, actionLabel: "報告")
-            .popupActionAlert(isPresented: $vm.deleteReport, title: "レポートを取り消しますか？", text: "取り消したタスクは再チャレンジできません。", action: { try await vm.repotTask() }, actionLabel: "取り消す")
-            .popupActionAlert(isPresented: $showImageDeleteAlert, text: "画像を削除しますか？", action: {
+            .popupActionAlert(prop: $vm.submitAlertProp, action: { try await vm.repotTask() }, actionLabel: "報告")
+            .popupActionAlert(prop: $vm.deleteAlertProp, action: { try await vm.repotTask() }, actionLabel: "取り消す")
+            .popupActionAlert(prop: $imageDeleteAlertProp, action: {
                 if let index = selectIndex {
                     vm.images.remove(at: index)
                 }
             }, actionLabel: "削除")
-            .popupDismissAlert(isPresented: $vm.reportComplete, title: "報告完了!!", text: "ホストの承認を受けるとポイントゲット！", buttonLabel: "戻る")
+            .popupDismissAlert(prop: $vm.completedAlertProp)
             .confirmationDialog("", isPresented: $isShowConfirmation) {
                 Button("カメラで撮影"){
                     isShowCameraView = true
@@ -112,7 +112,7 @@ struct TaskReportView: View {
                         
                         Button(action: {
                             selectIndex = index
-                            showImageDeleteAlert = true
+                            imageDeleteAlertProp.isPresented = true
                         })
                         {
                             XMarkCircleFillIcon()
@@ -197,16 +197,16 @@ struct TaskReportView: View {
                 DescriptionTextEditor(description: $vm.report, focused: _focused, placeholder: "タスク報告を書こう")
             }
             if vm.taskReports == nil {
-                EnabledFlagFillButton(label: "報告", color: Color(.indigo), flag: $vm.submitReport, condition: !(vm.taskReports == nil || vm.taskReports?.status == ReportStatus.rejected))
+                EnabledFlagFillButton(label: "報告", color: Color(.indigo), flag: $vm.submitAlertProp.isPresented, condition: !(vm.taskReports == nil || vm.taskReports?.status == ReportStatus.rejected))
                     .padding(.vertical)
             } else if vm.taskReports?.status == ReportStatus.rejected {
-                FlagFillButton(label: "再報告", color: Color(.indigo), flag: $vm.submitReport)
+                FlagFillButton(label: "再報告", color: Color(.indigo), flag: $vm.submitAlertProp.isPresented)
                     .padding(.vertical)
             } else if vm.taskReports?.status == ReportStatus.pending {
                 HStack(spacing: 20) {
-                    FlagFillButton(label: "取り消す", color: Color(.indigo), flag: $vm.deleteReport)
+                    FlagFillButton(label: "取り消す", color: Color(.indigo), flag: $vm.deleteAlertProp.isPresented)
                         .padding(.vertical)
-                    FlagFillButton(label: "編集する", color: Color(.indigo), flag: $vm.submitReport)
+                    FlagFillButton(label: "編集する", color: Color(.indigo), flag: $vm.submitAlertProp.isPresented)
                         .padding(.vertical)
                 }
             }

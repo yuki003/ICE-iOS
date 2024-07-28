@@ -38,9 +38,11 @@ enum AmplifyAuthError {
     case confirmError
     case signInFailed
     case signOutFailed
+    case userDoesNotExists
     case userAlreadyExists
     case notAuthorized
     case invalidVerificationCode
+    case alreadyConfirmed
 }
 
 extension AmplifyAuthError: LocalizedError {
@@ -55,11 +57,15 @@ extension AmplifyAuthError: LocalizedError {
         case .signOutFailed:
             return "ログアウトに失敗しました。"
         case .userAlreadyExists:
+            return "指定のユーザーが見つかりません。"
+        case .userDoesNotExists:
             return "指定のユーザーはすでに存在しています。"
         case .notAuthorized:
             return "認証できませんでした。入力内容をお確かめください。"
         case .invalidVerificationCode:
             return "認証コードが間違っています。"
+        case .alreadyConfirmed:
+            return "ユーザーはすでに認証済みです。ログイン操作を行なってください。"
         }
     }
 }

@@ -28,7 +28,7 @@ class ViewModelBase: ObservableObject {
     @Published var reload = false
     @Published var isLoading = false
     @Published var showAlert: Bool = false
-    @Published var alert: Bool = false
+    @Published var ErrorAlert: Bool = false
     
     // MARK: Services
     @ObservedObject var apiHandler = APIHandler.shared
@@ -76,6 +76,6 @@ class ViewModelBase: ObservableObject {
     
     func setErrorMessage(_ error: Error) {
         alertMessage = error.localizedDescription
-        alert = true
+        ErrorAlert = true
     }
 }
