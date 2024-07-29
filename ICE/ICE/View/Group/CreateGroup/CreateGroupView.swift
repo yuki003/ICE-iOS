@@ -16,75 +16,66 @@ struct CreateGroupView: View {
     @State var createCompleted: Bool = false
     var body: some View {
         VStack {
-            switch vm.state {
-            case .idle:
-                Color.clear.onAppear { vm.state = .loading }
-            case .loading:
-                LoadingView().onAppear {
-                    Task {
-                        try await vm.loadData()
-                    }
-                }
-            case let .failed(error):
-                Text(error.localizedDescription)
-            case .loaded:
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .center, spacing: 20) {
-                        if !createCompleted {
-                            groupImageSection()
-                                .validation(vm.thumbnailValidation, alignmentCenter: true)
-                            UnderLineTextField(text: $vm.groupName, focused: _focused, field: FormField.name, placeHolder: "グループ名を入力")
-                                .onChange(of: vm.groupName) { newValue in
-                                    if newValue.isEmpty {
-                                        vm.buttonDisabled = true
-                                    } else {
-                                        vm.buttonDisabled = false
-                                    }
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .center, spacing: 20) {
+                    if !createCompleted {
+                        groupImageSection()
+                            .validation(vm.thumbnailValidation, alignmentCenter: true)
+                        UnderLineTextField(text: $vm.groupName, focused: _focused, field: FormField.name, placeHolder: "グループ名を入力")
+                            .onChange(of: vm.groupName) { newValue in
+                                if newValue.isEmpty {
+                                    vm.buttonDisabled = true
+                                } else {
+                                    vm.buttonDisabled = false
                                 }
-                            DescriptionTextEditor(description: $vm.groupDescription, focused: _focused)
-                        } else {
-                            VStack(alignment: .center, spacing: 20) {
-                                Text("グループの登録が完了しました！")
-                                    .font(.callout.bold())
-                                Text("""
+                            }
+                        DescriptionTextEditor(description: $vm.groupDescription, focused: _focused)
+                    } else {
+                        VStack(alignment: .center, spacing: 20) {
+                            Text("グループの登録が完了しました！")
+                                .font(.callout.bold())
+                            Text("""
                                          ホームからグループの詳細を確認し、
                                          タスクやリワードを設定しましょう!!
                                          """)
-                                .font(.footnote.bold())
-                            }
-                            .padding(.vertical, 20)
+                            .font(.footnote.bold())
                         }
-                        CreateGroupCard(groupName: vm.groupName, image: vm.image, description: vm.groupDescription, color: vm.groupName.isEmpty ? Color.gray : Color(.indigo))
-                        
-                        if createCompleted {
-                            DismissRoundedButton(label: "ホームに戻る", color: Color(.indigo))
-                        } else {
-                            ActionWithFlagFillButton(label: "グループを作成", action: {
-                                createGroupAlertProp.action = vm.createGroup
-                                createCompleted = true
-                            }, color: Color(.jade), flag: $createGroupAlertProp.isPresented, condition: vm.buttonDisabled)
-                                .padding(.vertical)
-                        }
-                        
+                        .padding(.vertical, 20)
                     }
-                    .frame(width: deviceWidth())
-                    .padding(.vertical)
-                    //                        .popupDismissAlert(isPresented: $vm.createComplete, title: "グループ作成完了!!", text: "ホーム画面から新しく作成したグループを確認してください。", buttonLabel: "ホームに戻る")
-                    .onAppear {
-                        if vm.groupName.isEmpty {
-                            vm.buttonDisabled = true
-                        }
+                    CreateGroupCard(groupName: vm.groupName, image: vm.image, description: vm.groupDescription, color: vm.groupName.isEmpty ? Color.gray : Color(.indigo))
+                    
+                    if createCompleted {
+                        DismissRoundedButton(label: "ホームに戻る", color: Color(.indigo))
+                    } else {
+                        ActionWithFlagFillButton(label: "グループを作成", action: {
+                            createGroupAlertProp.action = vm.createGroup
+                            createCompleted = true
+                        }, color: Color(.jade), flag: $createGroupAlertProp.isPresented, condition: vm.buttonDisabled)
+                        .padding(.vertical)
                     }
-                    .loading(isLoading: $vm.isLoading)
-                    .sheet(isPresented: $vm.showImagePicker, content: {
-                        ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
-                    })
+                    
+                }
+                .frame(width: deviceWidth())
+                .padding(.vertical)
+                .onAppear {
+                    if vm.groupName.isEmpty {
+                        vm.buttonDisabled = true
+                    }
+                }
+                .loading(isLoading: $vm.isLoading)
+                .sheet(isPresented: $vm.showImagePicker, content: {
+                    ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
+                })
+            }
+            .refreshable {
+                Task{
+                    await vm.reLoadData()
                 }
             }
         }
         .popupActionAlert(prop: $createGroupAlertProp, actionLabel: "作成")
         .popupAlert(prop: $vm.apiErrorPopAlertProp)
-        .userToolbar(state: vm.state, userName: "ユーザー", dismissExists: true)
+        .userToolbar(userName: "ユーザー", dismissExists: true)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onTapGesture {

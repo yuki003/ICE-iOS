@@ -19,6 +19,14 @@ final class CreateGroupViewModel: ViewModelBase {
     @Published var image = UIImage()
     @Published var groupName: String = ""
     @Published var groupDescription: String = ""
+    @Published var selectedGroup: Group?
+    
+    init(selectedGroup: Group? = nil){
+        super.init()
+        self.selectedGroup = selectedGroup
+        self.setGroupProperties()
+        
+    }
     
     var groupNameValidation: AnyPublisher<Validation, Never> {
         $groupName
@@ -43,12 +51,12 @@ final class CreateGroupViewModel: ViewModelBase {
     }
     
     @MainActor
-    func loadData() async throws {
-        asyncOperation({
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+    func reLoadData() async {
+        asyncOperation({ [self] in
+            if let groupID = selectedGroup?.id {
+                selectedGroup = try await self.apiHandler.get(Group.self, byId: groupID)
+                setGroupProperties()
+            }
         })
     }
     
@@ -62,5 +70,15 @@ final class CreateGroupViewModel: ViewModelBase {
             group.thumbnailKey = url
             try await self.apiHandler.create(group, keyName: "hostGroups")
         })
+    }
+    
+    func setGroupProperties() {
+        if let group = selectedGroup {
+            groupName = group.groupName
+            groupDescription = group.description ?? ""
+            if let thumbnailKey = group.thumbnailKey {
+                image = UIImage(url: thumbnailKey)
+            }
+        }
     }
 }

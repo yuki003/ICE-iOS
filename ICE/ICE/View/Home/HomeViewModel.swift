@@ -66,10 +66,6 @@ final class HomeViewModel: ViewModelBase {
             } else {
                 self.belongingGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups") ?? []
             }
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
         })
     }
 }

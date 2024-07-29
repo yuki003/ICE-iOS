@@ -16,64 +16,46 @@ struct GroupDetailView: View {
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
-                switch vm.state {
-                case .idle, .loading:
-                    LoadingView().onAppear{
-                        Task {
-                            try await vm.loadData()
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 20) {
+                        VStack(alignment: .center, spacing: 15) {
+                            Text(vm.groupInfo.groupName)
+                                .font(.headline.bold())
+                                .foregroundStyle(Color(.indigo))
+                            
+                            Thumbnail(type: ThumbnailType.group, url: vm.groupInfo.thumbnailKey ?? "", aspect: 70)
+                            
+                            GroupDescription(description: vm.groupInfo.description)
+                            
+                            Divider()
                         }
+                        makeMemberList()
+                        makeTaskList()
+                        makeRewardList()
                     }
-                case let .failed(error):
-                    Text(error.localizedDescription)
-                case .loaded:
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 20) {
-                            VStack(alignment: .center, spacing: 15) {
-                                Text(vm.groupInfo.groupName)
-                                    .font(.headline.bold())
-                                    .foregroundStyle(Color(.indigo))
-                                
-                                Thumbnail(type: ThumbnailType.group, url: vm.groupInfo.thumbnailKey ?? "", aspect: 70)
-                                
-                                GroupDescription(description: vm.groupInfo.description)
-                                
-                                Divider()
-                            }
-                            makeMemberList()
-                            makeTaskList()
-                            makeRewardList()
-                        }
-                        .padding()
-                        .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.ErrorAlert) {
-                            Alert(
-                                title: Text("エラー"),
-                                message: Text(vm.alertMessage ?? "操作をやり直してください。"),
-                                dismissButton: .default(Text("閉じる"))
-                            )
-                        }
-                        .popupActionAlert(prop: $taskService.receiveConfirmAlertProp,
-                                          actionLabel: "挑戦する")
-                    }
-                    .popupAlert(prop: $taskService.taskReceivedAlertProp)
-                    .sheet(isPresented: $inviteFlag) {
-                        ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
-                    }
-                    .refreshable {
-                        Task {
-                            vm.reload = true
-                            try await vm.reloadData()
-                        }
+                    .padding()
+                    .frame(width: deviceWidth())
+                }
+                .sheet(isPresented: $inviteFlag) {
+                    ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
+                }
+                .refreshable {
+                    Task {
+                        vm.reload = true
+                        try await vm.reloadData()
                     }
                 }
             }
             .loading(isLoading: $vm.isLoading)
             .loading(isLoading: $taskService.isLoading)
-            .userToolbar(state: vm.state, userName: nil, dismissExists: true)
+            .userToolbar(userName: nil, dismissExists: true)
+            .popupActionAlert(prop: $taskService.receiveConfirmAlertProp,
+                              actionLabel: "挑戦する")
+            .popupAlert(prop: $taskService.taskReceivedAlertProp)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .onAppear {
-                vm.state = .idle
+            .task {
+                await vm.loadData()
             }
         }
     }

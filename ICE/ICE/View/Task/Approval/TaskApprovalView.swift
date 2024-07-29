@@ -16,46 +16,29 @@ struct TaskApprovalView: View {
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
-                switch vm.state {
-                case .idle:
-                    Color.clear.onAppear { vm.state = .loading }
-                case .loading:
-                    LoadingView().onAppear{
-                        Task {
-                            try await vm.loadData()
-                        }
-                    }
-                case let .failed(error):
-                    Text(error.localizedDescription)
-                case .loaded:
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 20) {
-                            if !vm.reportsWithUsers.isEmpty {
-                                ForEach(vm.reportsWithUsers.indices, id:\.self){ index in
-                                    let reportWithUser = vm.reportsWithUsers[index]
-                                    ApprovalReportRow(showImage: $vm.showImage, selectedImage: $vm.selectedImage, comment: $vm.comment, task: vm.task, reportWithUser: reportWithUser, approvalAction: {
-                                        vm.selectedReport = reportWithUser.report
-                                        approveAlertProp.action = vm.reportApprove
-                                        approveAlertProp.isPresented = true
-                                    }, rejectAction: {
-                                        vm.selectedReport = reportWithUser.report
-                                        rejectAlertProp.action = vm.reportReject
-                                        rejectAlertProp.isPresented = true
-                                    })
-                                }
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 20) {
+                        if !vm.reportsWithUsers.isEmpty {
+                            ForEach(vm.reportsWithUsers.indices, id:\.self){ index in
+                                let reportWithUser = vm.reportsWithUsers[index]
+                                ApprovalReportRow(showImage: $vm.showImage, selectedImage: $vm.selectedImage, comment: $vm.comment, task: vm.task, reportWithUser: reportWithUser, approvalAction: {
+                                    vm.selectedReport = reportWithUser.report
+                                    approveAlertProp.action = vm.reportApprove
+                                    approveAlertProp.isPresented = true
+                                }, rejectAction: {
+                                    vm.selectedReport = reportWithUser.report
+                                    rejectAlertProp.action = vm.reportReject
+                                    rejectAlertProp.isPresented = true
+                                })
                             }
                         }
-                        .padding(.vertical)
-                        .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.ErrorAlert) {
-                            Alert(
-                                title: Text("エラー"),
-                                message: Text(vm.alertMessage ?? "操作をやり直してください。"),
-                                dismissButton: .default(Text("閉じる"))
-                            )
-                        }
                     }
+                    .padding(.vertical)
+                    .frame(width: deviceWidth())
                 }
+            }
+            .task {
+                await vm.loadData()
             }
             .dismissToolbar {
                 ToolbarItem(placement: .principal) {
@@ -79,6 +62,7 @@ struct TaskApprovalView: View {
             .popupActionAlert(prop: $rejectAlertProp, actionLabel: "却下")
             .popupDismissAlert(prop: $vm.approvedAlertProp)
             .popupDismissAlert(prop: $vm.rejectedAlertProp)
+            .popupAlert(prop: $vm.apiErrorPopAlertProp)
             .popupImage(isPresented: $vm.showImage, url: vm.selectedImage)
         }
     }

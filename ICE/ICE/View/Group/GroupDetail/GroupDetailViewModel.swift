@@ -43,7 +43,7 @@ Link： ice://invite?code=\(groupInfo.id)
     }
     
     @MainActor
-    func loadData() async throws {
+    func loadData() async {
         asyncOperation({ [self] in
             if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-users") || reload {
                 var userIDs:[String?] = []
@@ -90,7 +90,7 @@ Link： ice://invite?code=\(groupInfo.id)
             let predicate = Group.keys.id.eq(groupInfo.id)
             let groupInfo = try await apiHandler.list(Group.self, where: predicate, keyName: "belongingGroups")
             self.groupInfo = groupInfo[0]
-            try await loadData()
+            await loadData()
         } catch {
             alertMessage = error.localizedDescription
             ErrorAlert = true

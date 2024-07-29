@@ -16,7 +16,6 @@ typealias APIErrorHandler = (APIError) -> Void
 
 class ViewModelBase: ObservableObject {
     // MARK: Properties
-    @Published var state: LoadingState = .idle
     @Published var formValid: Validation = .failed()
     @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
     @Published var asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
@@ -57,25 +56,14 @@ class ViewModelBase: ObservableObject {
                 if reload {
                     reload = false
                 }
-                
-                withAnimation(.linear) {
-                    state = .loaded
-                }
             } catch let error as APIError {
                 apiErrorHandler(error)
                 apiErrorPopAlertProp.text = error.localizedDescription
                 apiErrorPopAlertProp.isPresented = true
-                
-//                withAnimation(.linear) {
-//                    state = .failed(error)
-//                }
             } catch {
                 errorHandler(error)
                 apiErrorPopAlertProp.text = error.localizedDescription
                 apiErrorPopAlertProp.isPresented = true
-//                withAnimation(.linear) {
-//                    state = .failed(error)
-//                }
             }
         }
     }

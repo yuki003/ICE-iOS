@@ -196,11 +196,11 @@ class APIHandler: ObservableObject {
     
     func decodeUserDefault<T: Decodable>(modelType: T.Type, key: String) throws -> T? {
         let keyList = userDefaultKeys.filter({ $0.elementsEqual(key)})
-        if !(keyList.count == 1) {
+        if keyList.count > 1 {
             throw DeveloperError.userDefaultKeyDuplicated
         }
-        let key = keyList[0]
-        guard let data = UserDefaults.standard.data(forKey: key),
+        guard !keyList.isEmpty else { return nil }
+        guard let data = UserDefaults.standard.data(forKey: keyList[0]),
               let dataModel = try? jsonDecoder.decode(modelType, from: data) else {
             return nil
         }

@@ -57,9 +57,9 @@ extension AmplifyAuthError: LocalizedError {
         case .signOutFailed:
             return "ログアウトに失敗しました。"
         case .userAlreadyExists:
-            return "指定のユーザーが見つかりません。"
-        case .userDoesNotExists:
             return "指定のユーザーはすでに存在しています。"
+        case .userDoesNotExists:
+            return "指定のユーザーが見つかりません。"
         case .notAuthorized:
             return "認証できませんでした。入力内容をお確かめください。"
         case .invalidVerificationCode:

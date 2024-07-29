@@ -12,7 +12,6 @@
 		B61BE95D2ADCBD79003BC55B /* ToolbarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE95C2ADCBD79003BC55B /* ToolbarModifier.swift */; };
 		B61BE95F2ADCBE69003BC55B /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE95E2ADCBE69003BC55B /* Toolbar.swift */; };
 		B61BE9622ADD29E0003BC55B /* AmplifyAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE9612ADD29E0003BC55B /* AmplifyAuthService.swift */; };
-		B61BE9672AE00FC8003BC55B /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE9662AE00FC8003BC55B /* LoadingState.swift */; };
 		B61BE96A2AE0B6C2003BC55B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE9692AE0B6C2003BC55B /* HomeView.swift */; };
 		B61BE96D2AE15E50003BC55B /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BE96C2AE15E50003BC55B /* APIHandler.swift */; };
 		B61E206A2AC9247000EF3CEB /* ICEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61E20692AC9247000EF3CEB /* ICEApp.swift */; };
@@ -132,7 +131,6 @@
 		B61BE95C2ADCBD79003BC55B /* ToolbarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarModifier.swift; sourceTree = "<group>"; };
 		B61BE95E2ADCBE69003BC55B /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		B61BE9612ADD29E0003BC55B /* AmplifyAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplifyAuthService.swift; sourceTree = "<group>"; };
-		B61BE9662AE00FC8003BC55B /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
 		B61BE9692AE0B6C2003BC55B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B61BE96C2AE15E50003BC55B /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
 		B61E20662AC9247000EF3CEB /* ICE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ICE.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -451,7 +449,6 @@
 				B69A76C22AE3B6EF009228EC /* Validation.swift */,
 				B64E1CD62AD3923E00A876CC /* Error.swift */,
 				B6F2C04D2ADC225000960084 /* FocusField.swift */,
-				B61BE9662AE00FC8003BC55B /* LoadingState.swift */,
 				B62C9C912AE3C0300048A166 /* Regex.swift */,
 				B62AAE012B08A6D1004862F2 /* Type.swift */,
 				B62AAE2E2B144D39004862F2 /* General.swift */,
@@ -804,7 +801,6 @@
 				B62C9C8E2AE3BC570048A166 /* String+.swift in Sources */,
 				B62AAE0C2B099C5A004862F2 /* WhoGetsPaid.swift in Sources */,
 				B6812E2B2B3964E8007D8C65 /* ActivityViewController.swift in Sources */,
-				B61BE9672AE00FC8003BC55B /* LoadingState.swift in Sources */,
 				B6B49DAF2AFB2F9F00CF0E6A /* AmplifyStorageService.swift in Sources */,
 				B6B9E8072AF0928F0056D175 /* Rows.swift in Sources */,
 				B611603F2B29589400489E95 /* CreateRewardsView.swift in Sources */,
@@ -1021,6 +1017,7 @@
 				AMPLIFY_CONFIG_FILE = amplifyconfiguration_dev;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ICE/Preview Content\"";
@@ -1040,6 +1037,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1052,6 +1050,7 @@
 				AMPLIFY_CONFIG_FILE = amplifyconfiguration_prod;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ICE/Preview Content\"";
@@ -1071,6 +1070,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SAMPLE_DISPLAY_NAME_PREFIX = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1085,7 +1085,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GJ2499U42D;
+				DEVELOPMENT_TEAM = H9Q7896UF5;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
@@ -1105,7 +1105,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GJ2499U42D;
+				DEVELOPMENT_TEAM = H9Q7896UF5;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
@@ -1124,7 +1124,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GJ2499U42D;
+				DEVELOPMENT_TEAM = H9Q7896UF5;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yuki-s-e.ICEUITests";
@@ -1142,7 +1142,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GJ2499U42D;
+				DEVELOPMENT_TEAM = H9Q7896UF5;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yuki-s-e.ICEUITests";
@@ -1224,6 +1224,7 @@
 				AMPLIFY_CONFIG_FILE = amplifyconfiguration_prod;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ICE/Preview Content\"";
@@ -1243,6 +1244,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jadigo.ICE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1256,7 +1258,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GJ2499U42D;
+				DEVELOPMENT_TEAM = H9Q7896UF5;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
@@ -1275,7 +1277,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GJ2499U42D;
+				DEVELOPMENT_TEAM = H9Q7896UF5;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yuki-s-e.ICEUITests";

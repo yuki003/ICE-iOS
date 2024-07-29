@@ -16,62 +16,32 @@ struct HomeView: View {
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
-                switch vm.state {
-                case .idle:
-                    Color.clear.onAppear { vm.state = .loading }
-                case .loading:
-                    LoadingView().onAppear{
-                        Task{
-                            
-                        }
-                    }
-                case let .failed(error):
-                    Text(error.localizedDescription)
-                case .loaded:
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 10) {
-                            CurrentActivityNotice(message: "test notice", isShowNotice: $vm.isShowNotice, nav: $vm.navNotice)
-                                .padding(.top)
-                            currentActivitySection()
-                            if vm.asHost {
-                                hostGroupSection()
-                                    .padding(.top, 10)
-                            }
-                            belongingGroupSection()
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 10) {
+                        CurrentActivityNotice(message: "test notice", isShowNotice: $vm.isShowNotice, nav: $vm.navNotice)
+                            .padding(.top)
+                        currentActivitySection()
+                        if vm.asHost {
+                            hostGroupSection()
                                 .padding(.top, 10)
                         }
-                        .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.ErrorAlert) {
-                            Alert(
-                                title: Text(
-                                    "エラー"
-                                ),
-                                message: Text(
-                                    vm.alertMessage ?? "操作をやり直してください。"
-                                ),
-                                dismissButton: .default(
-                                    Text(
-                                        "閉じる"
-                                    )
-                                )
-                            )
-                        }
+                        belongingGroupSection()
+                            .padding(.top, 10)
                     }
-                    .refreshable {
-                        Task{
-                            vm.reload = true
-                            try await vm.loadData()
-                        }
+                    .frame(width: deviceWidth())
+                }
+                .refreshable {
+                    Task{
+                        vm.reload = true
+                        await vm.loadData()
                     }
                 }
                 SignOutButton(auth: auth)
             }
-            .userToolbar(state: vm.state, userName: vm.userInfo?.userName ?? "ユーザー")
+            .popupAlert(prop: $vm.apiErrorPopAlertProp)
+            .userToolbar(userName: vm.userInfo?.userName ?? "ユーザー")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .onAppear {
-                vm.state = .idle
-            }
             .task {
                 await vm.loadData()
             }

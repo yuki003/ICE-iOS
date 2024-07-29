@@ -31,12 +31,8 @@ final class TaskListViewModel: ViewModelBase {
         self.tasks = tasks
     }
     @MainActor
-    func loadData() async throws {
+    func loadData() async {
         asyncOperation({
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
         })
     }
 //    @MainActor

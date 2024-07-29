@@ -43,7 +43,7 @@ final class TaskReportViewModel: ViewModelBase {
     }
     
     @MainActor
-    func loadData() async throws {
+    func loadData() async {
         asyncOperation({ [self] in
 //            if apiHandler.isRunFetch(userDefaultKey: "\(task.id)-report") || reload {
                 let reportPredicate = keys.taskID.eq(task.id) && keys.reportUserID.eq(userID)

@@ -21,39 +21,26 @@ struct TaskReportView: View {
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
-                switch vm.state {
-                case .idle:
-                    Color.clear.onAppear { vm.state = .loading }
-                case .loading:
-                    LoadingView().onAppear{
-                        Task {
-                            try await vm.loadData()
-                        }
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 20) {
+                        TaskDetailSection(task: vm.task)
+                        Divider()
+                        reportSection()
                     }
-                case let .failed(error):
-                    Text(error.localizedDescription)
-                case .loaded:
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 20) {
-                            TaskDetailSection(task: vm.task)
-                            Divider()
-                            reportSection()
-                        }
-                        .padding()
-                        .frame(width: screenWidth())
-                        .alert(isPresented: $vm.ErrorAlert) {
-                            Alert(
-                                title: Text("エラー"),
-                                message: Text(vm.alertMessage ?? "操作をやり直してください。"),
-                                dismissButton: .default(Text("閉じる"))
-                            )
-                        }
+                    .padding()
+                    .frame(width: screenWidth())
+                    .alert(isPresented: $vm.ErrorAlert) {
+                        Alert(
+                            title: Text("エラー"),
+                            message: Text(vm.alertMessage ?? "操作をやり直してください。"),
+                            dismissButton: .default(Text("閉じる"))
+                        )
                     }
-                    .refreshable {
-                        Task {
-                            vm.reload = true
-                            try await vm.loadData()
-                        }
+                }
+                .refreshable {
+                    Task {
+                        vm.reload = true
+                        await vm.loadData()
                     }
                 }
             }
@@ -70,7 +57,10 @@ struct TaskReportView: View {
                     vm.image = UIImage()
                 }
             }
-            .userToolbar(state: vm.state, userName: nil, dismissExists: true)
+            .task {
+                await vm.loadData()
+            }
+            .userToolbar(userName: nil, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .loading(isLoading: $vm.isLoading)
@@ -208,7 +198,7 @@ struct TaskReportView: View {
                 HStack(spacing: 20) {
                     ActionWithFlagFillButton(label: "取り消す", action: { vm.deleteAlertProp.action = vm.repotTask}, color: Color(.indigo), flag: $vm.deleteAlertProp.isPresented)
                         .padding(.vertical)
-                    FlagFillButton(label: "編集する", color: Color(.indigo), flag: $vm.submitAlertProp.isPresented)
+                    ActionWithFlagFillButton(label: "編集する", action: {vm.submitAlertProp.action = vm.repotTask }, color: Color(.indigo), flag: $vm.submitAlertProp.isPresented)
                         .padding(.vertical)
                 }
             }
