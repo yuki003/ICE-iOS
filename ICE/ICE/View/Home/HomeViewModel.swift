@@ -10,8 +10,8 @@ import Amplify
 
 final class HomeViewModel: ViewModelBase {
     @Published var userInfo: User?
-    @Published var hostGroups: [Group] = []
-    @Published var belongingGroups: [Group] = []
+    @Published var hostGroups: [Group]?
+    @Published var belongingGroups: [Group]?
     @Published var selectedGroup: Group?
     
     @Published var isShowNotice: Bool = true // 本来false
@@ -19,11 +19,11 @@ final class HomeViewModel: ViewModelBase {
     @Published var navGroupDetail: Bool = false
     
     @Published var createGroup: Bool = false
-    @Published var belongGroup: Bool = false
     
     
     @MainActor
     func loadData() async {
+        propertiesInitialize()
         asyncOperation({
             if self.apiHandler.isRunFetch(userDefaultKey: User.modelName) || self.reload {
                 let userPredicate = User.keys.userID.eq(self.userID)
@@ -67,5 +67,11 @@ final class HomeViewModel: ViewModelBase {
                 self.belongingGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups") ?? []
             }
         })
+    }
+    
+    func propertiesInitialize() {
+        userInfo = nil
+        hostGroups = nil
+        belongingGroups = nil
     }
 }

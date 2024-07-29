@@ -83,5 +83,9 @@ extension View {
             alignment: .bottomTrailing
         )
     }
+    
+    func loadingSkeleton<T>(object: T?) -> some View {
+        modifier(LoadingSkeletonModifier(object: object))
+    }
 }
 

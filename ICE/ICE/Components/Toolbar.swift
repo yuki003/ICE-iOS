@@ -51,11 +51,13 @@ struct UserToolbar: ToolbarContent {
                     }
                 }
                 Thumbnail(type: ThumbnailType.user, aspect: 30)
+                    .loadingSkeleton(object: userName)
                 if let name = userName {
                     Text("\(name)")
                         .font(.system(size: 15, weight: .heavy))
                         .frame(maxWidth: 200)
                         .foregroundStyle(Color.black)
+                        .loadingSkeleton(object: userName)
                 }
             }
             .padding(.leading, 5)

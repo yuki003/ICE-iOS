@@ -39,7 +39,7 @@ struct HomeView: View {
                 SignOutButton(auth: auth)
             }
             .popupAlert(prop: $vm.apiErrorPopAlertProp)
-            .userToolbar(userName: vm.userInfo?.userName ?? "ユーザー")
+            .userToolbar(userName: vm.userInfo?.userName)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .task {
@@ -71,11 +71,11 @@ struct HomeView: View {
             .padding(.leading)
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
-            if !vm.hostGroups.isEmpty {
+            if let hostGroups = vm.hostGroups, !hostGroups.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(vm.hostGroups.indices, id: \.self) { index in
-                            let group = vm.hostGroups[index]
+                        ForEach(hostGroups.indices, id: \.self) { index in
+                            let group = hostGroups[index]
                             Button(action: {
                                 vm.selectedGroup = group
                                 router.path.append(NavigationPathType.groupDetail(group: group))
@@ -101,6 +101,7 @@ struct HomeView: View {
             }
         }
         .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
+        .loadingSkeleton(object: vm.hostGroups)
     }
     
     @ViewBuilder
@@ -119,11 +120,11 @@ struct HomeView: View {
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
             // group switchable
-            if !vm.belongingGroups.isEmpty {
+            if let belongingGroups = vm.belongingGroups, !belongingGroups.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(vm.belongingGroups.indices, id: \.self) { index in
-                            let group = vm.belongingGroups[index]
+                        ForEach(belongingGroups.indices, id: \.self) { index in
+                            let group = belongingGroups[index]
                             Button(action: {
                                 vm.selectedGroup = group
                                 router.path.append(NavigationPathType.groupDetail(group: group))
@@ -148,6 +149,7 @@ struct HomeView: View {
             }
         }
         .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
+        .loadingSkeleton(object: vm.belongingGroups)
     }
 }
 //#Preview{
