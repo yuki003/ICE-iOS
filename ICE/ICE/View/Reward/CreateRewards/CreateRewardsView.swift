@@ -66,7 +66,7 @@ struct CreateRewardsView: View {
                         
                         Spacer()
                         if !vm.createdRewardsAlertProp.isPresented {
-                            EnabledFlagFillButton(label: "リワードを作成", color: Color(.jade), flag: $vm.createRewardsAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
+                            ActionWithFlagFillButton(label: "リワードを作成", action: {vm.createRewardsAlertProp.action = vm.createReward }, color: Color(.jade), flag: $vm.createRewardsAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
                                 .padding(.vertical)
                         }
                     }
@@ -74,26 +74,12 @@ struct CreateRewardsView: View {
                     .padding(.horizontal, 20)
                     .padding(.top)
                     .frame(width: deviceWidth())
-                    .alert(isPresented: $vm.ErrorAlert) {
-                        Alert(
-                            title: Text(
-                                "エラー"
-                            ),
-                            message: Text(
-                                vm.alertMessage ?? "操作をやり直してください。"
-                            ),
-                            dismissButton: .default(
-                                Text(
-                                    "閉じる"
-                                )
-                            )
-                        )
-                    }
-                    .popupActionAlert(prop: $vm.createRewardsAlertProp, action: { Task { try await vm.createReward()} }, actionLabel: "作成")
-                    .popupDismissAndActionAlert(prop: $vm.createRewardsAlertProp, dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける", action: { vm.initialization() })
                 }
             }
         }
+        .popupActionAlert(prop: $vm.createRewardsAlertProp, actionLabel: "作成")
+        .popupDismissAndActionAlert(prop: $vm.createdRewardsAlertProp, dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける")
+        .popupAlert(prop: $vm.apiErrorPopAlertProp)
         .loading(isLoading: $vm.isLoading)
         .userToolbar(state: vm.state, userName: nil, dismissExists: true)
         .navigationBarTitleDisplayMode(.inline)

@@ -53,20 +53,20 @@ extension View {
         modifier(RoundedSectionModifier(color: color))
     }
     
-    func popupActionAlert(prop: Binding<PopupAlertProperties>, action: @escaping () async throws -> Void, actionLabel: String = "実行") -> some View {
-        modifier(PopupActionAlertModifier(prop: prop, action: action, actionLabel: actionLabel))
+    func popupActionAlert(prop: Binding<PopupAlertProperties>, actionLabel: String = "実行") -> some View {
+        modifier(PopupActionAlertModifier(prop: prop, actionLabel: actionLabel))
     }
     
     func popupDismissAlert(prop: Binding<PopupAlertProperties>, buttonLabel: String = "戻る") -> some View {
         modifier(PopupDismissAlertModifier(prop: prop, buttonLabel: buttonLabel))
     }
     
-    func popupDismissAndActionAlert(prop: Binding<PopupAlertProperties>, dismissLabel: String = "戻る", actionLabel: String = "実行", action: @escaping () async throws -> Void) -> some View {
-        modifier(PopupDismissAndActionAlertModifier(prop: prop, dismissLabel: dismissLabel, actionLabel: actionLabel, action: action))
+    func popupDismissAndActionAlert(prop: Binding<PopupAlertProperties>, dismissLabel: String = "戻る", actionLabel: String = "実行") -> some View {
+        modifier(PopupDismissAndActionAlertModifier(prop: prop, dismissLabel: dismissLabel, actionLabel: actionLabel))
     }
     
-    func popupAlert(prop: Binding<PopupAlertProperties>, dismissLabel: String = "閉じる", action: @escaping () async throws -> Void) -> some View {
-        modifier(PopupAlertModifier(prop:prop, buttonLabel: dismissLabel, action: action))
+    func popupAlert(prop: Binding<PopupAlertProperties>, dismissLabel: String = "閉じる") -> some View {
+        modifier(PopupAlertModifier(prop:prop, buttonLabel: dismissLabel))
     }
     
     func popupTaskIconSelector(isPresented: Binding<Bool>, taskType: Binding<TaskType>, color: Color = Color(.indigo), buttonLabel: String = "決定") -> some View {

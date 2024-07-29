@@ -24,8 +24,9 @@ final class CreateTaskViewModel: ViewModelBase {
                                                                      text:"""
                                                                           入力した内容でタスクを作成します。
                                                                           作成したタスクはのちに編集することもできます。
-                                                                          """
-)
+                                                                          """)
+
+@Published var createdTaskAlertProp: PopupAlertProperties = .init(title: "作成完了!!", text: "グループ画面から作ったタスクを確認できます。")
     var translatedFrequency: String {
         enumUtil.translateFrequencyType(frequency: frequencyType)
     }
@@ -34,7 +35,6 @@ final class CreateTaskViewModel: ViewModelBase {
     // MARK: Flags
     @Published var isLimited: Bool = false
     @Published var showIconSelector: Bool = false
-    @Published var createComplete: Bool = false
     
     // MARK: Validations
     var groupNameValidation: AnyPublisher<Validation, Never> {
@@ -87,7 +87,7 @@ final class CreateTaskViewModel: ViewModelBase {
     }
     
     @MainActor
-    func createTask() async throws {
+    func createTasks() async throws {
         asyncOperation({
             self.createTaskAlertProp.isPresented = false
             if !self.condition.isEmpty {
@@ -101,11 +101,8 @@ final class CreateTaskViewModel: ViewModelBase {
             }
             
             try await self.apiHandler.create(task, keyName: "\(self.groupID)-tasks")
-            self.createComplete = true
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+            self.createdTaskAlertProp.action = self.initialization
+            self.createdTaskAlertProp.isPresented = true
         })
     }
     
@@ -124,6 +121,6 @@ final class CreateTaskViewModel: ViewModelBase {
         conditions = []
         point = 0
         frequencyType = .onlyOnce
-        createComplete = false
+        createdTaskAlertProp.isPresented = false
     }
 }

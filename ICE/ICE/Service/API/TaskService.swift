@@ -23,7 +23,7 @@ final class TaskService: ViewModelBase {
     }
     
     @MainActor
-    func receiveTaskOrder(groupID: String) async throws {
+    func receiveTaskOrder(groupID: String) async {
         asyncOperation({ [self] in
             if let selectedTask = selectedTask  {
                 var selectedTask = selectedTask
@@ -32,7 +32,7 @@ final class TaskService: ViewModelBase {
                 } else {
                     selectedTask.receivingUserIDs = [userID]
                 }
-                var newList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(groupID)-tasks")?.filter({$0.id != selectedTask.id})
+                let newList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(groupID)-tasks")?.filter({$0.id != selectedTask.id})
                 apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(groupID)-tasks")
                 try await apiHandler.update(selectedTask, keyName: "\(groupID)-tasks")
             }
@@ -99,6 +99,7 @@ final class TaskService: ViewModelBase {
             }
             TaskRow(task: task, action: {
                 self.selectedTask = task
+                self.receiveConfirmAlertProp.action = {Task { await self.receiveTaskOrder(groupID: task.groupID)}}
                 self.receiveConfirmAlertProp.isPresented = true
             }, asHost: self.asHost, status: status)
             .padding(.leading, 10)

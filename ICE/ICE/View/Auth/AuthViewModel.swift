@@ -35,7 +35,7 @@ final class AuthViewModel: ObservableObject {
     @ObservedObject var auth = AmplifyAuthService.shared
     @ObservedObject var apiHandler = APIHandler.shared
     
-    @Published var errorPopAlertProp: PopupAlertProperties = .init(title: "認証エラー", text: "操作をやり直してください。")
+    @Published var authErrorPopAlertProp: PopupAlertProperties = .init(title: "認証エラー", text: "操作をやり直してください。")
     
     let hashDelimiter = "_hash_"
     
@@ -185,16 +185,16 @@ final class AuthViewModel: ObservableObject {
             } catch let error as AmplifyAuthError {
                 switch error {
                 case .userAlreadyExists:
-                    errorPopAlertProp.text = error.localizedDescription
-                    errorPopAlertProp.isPresented = true
+                    authErrorPopAlertProp.text = error.localizedDescription
+                    authErrorPopAlertProp.isPresented = true
                     navSignIn = true
                 default:
-                    errorPopAlertProp.text = error.localizedDescription
-                    errorPopAlertProp.isPresented = true
+                    authErrorPopAlertProp.text = error.localizedDescription
+                    authErrorPopAlertProp.isPresented = true
                 }
             } catch let error {
-                errorPopAlertProp.text = error.localizedDescription
-                errorPopAlertProp.isPresented = true
+                authErrorPopAlertProp.text = error.localizedDescription
+                authErrorPopAlertProp.isPresented = true
             }
         }
         if !navSignUpConfirm, !isSignUp {
@@ -218,14 +218,14 @@ final class AuthViewModel: ObservableObject {
                     throw AmplifyAuthError.confirmError
                 }
             } catch let error as AmplifyAuthError {
-                errorPopAlertProp.text = error.localizedDescription
-                errorPopAlertProp.isPresented = true
+                authErrorPopAlertProp.text = error.localizedDescription
+                authErrorPopAlertProp.isPresented = true
             } catch let error as AuthError {
-                errorPopAlertProp.text = error.localizedDescription
-                errorPopAlertProp.isPresented = true
+                authErrorPopAlertProp.text = error.localizedDescription
+                authErrorPopAlertProp.isPresented = true
             } catch let error {
-                errorPopAlertProp.text = error.localizedDescription
-                errorPopAlertProp.isPresented = true
+                authErrorPopAlertProp.text = error.localizedDescription
+                authErrorPopAlertProp.isPresented = true
             }
         }
     }
@@ -237,8 +237,8 @@ final class AuthViewModel: ObservableObject {
         do {
             try await auth.resendSignUpCode(for: userName + hashedKey)
         } catch {
-            errorPopAlertProp.text = APIError.createFailed.localizedDescription
-            errorPopAlertProp.isPresented = true
+            authErrorPopAlertProp.text = APIError.createFailed.localizedDescription
+            authErrorPopAlertProp.isPresented = true
         }
     }
     
@@ -275,11 +275,11 @@ final class AuthViewModel: ObservableObject {
                     throw AmplifyAuthError.signInFailed
                 }
             } catch let error as AmplifyAuthError {
-                errorPopAlertProp.text = error.localizedDescription
-                errorPopAlertProp.isPresented = true
+                authErrorPopAlertProp.text = error.localizedDescription
+                authErrorPopAlertProp.isPresented = true
             } catch let error as AuthError {
-                errorPopAlertProp.text = error.localizedDescription
-                errorPopAlertProp.isPresented = true
+                authErrorPopAlertProp.text = error.localizedDescription
+                authErrorPopAlertProp.isPresented = true
             }
         } else if !self.auth.isSignedIn, !isSignIn {
             withAnimation(.easeOut(duration: 0.3)) {
@@ -316,8 +316,8 @@ final class AuthViewModel: ObservableObject {
                 }
             }
         } catch {
-            errorPopAlertProp.text = APIError.createFailed.localizedDescription
-            errorPopAlertProp.isPresented = true
+            authErrorPopAlertProp.text = APIError.createFailed.localizedDescription
+            authErrorPopAlertProp.isPresented = true
         }
     }
     

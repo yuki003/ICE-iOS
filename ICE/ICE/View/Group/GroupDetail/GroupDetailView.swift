@@ -53,12 +53,9 @@ struct GroupDetailView: View {
                             )
                         }
                         .popupActionAlert(prop: $taskService.receiveConfirmAlertProp,
-                                          action: { Task { try await taskService.receiveTaskOrder(groupID: vm.groupInfo.id)}},
                                           actionLabel: "挑戦する")
                     }
-                    .popupAlert(prop: $taskService.taskReceivedAlertProp, action: {
-                        vm.state = .idle
-                    })
+                    .popupAlert(prop: $taskService.taskReceivedAlertProp)
                     .sheet(isPresented: $inviteFlag) {
                         ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
                     }

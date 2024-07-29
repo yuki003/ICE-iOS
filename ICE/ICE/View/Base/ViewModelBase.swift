@@ -21,6 +21,7 @@ class ViewModelBase: ObservableObject {
     @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
     @Published var asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
     @Published var alertMessage: String?
+    @Published var apiErrorPopAlertProp: PopupAlertProperties = .init(title: "操作エラー", text: "操作をやり直してください。")
     var publishers = Set<AnyCancellable>()
     let jsonDecoder = JSONDecoder()
     
@@ -40,8 +41,8 @@ class ViewModelBase: ObservableObject {
     // 非同期処理を行う共通関数
     @MainActor
     func asyncOperation(_ operation: @escaping () async throws -> Void,
-                               apiErrorHandler: @escaping APIErrorHandler,
-                               errorHandler: @escaping ErrorHandler) {
+                        apiErrorHandler: @escaping APIErrorHandler = {_ in },
+                        errorHandler: @escaping ErrorHandler = {_ in }) {
         Task {
             do {
                 isLoading = true
@@ -62,11 +63,16 @@ class ViewModelBase: ObservableObject {
                 }
             } catch let error as APIError {
                 apiErrorHandler(error)
+                apiErrorPopAlertProp.text = error.localizedDescription
+                apiErrorPopAlertProp.isPresented = true
+                
 //                withAnimation(.linear) {
 //                    state = .failed(error)
 //                }
             } catch {
                 errorHandler(error)
+                apiErrorPopAlertProp.text = error.localizedDescription
+                apiErrorPopAlertProp.isPresented = true
 //                withAnimation(.linear) {
 //                    state = .failed(error)
 //                }

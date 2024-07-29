@@ -22,7 +22,7 @@ struct HomeView: View {
                 case .loading:
                     LoadingView().onAppear{
                         Task{
-                            try await vm.loadData()
+                            
                         }
                     }
                 case let .failed(error):
@@ -71,6 +71,9 @@ struct HomeView: View {
             .navigationBarBackButtonHidden(true)
             .onAppear {
                 vm.state = .idle
+            }
+            .task {
+                await vm.loadData()
             }
         }
     }

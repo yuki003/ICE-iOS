@@ -109,11 +109,8 @@ var createValidation: AnyPublisher<Validation, Never> {
             }
             
             try await self.apiHandler.create(reward, keyName: "\(self.groupID)-rewards")
+            self.createRewardsAlertProp.action = self.initialization
             self.createdRewardsAlertProp.isPresented = true
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
         })
     }
     

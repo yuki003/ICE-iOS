@@ -81,10 +81,6 @@ Link： ice://invite?code=\(groupInfo.id)
             } else {
                 self.rewards = try apiHandler.decodeUserDefault(modelType: [Rewards].self, key: "\(groupInfo.id)-rewards") ?? []
             }
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
         })
     }
     

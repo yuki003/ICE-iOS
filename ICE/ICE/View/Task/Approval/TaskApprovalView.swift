@@ -35,9 +35,11 @@ struct TaskApprovalView: View {
                                     let reportWithUser = vm.reportsWithUsers[index]
                                     ApprovalReportRow(showImage: $vm.showImage, selectedImage: $vm.selectedImage, comment: $vm.comment, task: vm.task, reportWithUser: reportWithUser, approvalAction: {
                                         vm.selectedReport = reportWithUser.report
+                                        approveAlertProp.action = vm.reportApprove
                                         approveAlertProp.isPresented = true
                                     }, rejectAction: {
                                         vm.selectedReport = reportWithUser.report
+                                        rejectAlertProp.action = vm.reportReject
                                         rejectAlertProp.isPresented = true
                                     })
                                 }
@@ -73,8 +75,8 @@ struct TaskApprovalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .loading(isLoading: $vm.isLoading)
-            .popupActionAlert(prop: $approveAlertProp, action: { await vm.reportApprove() }, actionLabel: "承認")
-            .popupActionAlert(prop: $rejectAlertProp , action: { await vm.reportReject() }, actionLabel: "却下")
+            .popupActionAlert(prop: $approveAlertProp, actionLabel: "承認")
+            .popupActionAlert(prop: $rejectAlertProp, actionLabel: "却下")
             .popupDismissAlert(prop: $vm.approvedAlertProp)
             .popupDismissAlert(prop: $vm.rejectedAlertProp)
             .popupImage(isPresented: $vm.showImage, url: vm.selectedImage)

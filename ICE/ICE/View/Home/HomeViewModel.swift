@@ -23,7 +23,7 @@ final class HomeViewModel: ViewModelBase {
     
     
     @MainActor
-    func loadData() async throws {
+    func loadData() async {
         asyncOperation({
             if self.apiHandler.isRunFetch(userDefaultKey: User.modelName) || self.reload {
                 let userPredicate = User.keys.userID.eq(self.userID)

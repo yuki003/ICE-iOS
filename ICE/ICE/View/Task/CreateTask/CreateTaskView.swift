@@ -87,8 +87,8 @@ struct CreateTaskView: View {
                             }
                         }
                         Spacer()
-                        if !vm.createComplete {
-                            EnabledFlagFillButton(label: "タスクを作成", color: Color(.jade), flag: $vm.createTaskAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
+                        if !vm.createdTaskAlertProp.isPresented {
+                            ActionWithFlagFillButton(label: "タスクを作成", action: { vm.createTaskAlertProp.action = vm.createTasks }, color: Color(.jade), flag: $vm.createTaskAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
                                 .padding(.vertical)
                         }
                     }
@@ -96,28 +96,13 @@ struct CreateTaskView: View {
                     .padding(.horizontal, 20)
                     .padding(.top)
                     .frame(width: deviceWidth())
-                    .alert(isPresented: $vm.ErrorAlert) {
-                        Alert(
-                            title: Text(
-                                "エラー"
-                            ),
-                            message: Text(
-                                vm.alertMessage ?? "操作をやり直してください。"
-                            ),
-                            dismissButton: .default(
-                                Text(
-                                    "閉じる"
-                                )
-                            )
-                        )
-                    }
-                    .popupTaskIconSelector(isPresented: $vm.showIconSelector, taskType: $vm.taskType)
-                    .popupActionAlert(prop: $vm.createTaskAlertProp
-                                      , action: { Task { try await vm.createTask()} }, actionLabel: "作成")
-                    .popupDismissAndActionAlert(prop: $vm.createTaskAlertProp, dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける", action: { vm.initialization() })
                 }
             }
         }
+        .popupTaskIconSelector(isPresented: $vm.showIconSelector, taskType: $vm.taskType)
+        .popupActionAlert(prop: $vm.createTaskAlertProp, actionLabel: "作成")
+        .popupDismissAndActionAlert(prop: $vm.createdTaskAlertProp, dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける")
+        .popupAlert(prop: $vm.apiErrorPopAlertProp)
         .loading(isLoading: $vm.isLoading)
         .userToolbar(state: vm.state, userName: nil, dismissExists: true)
         .navigationBarTitleDisplayMode(.inline)

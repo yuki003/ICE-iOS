@@ -68,7 +68,7 @@ struct AuthView: View {
             }
         }
         .loading(isLoading: $vm.isLoading)
-        .popupAlert(prop: $vm.errorPopAlertProp, action: {})
+        .popupAlert(prop: $vm.authErrorPopAlertProp)
         .onOpenURL(perform: { url in
             debugPrint(url)
             if let components = URLComponents(url: url, resolvingAgainstBaseURL: true),

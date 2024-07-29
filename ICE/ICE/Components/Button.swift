@@ -294,34 +294,11 @@ struct ActionWithFlagFillButton: View {
     let action: () async throws -> Void
     let color: Color
     @Binding var flag: Bool
+    var condition: Bool = false
     var body: some View {
         Button(action: {
             Task {
                 try await action()
-                flag.toggle()
-            }
-        })
-        {
-            Text(label)
-                .font(.callout.bold())
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                .background(color)
-                .foregroundStyle(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 4))
-        }
-    }
-}
-
-struct EnabledFlagFillButton: View {
-    var label: String
-    let color: Color
-    @Binding var flag: Bool
-    var condition: Bool
-    var body: some View {
-        Button(action: {
-            withAnimation(.linear(duration: 0.3)) {
-                UIApplication.shared.closeKeyboard()
                 flag.toggle()
             }
         })
@@ -337,6 +314,31 @@ struct EnabledFlagFillButton: View {
         .disabled(condition)
     }
 }
+//
+//struct EnabledFlagFillButton: View {
+//    var label: String
+//    let color: Color
+//    @Binding var flag: Bool
+//    var condition: Bool
+//    var body: some View {
+//        Button(action: {
+//            withAnimation(.linear(duration: 0.3)) {
+//                UIApplication.shared.closeKeyboard()
+//                flag.toggle()
+//            }
+//        })
+//        {
+//            Text(label)
+//                .font(.callout.bold())
+//                .padding(.vertical, 10)
+//                .padding(.horizontal, 20)
+//                .background(condition ? Color.gray : color)
+//                .foregroundStyle(Color.white)
+//                .clipShape(RoundedRectangle(cornerRadius: 4))
+//        }
+//        .disabled(condition)
+//    }
+//}
 struct FlagFillButton: View {
     var label: String
     let color: Color

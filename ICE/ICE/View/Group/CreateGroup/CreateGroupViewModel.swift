@@ -19,8 +19,6 @@ final class CreateGroupViewModel: ViewModelBase {
     @Published var image = UIImage()
     @Published var groupName: String = ""
     @Published var groupDescription: String = ""
-    @Published var createGroupAlertProp: PopupAlertProperties = .init(title: "グループを作成します", text: "現在の内容でグループを作成します。グループ詳細画面から内容を更新することができます。")
-    @Published var createCompletedAlertProp: PopupAlertProperties = .init(title: "タスク作成完了!!", text: "グループ画面から作ったタスクを確認できます。")
     
     var groupNameValidation: AnyPublisher<Validation, Never> {
         $groupName
@@ -63,11 +61,6 @@ final class CreateGroupViewModel: ViewModelBase {
             let url = try await self.storage.uploadData(self.image, key: key)
             group.thumbnailKey = url
             try await self.apiHandler.create(group, keyName: "hostGroups")
-            self.createCompletedAlertProp.isPresented = true
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
         })
     }
 }
