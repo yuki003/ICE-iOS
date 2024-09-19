@@ -51,7 +51,8 @@ final class HomeViewModel: ViewModelBase {
                         let hostGroupPredicate = self.apiService.orPredicateGroupByID(ids: hostGroupIDs, model: Group.keys.id)
                         let hostGroups = try await self.apiHandler.list(Group.self, where: hostGroupPredicate, keyName: "hostGroups")
                         self.hostGroups = hostGroups.sorted(by: {$0.createdAt! > $1.createdAt!})
-                        
+                    } else {
+                        self.hostGroups = []
                     }
                 } else {
                     self.hostGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "hostGroups") ?? []
@@ -62,6 +63,8 @@ final class HomeViewModel: ViewModelBase {
                     let belongingGroupPredicate = self.apiService.orPredicateGroupByID(ids: belongingGroupIDs, model: Group.keys.id)
                     let belongingGroups = try await self.apiHandler.list(Group.self, where: belongingGroupPredicate, keyName: "belongingGroups")
                     self.belongingGroups = belongingGroups
+                } else {
+                    self.belongingGroups = []
                 }
             } else {
                 self.belongingGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups") ?? []
