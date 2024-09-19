@@ -88,6 +88,8 @@ final class CreateTaskViewModel: ViewModelBase {
     
     @MainActor
     func createTasks() async throws {
+        isLoading = true
+        defer { isLoading = false }
         asyncOperation({
             self.createTaskAlertProp.isPresented = false
             if !self.condition.isEmpty {

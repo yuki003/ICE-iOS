@@ -75,6 +75,8 @@ final class TaskReportViewModel: ViewModelBase {
     }
     @MainActor
     func repotTask() async throws {
+        isLoading = true
+        defer { isLoading = false }
         asyncOperation({ [self] in
             submitAlertProp.isPresented = false
             var baseKey = task.id

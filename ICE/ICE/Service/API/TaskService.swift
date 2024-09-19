@@ -86,17 +86,18 @@ final class TaskService: ViewModelBase {
     func taskListBuilder(_ taskList:[Tasks], _ router: PageRouter) -> some View {
         ForEach(taskList.indices, id: \.self) { index in
             let task = taskList[index]
-            var status: BelongingTaskStatus {
-                if let receivingUserIDs = task.receivingUserIDs, (receivingUserIDs.contains(where: { $0 == self.userID}) || self.asHost) {
-                    return .receiving
-                } else if let completedUserIDs = task.rejectedUserIDs, completedUserIDs.contains(where: { $0 == self.userID}) {
-                    return .rejected
-                } else if let completedUserIDs = task.completedUserIDs, completedUserIDs.contains(where: { $0 == self.userID}) {
-                    return .completed
-                } else {
-                    return .accept
-                }
-            }
+            var status = BelongingTaskStatus.init(task)
+//            var status: BelongingTaskStatus {
+//                if let receivingUserIDs = task.receivingUserIDs, (receivingUserIDs.contains(where: { $0 == self.userID}) || self.asHost) {
+//                    return .receiving
+//                } else if let completedUserIDs = task.rejectedUserIDs, completedUserIDs.contains(where: { $0 == self.userID}) {
+//                    return .rejected
+//                } else if let completedUserIDs = task.completedUserIDs, completedUserIDs.contains(where: { $0 == self.userID}) {
+//                    return .completed
+//                } else {
+//                    return .accept
+//                }
+//            }
             TaskRow(task: task, action: {
                 self.selectedTask = task
                 self.receiveConfirmAlertProp.action = {Task { await self.receiveTaskOrder(groupID: task.groupID)}}

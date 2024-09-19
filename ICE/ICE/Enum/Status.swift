@@ -13,6 +13,20 @@ enum BelongingTaskStatus: String, Hashable {
     case receiving = "挑戦中"
     case rejected = "再提出"
     case completed = "完了"
+    
+    init(_ task: Tasks) {
+        let userID = UserDefaults.standard.string(forKey: "userID") ?? ""
+        let asHost = UserDefaults.standard.bool(forKey: "asHost")
+        if let receivingUserIDs = task.receivingUserIDs, (receivingUserIDs.contains(where: { $0 == userID}) || asHost) {
+            self = .receiving
+        } else if let rejectedUserIDs = task.rejectedUserIDs, rejectedUserIDs.contains(where: { $0 == userID}) {
+            self = .rejected
+        } else if let completedUserIDs = task.completedUserIDs, completedUserIDs.contains(where: { $0 == userID}) {
+            self = .completed
+        } else {
+            self = .accept
+        }
+    }
 }
 
 extension BelongingTaskStatus {

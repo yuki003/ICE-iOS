@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Amplify
+import AWSPluginsCore
 
 final class HomeViewModel: ViewModelBase {
     @Published var userInfo: User?
@@ -24,7 +25,9 @@ final class HomeViewModel: ViewModelBase {
     @MainActor
     func loadData() async {
         propertiesInitialize()
-        asyncOperation({
+        asyncOperation({ [self] in
+//            try await confirmSession()
+//            try await reConnectSession()
             if self.apiHandler.isRunFetch(userDefaultKey: User.modelName) || self.reload {
                 let userPredicate = User.keys.userID.eq(self.userID)
                 let userInfo = try await self.apiHandler.list(User.self, where: userPredicate, keyName: "User")
@@ -77,4 +80,25 @@ final class HomeViewModel: ViewModelBase {
         hostGroups = nil
         belongingGroups = nil
     }
+    
+//    func confirmSession() async throws {
+//        let session = try await Amplify.Auth.fetchAuthSession()
+//        if session.isSignedIn {
+//            print("セッションは有効です")
+//        } else {
+//            print("セッションが無効です")
+//        }
+//    }
+//    
+//    func reConnectSession() async throws {
+//        let options = AuthFetchSessionRequest.Options(forceRefresh: true)
+//        let session = try await Amplify.Auth.fetchAuthSession(options: options)
+//        guard let awsCredentialsProvider = session as? AuthAWSCredentialsProvider else {
+//            print("Failed to retrieve AWS credentials.")
+//            return
+//        }
+//        
+//        let credentials = try awsCredentialsProvider.getAWSCredentials().get()
+//        print("AWS Credentials: \(credentials)")
+//    }
 }

@@ -44,8 +44,6 @@ class ViewModelBase: ObservableObject {
                         errorHandler: @escaping ErrorHandler = {_ in }) {
         Task {
             do {
-                isLoading = true
-                defer { isLoading = false }
                 if userID.isEmpty {
                     let userInfo = try await Amplify.Auth.getCurrentUser()
                     userID = userInfo.userId
@@ -56,6 +54,10 @@ class ViewModelBase: ObservableObject {
                 if reload {
                     reload = false
                 }
+            } catch let error as StorageError {
+                errorHandler(error)
+                apiErrorPopAlertProp.text = error.localizedDescription
+                apiErrorPopAlertProp.isPresented = true
             } catch let error as APIError {
                 apiErrorHandler(error)
                 apiErrorPopAlertProp.text = error.localizedDescription

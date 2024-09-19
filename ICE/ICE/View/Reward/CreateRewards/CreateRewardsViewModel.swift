@@ -93,6 +93,8 @@ var createValidation: AnyPublisher<Validation, Never> {
     }
     @MainActor
     func createReward() async throws {
+        isLoading = true
+        defer { isLoading = false }
         asyncOperation({
             self.createRewardsAlertProp.isPresented = false
             var reward = Rewards(createUserID: self.userID, rewardName: self.rewardName,description: self.rewardDescription.isEmpty ? nil : self.rewardDescription, thumbnailKey: "", frequencyType: self.frequencyType, whoGetsPaid: self.whoGetsPaid, cost: self.cost, groupID: self.groupID)

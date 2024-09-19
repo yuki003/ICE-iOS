@@ -62,6 +62,8 @@ final class CreateGroupViewModel: ViewModelBase {
     
     @MainActor
     func createGroup() async throws {
+        isLoading = true
+        defer { isLoading = false }
         asyncOperation({
             self.showAlert = false
             var group = Group(groupName: self.groupName, description: self.groupDescription.isEmpty ? nil : self.groupDescription , thumbnailKey: "", hostUserIDs: [self.userID])
