@@ -32,7 +32,7 @@ final class TaskListViewModel: ViewModelBase {
     }
     @MainActor
     func loadData() async {
-        asyncOperation({
+        asyncOperation({ [self] in
         })
     }
 //    @MainActor

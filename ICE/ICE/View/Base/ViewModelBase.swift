@@ -70,6 +70,14 @@ class ViewModelBase: ObservableObject {
         }
     }
     
+    func fetchData(userDefaultKey: String, trueAction: () async throws -> Void, falseAction: () async throws -> Void) async throws {
+        if apiHandler.isRunFetch(userDefaultKey: userDefaultKey) || reload {
+            try await trueAction()
+        } else {
+            try await falseAction()
+        }
+    }
+    
     func setErrorMessage(_ error: Error) {
         alertMessage = error.localizedDescription
         ErrorAlert = true

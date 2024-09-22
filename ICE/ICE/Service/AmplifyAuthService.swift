@@ -15,6 +15,7 @@ class AmplifyAuthService: ObservableObject {
     static let shared = AmplifyAuthService()
     @AppStorage("isSignedIn") var isSignedIn = false
     
+    @MainActor
     func checkSessionStatus() async {
         do {
             let result = try await Amplify.Auth.fetchAuthSession()
@@ -43,11 +44,9 @@ class AmplifyAuthService: ObservableObject {
 
     func webSignIn() async throws {
         do {
-//            let options = AuthWebUISignInRequest.Options(scopes: ["ja"])
             let result = try await Amplify.Auth.signInWithWebUI(presentationAnchor: window)
             if result.isSignedIn {
                 print("Signed in")
-//                router.move(to: .home)
             } else {
                 print("Failure")
             }
@@ -55,6 +54,7 @@ class AmplifyAuthService: ObservableObject {
             print(error)
         }
     }
+    
     func observeAuthEvents() {
         _ = Amplify.Hub.listen(to: .auth) { [weak self] result in
             switch result.eventName {

@@ -82,8 +82,6 @@ final class TaskApprovalViewModel: ViewModelBase {
             } else {
                 pointHistory[0].completedTaskID = [task.id]
             }
-            let newList = try self.apiHandler.decodeUserDefault(modelType: [GroupPointsHistory].self, key: "\(task.id)-\(selectedReport.reportUserID)-point")?.filter({$0.id != pointHistory[0].id})
-            apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
             try await apiHandler.update(pointHistory[0], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
         }
     }
@@ -95,8 +93,6 @@ final class TaskApprovalViewModel: ViewModelBase {
         }
         selectedReport.status = .approved
         selectedReport.reportVersion = selectedReport.reportVersion! + 1
-        let newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-reports")?.filter({$0.id != selectedReport.id})
-        apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-reports")
         try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
     }
     
@@ -115,8 +111,6 @@ final class TaskApprovalViewModel: ViewModelBase {
                     }
                 }
                 selectedReport.status = .rejected
-                let newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-reports")?.filter({$0.id != selectedReport.id})
-                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-reports")
                 try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
                 
                 if let receivingUserIDs = task.receivingUserIDs, receivingUserIDs.contains(selectedReport.reportUserID) {
@@ -128,8 +122,6 @@ final class TaskApprovalViewModel: ViewModelBase {
                     } else {
                         task.rejectedUserIDs = [selectedReport.reportUserID]
                     }
-                    let newList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(task.groupID)-tasks")?.filter({$0.id != task.id})
-                    apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.groupID)-tasks")
                     try await self.apiHandler.update(task, keyName: "\(task.groupID)-tasks")
                 }
             }

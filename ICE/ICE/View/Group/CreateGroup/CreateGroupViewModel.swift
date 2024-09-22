@@ -64,13 +64,13 @@ final class CreateGroupViewModel: ViewModelBase {
     func createGroup() async throws {
         isLoading = true
         defer { isLoading = false }
-        asyncOperation({
-            self.showAlert = false
-            var group = Group(groupName: self.groupName, description: self.groupDescription.isEmpty ? nil : self.groupDescription , thumbnailKey: "", hostUserIDs: [self.userID])
-            let key = self.userID + group.id
-            let url = try await self.storage.uploadData(self.image, key: key)
+        asyncOperation({ [self] in
+            showAlert = false
+            var group = Group(groupName: self.groupName, description: groupDescription.isEmpty ? nil : groupDescription , thumbnailKey: "", hostUserIDs: [userID])
+            let key = userID + group.id
+            let url = try await storage.uploadData(image, key: key)
             group.thumbnailKey = url
-            try await self.apiHandler.create(group, keyName: "hostGroups")
+            try await apiHandler.create(group, keyName: "hostGroups")
         })
     }
     

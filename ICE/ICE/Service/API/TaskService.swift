@@ -32,8 +32,6 @@ final class TaskService: ViewModelBase {
                 } else {
                     selectedTask.receivingUserIDs = [userID]
                 }
-                let newList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(groupID)-tasks")?.filter({$0.id != selectedTask.id})
-                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(groupID)-tasks")
                 try await apiHandler.update(selectedTask, keyName: "\(groupID)-tasks")
             }
             taskReceivedAlertProp.isPresented = true

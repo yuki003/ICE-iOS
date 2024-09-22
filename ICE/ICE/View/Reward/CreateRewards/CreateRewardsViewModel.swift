@@ -84,7 +84,7 @@ var createValidation: AnyPublisher<Validation, Never> {
     }
     @MainActor
     func loadData() async throws {
-        asyncOperation({
+        asyncOperation({ [self] in
         }, apiErrorHandler: { apiError in
             self.setErrorMessage(apiError)
         }, errorHandler: { error in
@@ -95,24 +95,24 @@ var createValidation: AnyPublisher<Validation, Never> {
     func createReward() async throws {
         isLoading = true
         defer { isLoading = false }
-        asyncOperation({
-            self.createRewardsAlertProp.isPresented = false
-            var reward = Rewards(createUserID: self.userID, rewardName: self.rewardName,description: self.rewardDescription.isEmpty ? nil : self.rewardDescription, thumbnailKey: "", frequencyType: self.frequencyType, whoGetsPaid: self.whoGetsPaid, cost: self.cost, groupID: self.groupID)
+        asyncOperation({ [self] in
+            createRewardsAlertProp.isPresented = false
+            var reward = Rewards(createUserID: userID, rewardName: rewardName,description: rewardDescription.isEmpty ? nil : rewardDescription, thumbnailKey: "", frequencyType: frequencyType, whoGetsPaid: whoGetsPaid, cost: cost, groupID: groupID)
             
-            if self.isLimited {
-                reward.startDate = Temporal.DateTime(self.startDate)
-                reward.endDate = Temporal.DateTime(self.endDate)
+            if isLimited {
+                reward.startDate = Temporal.DateTime(startDate)
+                reward.endDate = Temporal.DateTime(endDate)
             }
             
-            if !self.image.isEmpty() {
-                let key = self.groupID + reward.id
-                let url = try await self.storage.uploadData(self.image, key: key)
+            if !image.isEmpty() {
+                let key = groupID + reward.id
+                let url = try await storage.uploadData(image, key: key)
                 reward.thumbnailKey = url
             }
             
-            try await self.apiHandler.create(reward, keyName: "\(self.groupID)-rewards")
-            self.createRewardsAlertProp.action = self.initialization
-            self.createdRewardsAlertProp.isPresented = true
+            try await apiHandler.create(reward, keyName: "\(groupID)-rewards")
+            createRewardsAlertProp.action = initialization
+            createdRewardsAlertProp.isPresented = true
         })
     }
     

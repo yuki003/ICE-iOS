@@ -90,21 +90,21 @@ final class CreateTaskViewModel: ViewModelBase {
     func createTasks() async throws {
         isLoading = true
         defer { isLoading = false }
-        asyncOperation({
-            self.createTaskAlertProp.isPresented = false
-            if !self.condition.isEmpty {
-                self.conditions.append(self.condition)
+        asyncOperation({ [self] in
+            createTaskAlertProp.isPresented = false
+            if !condition.isEmpty {
+                conditions.append(condition)
             }
-            var task = Tasks(createUserID: self.userID, taskName: self.taskName, description: self.taskDescription.isEmpty ? nil : self.taskDescription, iconName: self.taskType.rawValue , frequencyType: self.frequencyType, condition: self.conditions, point: self.point, groupID: self.groupID, hasPendingReport: false)
+            var task = Tasks(createUserID: userID, taskName: taskName, description: taskDescription.isEmpty ? nil : taskDescription, iconName: taskType.rawValue , frequencyType: frequencyType, condition: conditions, point: point, groupID: groupID, hasPendingReport: false)
             
-            if self.isLimited {
-                task.startDate = Temporal.DateTime(self.startDate)
-                task.endDate = Temporal.DateTime(self.endDate)
+            if isLimited {
+                task.startDate = Temporal.DateTime(startDate)
+                task.endDate = Temporal.DateTime(endDate)
             }
             
-            try await self.apiHandler.create(task, keyName: "\(self.groupID)-tasks")
-            self.createdTaskAlertProp.action = self.initialization
-            self.createdTaskAlertProp.isPresented = true
+            try await apiHandler.create(task, keyName: "\(groupID)-tasks")
+            createdTaskAlertProp.action = initialization
+            createdTaskAlertProp.isPresented = true
         })
     }
     

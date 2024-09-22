@@ -25,6 +25,7 @@ final class TaskReportViewModel: ViewModelBase {
     @Published var submitAlertProp: PopupAlertProperties = .init(text: "この内容で報告しますか？")
     @Published var deleteAlertProp: PopupAlertProperties = .init(title: "レポートを取り消しますか？", text: "取り消したタスクは再チャレンジできません。")
     @Published var completedSubmitAlertProp: PopupAlertProperties = .init(title: "報告完了!!", text: "ホストの承認を受けるとポイントゲット！")
+    @Published var completedDeleteAlertProp: PopupAlertProperties = .init(text: "レポートを取り消しました！")
 
     
     var alreadyReported: Bool {
@@ -45,24 +46,11 @@ final class TaskReportViewModel: ViewModelBase {
     @MainActor
     func loadData() async {
         asyncOperation({ [self] in
-//            if apiHandler.isRunFetch(userDefaultKey: "\(task.id)-report") || reload {
                 let reportPredicate = keys.taskID.eq(task.id) && keys.reportUserID.eq(userID)
                 let reportList = try await apiHandler.list(TaskReports.self, where: reportPredicate, keyName: "\(task.id)-report")
                 if !reportList.isEmpty {
                     taskReports = reportList[0]
-//                    let reportIndex = reportList[0].reportVersion! - 1
-//                    report = reportList[0].reports![reportIndex] ?? ""
-//                    images = fetchImages(taskReports?.picture1,taskReports?.picture2,taskReports?.picture3)
                 }
-//            } else {
-//                let report = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")
-//                if let report = report {
-//                    taskReports = report[0]
-////                    let reportIndex = report[0].reportVersion! - 1
-////                    self.report = report[0].reports![reportIndex] ?? ""
-////                    images = fetchImages(taskReports?.picture1,taskReports?.picture2,taskReports?.picture3)
-//                }
-//            }
             
             if let taskReports = taskReports {
                 if taskReports.status == ReportStatus.pending {
@@ -158,12 +146,8 @@ final class TaskReportViewModel: ViewModelBase {
                         }
                     }
                 }
-                let newTaskList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(task.groupID)-tasks")?.filter({$0.id != task.id})
-                apiHandler.replaceUserDefault(models: newTaskList ?? [], keyName: "\(task.groupID)-tasks")
                 try await apiHandler.update(task, keyName: "\(task.groupID)-tasks")
                 
-                let newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")?.filter({$0.id != taskReports.id})
-                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-report")
                 try await apiHandler.update(taskReports, keyName: "\(task.id)-report")
             } else {
                 model.reports = [report]
@@ -171,6 +155,43 @@ final class TaskReportViewModel: ViewModelBase {
             }
             
             completedSubmitAlertProp.isPresented = true
+        })
+    }
+    
+    @MainActor
+    func deleteTaskReport() async throws {
+        isLoading = true
+        defer { isLoading = false }
+        asyncOperation({ [self] in
+            deleteAlertProp.isPresented = false
+            var baseKey = task.id
+            var key: String = ""
+            var model = TaskReports(taskID: task.id, reportUserID: userID, status: ReportStatus.pending, reportVersion: (taskReports?.reportVersion ?? 0) + 1)
+            if let taskReports = taskReports {
+                
+                if images.count > 0, images[0].isNotEmpty() {
+                    let image  = images[0]
+                    key = baseKey + "pic1"
+                    try await storage.deleteData(key: key)
+                }
+                
+                if images.count > 1, images[1].isNotEmpty() {
+                    let image  = images[1]
+                    key = baseKey + "pic2"
+                    try await storage.deleteData(key: key)
+                }
+                
+                if images.count > 2, images[2].isNotEmpty() {
+                    let image  = images[2]
+                    key = baseKey + "pic3"
+                    try await storage.deleteData(key: key)
+                }
+                try await apiHandler.delete(taskReports)
+                apiHandler.deleteUserDefault(keyName: "\(task.id)-report")
+                
+                completedDeleteAlertProp.isPresented = true
+                
+            }
         })
     }
     
@@ -183,48 +204,4 @@ final class TaskReportViewModel: ViewModelBase {
         }
         return images.compactMap{ $0 }
     }
-//    
-//    @MainActor
-//    func deleteTask() async throws {
-//        asyncOperation({ [self] in
-//            deleteAlertProp.isPresented = false
-//            var model = TaskReports(taskID: task.id, reportUserID: userID, status: ReportStatus.pending, reportVersion: (taskReports?.reportVersion ?? 0) + 1)
-//            
-//            if images.count > 0, images[0].isNotEmpty() {
-//                let image  = images[0]
-//                let key = task.id + model.id + "pic1"
-//                let url = try await self.storage.uploadData(image, key: key)
-//                model.picture1 = url
-//            }
-//            if images.count > 1, images[1].isNotEmpty() {
-//                let image  = images[1]
-//                let key = task.id + model.id + "pic2"
-//                let url = try await self.storage.uploadData(image, key: key)
-//                model.picture2 = url
-//            }
-//            
-//            if images.count > 2, images[2].isNotEmpty() {
-//                let image  = images[2]
-//                let key = task.id + model.id + "pic3"
-//                let url = try await self.storage.uploadData(image, key: key)
-//                model.picture3 = url
-//            }
-//            
-//            if let taskReports = taskReports {
-//                model.reports = taskReports.reports
-//                model.reports?.append(report)
-//                var newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-report")?.filter({$0.id != model.id})
-//                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-report")
-//                try await apiHandler.update(model, keyName: "\(task.id)-report")
-//            } else {
-//                model.reports = [report]
-//                try await apiHandler.create(model, keyName: "\(task.id)-report")
-//            }
-//            completedSubmitAlertProp.isPresented = true
-//        }, apiErrorHandler: { apiError in
-//            self.setErrorMessage(apiError)
-//        }, errorHandler: { error in
-//            self.setErrorMessage(error)
-//        })
-//    }
 }

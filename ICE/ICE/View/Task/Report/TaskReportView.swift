@@ -192,11 +192,11 @@ struct TaskReportView: View {
                 ActionWithFlagFillButton(label: "報告", action: {vm.submitAlertProp.action = vm.repotTask }, color: Color(.indigo), flag: $vm.submitAlertProp.isPresented, condition: !(vm.taskReports == nil || vm.taskReports?.status == ReportStatus.rejected))
                     .padding(.vertical)
             } else if vm.taskReports?.status == ReportStatus.rejected {
-                FlagFillButton(label: "再報告", color: Color(.indigo), flag: $vm.submitAlertProp.isPresented)
+                ActionWithFlagFillButton(label: "再報告", action: {vm.submitAlertProp.action = vm.repotTask },color: Color(.indigo), flag: $vm.submitAlertProp.isPresented)
                     .padding(.vertical)
             } else if vm.taskReports?.status == ReportStatus.pending {
                 HStack(spacing: 20) {
-                    ActionWithFlagFillButton(label: "取り消す", action: { vm.deleteAlertProp.action = vm.repotTask}, color: Color(.indigo), flag: $vm.deleteAlertProp.isPresented)
+                    ActionWithFlagFillButton(label: "取り消す", action: { vm.deleteAlertProp.action = vm.deleteTaskReport}, color: Color.red, flag: $vm.deleteAlertProp.isPresented)
                         .padding(.vertical)
                     ActionWithFlagFillButton(label: "編集する", action: {vm.submitAlertProp.action = vm.repotTask }, color: Color(.indigo), flag: $vm.submitAlertProp.isPresented)
                         .padding(.vertical)

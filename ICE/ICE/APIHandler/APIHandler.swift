@@ -110,7 +110,7 @@ class APIHandler: ObservableObject {
             switch result {
             case .success(let updatedModel):
                 print("Successfully updated model: \(updatedModel)")
-                appendUserDefault(model: updatedModel, keyName: keyName)
+                replaceUserDefault(models: [updatedModel], keyName: keyName)
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
                 throw APIError.updateFailed
@@ -169,16 +169,26 @@ class APIHandler: ObservableObject {
         }) {
             userDefaultKeys.append(keyName)
         }
+        print("append:\(userDefaultKeys)")
+        print("key:\(keyName)")
     }
     
     func replaceUserDefault<M: Model>(models: [M], keyName: String) {
-        if let savedData = defaults.data(forKey: keyName) {
+        print("replaceBefore:\(userDefaultKeys)")
+        if defaults.data(forKey: keyName) != nil {
             UserDefaults.standard.removeObject(forKey: keyName)
             
             guard let data = try? jsonEncoder.encode(models) else {
                 return
             }
             defaults.set(data, forKey: "\(keyName)")
+            if !userDefaultKeys.contains(where: { value in
+                value == keyName
+            }) {
+                userDefaultKeys.append(keyName)
+            }
+            print("replaceAfter:\(userDefaultKeys)")
+            print("key:\(keyName)")
         }
     }
     
@@ -192,6 +202,12 @@ class APIHandler: ObservableObject {
         }) {
             userDefaultKeys.append(keyName)
         }
+        print("set:\(userDefaultKeys)")
+        print("key:\(keyName)")
+    }
+    
+    func deleteUserDefault(keyName: String) {
+        UserDefaults.standard.removeObject(forKey: keyName)
     }
     
     func decodeUserDefault<T: Decodable>(modelType: T.Type, key: String) throws -> T? {
@@ -204,11 +220,12 @@ class APIHandler: ObservableObject {
               let dataModel = try? jsonDecoder.decode(modelType, from: data) else {
             return nil
         }
+        print("decode:\(userDefaultKeys)")
+        print("key:\(key)")
         return dataModel
     }
     
     func isRunFetch(userDefaultKey: String) -> Bool {
-        print(userDefaultKeys)
         return !userDefaultKeys.contains(userDefaultKey)
     }
 }
