@@ -110,7 +110,8 @@ class APIHandler: ObservableObject {
             switch result {
             case .success(let updatedModel):
                 print("Successfully updated model: \(updatedModel)")
-                replaceUserDefault(models: [updatedModel], keyName: keyName)
+                deleteElementUserDefault(model: updatedModel, keyName: keyName)
+                appendUserDefault(model: updatedModel, keyName: keyName)
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
                 throw APIError.updateFailed
@@ -124,11 +125,17 @@ class APIHandler: ObservableObject {
         }
     }
     
-    func delete<ModelType: Model>(_ model: ModelType) async throws {
+    func delete<ModelType: Model>(_ model: ModelType, keyName: String = "") async throws {
         do {
             let result = try await Amplify.API.mutate(request: .delete(model))
             switch result {
             case .success:
+                if let savedData = defaults.data(forKey: keyName),
+                   let structArray = try? jsonDecoder.decode([ModelType].self, from: savedData), structArray.count > 1 {
+                    deleteElementUserDefault(model: model, keyName: keyName)
+                } else {
+                    deleteObjectUserDefault(keyName: keyName)
+                }
                 print("Successfully delete")
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
@@ -151,6 +158,7 @@ class APIHandler: ObservableObject {
             
             // 配列を再度エンコードし、UserDefaultsに保存
             if let encodedData = try? jsonEncoder.encode(structArray) {
+                UserDefaults.standard.removeObject(forKey: keyName)
                 defaults.set(encodedData, forKey: keyName)
             } else {
                 print("Failed to encode data")
@@ -206,8 +214,29 @@ class APIHandler: ObservableObject {
         print("key:\(keyName)")
     }
     
-    func deleteUserDefault(keyName: String) {
+    func deleteObjectUserDefault(keyName: String) {
         UserDefaults.standard.removeObject(forKey: keyName)
+    }
+    
+    func deleteElementUserDefault<ModelType: Model>(model: ModelType, keyName: String) {
+        if let savedData = defaults.data(forKey: keyName),
+           var structArray = try? jsonDecoder.decode([ModelType].self, from: savedData) {
+            print("before:\(structArray)")
+            let element = AppModelType(type: model.modelName)
+            if let index = element.findTargetIndex(structArray, model) {
+                structArray.remove(at: index)
+            }
+            
+            // 配列を再度エンコードし、UserDefaultsに保存
+            if let encodedData = try? jsonEncoder.encode(structArray) {
+                UserDefaults.standard.removeObject(forKey: keyName)
+                defaults.set(encodedData, forKey: keyName)
+            } else {
+                print("Failed to encode data")
+            }
+            
+            print("after:\(structArray)")
+        }
     }
     
     func decodeUserDefault<T: Decodable>(modelType: T.Type, key: String) throws -> T? {

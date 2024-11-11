@@ -43,7 +43,9 @@ final class HomeViewModel: ViewModelBase {
                     userInfo = list[0]
                 }
             }
-            
+            if let userName = userInfo?.userName {
+                UserDefaults.standard.set(userName, forKey: "userName")
+            }
             if asHost {
                 if apiHandler.isRunFetch(userDefaultKey: "hostGroups") || reload  {
                     if let hostGroupIDs = userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {

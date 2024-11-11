@@ -11,12 +11,13 @@ import SwiftUI
 enum NavigationPathType: Hashable {
     case home
     case groupDetail(group: Group)
-    case createTask(groupID: String)
+    case createTask(groupID: String, selected: Tasks?)
     case createGroup
     case createReward(groupID: String)
     case taskList(tasks: [Tasks])
     case taskReport(task: Tasks)
     case taskApproval(task: Tasks)
+    case rewardApproval(reward: Rewards)
 
     func hash(into hasher: inout Hasher) {
         switch self {
@@ -40,6 +41,9 @@ enum NavigationPathType: Hashable {
         case .taskApproval(task: let task):
             hasher.combine(7)
             hasher.combine(task.id)
+        case .rewardApproval(reward: let reward):
+            hasher.combine(8)
+            hasher.combine(reward.id)
         }
     }
 
@@ -55,6 +59,8 @@ enum NavigationPathType: Hashable {
             return task1.id == task2.id
         case (.taskApproval(let task1), .taskApproval(let task2)):
             return task1.id == task2.id
+        case (.rewardApproval(let reward1), .rewardApproval(let reward2)):
+            return reward1.id == reward2.id
         default:
             return false
         }

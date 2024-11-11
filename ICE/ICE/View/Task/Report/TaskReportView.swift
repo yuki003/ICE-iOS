@@ -10,6 +10,7 @@ import Amplify
 import Kingfisher
 
 struct TaskReportView: View {
+    @Environment(\.dismiss) private var dismiss
     @StateObject var vm: TaskReportViewModel
     @EnvironmentObject var router: PageRouter
     @FocusState private var focused: FormField?
@@ -19,7 +20,7 @@ struct TaskReportView: View {
     @State private var isShowConfirmation: Bool = false
     @State private var selectIndex: Int?
     var body: some View {
-        DestinationHolderView(router: router) {
+        NavigationView {
             VStack {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 20) {
@@ -60,9 +61,21 @@ struct TaskReportView: View {
             .task {
                 await vm.loadData()
             }
-            .userToolbar(userName: nil, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(vm.taskReports == nil || vm.taskReports?.status == .pending ? "タスク報告" : "報告記録" ).font(.headline)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "multiply.circle.fill")
+                            .font(.callout)
+                            .foregroundColor(Color.gray)
+                    }
+                }
+            }
             .loading(isLoading: $vm.isLoading)
             .popupActionAlert(prop: $vm.submitAlertProp, actionLabel: "報告")
             .popupActionAlert(prop: $vm.deleteAlertProp, actionLabel: "取り消す")
@@ -97,23 +110,25 @@ struct TaskReportView: View {
                             .background(Color.gray.opacity(0.8))
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                         
-                        Button(action: {
-                            selectIndex = index
-                            imageDeleteAlertProp.action = {
-                                if let index = selectIndex {
-                                    vm.images.remove(at: index)
+                        if let status = vm.taskReports?.status, status != .approved {
+                            Button(action: {
+                                selectIndex = index
+                                imageDeleteAlertProp.action = {
+                                    if let index = selectIndex {
+                                        vm.images.remove(at: index)
+                                    }
                                 }
+                                imageDeleteAlertProp.isPresented = true
+                            })
+                            {
+                                XMarkCircleFillIcon()
+                                    .background(Color.white)
+                                    .foregroundStyle(Color(.indigo))
+                                    .frame(width: 20, height: 20)
+                                    .clipShape(Circle())
                             }
-                            imageDeleteAlertProp.isPresented = true
-                        })
-                        {
-                            XMarkCircleFillIcon()
-                                .background(Color.white)
-                                .foregroundStyle(Color(.indigo))
-                                .frame(width: 20, height: 20)
-                                .clipShape(Circle())
+                            .offset(x: 40, y: 40)
                         }
-                        .offset(x: 40, y: 40)
                     }
                 }
                 if vm.images.count < 3, vm.taskReports?.status != .approved {

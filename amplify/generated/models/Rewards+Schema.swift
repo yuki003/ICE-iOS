@@ -12,6 +12,8 @@ extension Rewards {
     case thumbnailKey
     case frequencyType
     case whoGetsPaid
+    case appliedUserIDs
+    case rejectedUserIDs
     case getUserID
     case cost
     case groupID
@@ -42,6 +44,8 @@ extension Rewards {
       .field(rewards.thumbnailKey, is: .optional, ofType: .string),
       .field(rewards.frequencyType, is: .required, ofType: .enum(type: FrequencyType.self)),
       .field(rewards.whoGetsPaid, is: .required, ofType: .enum(type: WhoGetsPaid.self)),
+      .field(rewards.appliedUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
+      .field(rewards.rejectedUserIDs, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(rewards.getUserID, is: .optional, ofType: .embeddedCollection(of: String.self)),
       .field(rewards.cost, is: .required, ofType: .int),
       .field(rewards.groupID, is: .required, ofType: .string),

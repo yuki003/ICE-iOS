@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct CreateTaskView: View {
+    @Environment(\.dismiss) private var dismiss
     @FocusState private var focused: FormField?
     @StateObject var vm: CreateTaskViewModel
     @State var fieldNum: String = ""
     @EnvironmentObject var router: PageRouter
+    @State var isDelete: Bool = false
     var body: some View {
-        VStack {
-            ScrollView(showsIndicators: false) {
+        NavigationView {
+            VStack {
                 VStack(alignment: .center, spacing: 20) {
                     VStack(alignment: .center, spacing: 5) {
                         // icon
@@ -49,8 +51,7 @@ struct CreateTaskView: View {
                         }
                         if !vm.conditions.isEmpty {
                             ForEach(vm.conditions.indices, id: \.self) { index in
-                                let condition = vm.conditions[index]
-                                if !condition.isEmpty {
+                                if let condition = vm.conditions[index], !condition.isEmpty {
                                     ItemizedRow(name: condition, font: .callout.bold(), onUnderLine: true)
                                 }
                             }
@@ -79,9 +80,22 @@ struct CreateTaskView: View {
                         }
                     }
                     Spacer()
-                    if !vm.createdTaskAlertProp.isPresented {
-                        ActionWithFlagFillButton(label: "タスクを作成", action: { vm.createTaskAlertProp.action = vm.createTasks }, color: Color(.jade), flag: $vm.createTaskAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
+                    HStack(spacing: 10) {
+                        if vm.isEdit {
+                            ActionWithFlagFillButton(label: "タスクを削除",
+                                                     action: {
+                                isDelete = true
+                                vm.confirmTaskAlertProp.title = "削除しますか？"
+                                vm.confirmTaskAlertProp.text = vm.deleteText
+                                vm.completeTaskAlertProp.title = "削除完了!!"
+                                vm.completeTaskAlertProp.text = vm.completeDelete
+                                vm.confirmTaskAlertProp.action = vm.deleteTasks
+                            },
+                                                     color: Color.red, flag: $vm.confirmTaskAlertProp.isPresented)
+                        }
+                        ActionWithFlagFillButton(label: vm.isEdit ? "タスクを編集" : "タスクを作成", action: { vm.confirmTaskAlertProp.action = vm.createTasks }, color: Color(vm.isEdit ? .indigo : .jade), flag: $vm.confirmTaskAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
                             .padding(.vertical)
+                        
                     }
                 }
                 .padding(.vertical)
@@ -89,15 +103,30 @@ struct CreateTaskView: View {
                 .padding(.top)
                 .frame(width: deviceWidth())
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(vm.isEdit ? "タスク編集" : "タスク作成").font(.headline)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "multiply.circle.fill")
+                            .font(.callout)
+                            .foregroundColor(Color.gray)
+                    }
+                }
+            }
+            .task {
+                vm.loadData()
+            }
         }
         .popupTaskIconSelector(isPresented: $vm.showIconSelector, taskType: $vm.taskType)
-        .popupActionAlert(prop: $vm.createTaskAlertProp, actionLabel: "作成")
-        .popupDismissAndActionAlert(prop: $vm.createdTaskAlertProp, dismissLabel: "グループ画面に戻る", actionLabel: "このまま続ける")
+        .popupActionAlert(prop: $vm.confirmTaskAlertProp, actionLabel: isDelete ? "削除" : vm.isEdit ? "編集" : "作成")
+        .popupDismissAndActionAlert(prop: $vm.completeTaskAlertProp, dismissLabel: "戻る", actionLabel: "新規作成")
         .popupAlert(prop: $vm.apiErrorPopAlertProp)
         .loading(isLoading: $vm.isLoading)
-        .userToolbar(userName: nil, dismissExists: true)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
     }
     
     @ViewBuilder

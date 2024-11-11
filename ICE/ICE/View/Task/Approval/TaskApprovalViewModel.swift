@@ -55,9 +55,9 @@ final class TaskApprovalViewModel: ViewModelBase {
     }
     @MainActor
     func reportApprove() async {
-        isLoading = true
-        defer { isLoading = false }
         asyncOperation({ [self] in
+            isLoading = true
+            defer { isLoading = false }
             if let selectedReport = selectedReport  {
                 try await updateGroupPointHistory(selectedReport: selectedReport)
                 try await updateTaskReport(selectedReport: selectedReport)
@@ -98,9 +98,9 @@ final class TaskApprovalViewModel: ViewModelBase {
     
     @MainActor
     func reportReject() async {
-        isLoading = true
-        defer { isLoading = false }
         asyncOperation({ [self] in
+            isLoading = true
+            defer { isLoading = false }
             if let selectedReport = selectedReport  {
                 var selectedReport = selectedReport
                 if comment.isNotEmpty {

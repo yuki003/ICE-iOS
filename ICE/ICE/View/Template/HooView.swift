@@ -35,7 +35,7 @@ struct HooView: View {
                 })
         }
         .frame(width: screenWidth())
-        .roundedSection(color: Color(.indigo))
+        .roundedBorder(color: Color(.indigo))
     }
 }
 //遷移先のView

@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct RoundedSectionModifier: ViewModifier {
+struct RoundedBorderModifier: ViewModifier {
     let color: Color
     func body(content: Content) -> some View {
         content
+//            .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.indigo), lineWidth: 2))
             .overlay(RoundedRectangle(cornerRadius: 4).stroke(color, lineWidth: 2))
     }
 }

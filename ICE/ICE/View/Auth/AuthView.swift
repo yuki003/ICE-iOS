@@ -13,21 +13,26 @@ struct AuthView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .center, spacing: 25) {
-                icon()
+                Icon()
                     .padding(.top, 70)
                 if vm.navHostOrGuest {
+                    // host or guest button
                     HostOrGuestSection()
                         .transition(.opacity)
                 } else if vm.navSignIn {
+                    // sign in view
                     SignInSection()
                         .transition(.opacity)
                 } else if vm.navSignUp {
+                    // sign up view
                     SignUpSection()
                         .transition(.opacity)
                 } else if vm.navSignUpConfirm {
+                    // confirmation code view
                     ConfirmationCodeSection()
                         .transition(.opacity)
                 } else {
+                    // default view
                     VStack(spacing: 20){
                         SignInButton(vm: vm)
                         SignUpButton(vm: vm)
@@ -38,6 +43,7 @@ struct AuthView: View {
                 Spacer()
             }
             .toolbar {
+                // Except default view
                 if vm.navSignIn || vm.navSignUp || vm.navSignUpConfirm || vm.navHostOrGuest {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
@@ -70,12 +76,10 @@ struct AuthView: View {
         .loading(isLoading: $vm.isLoading)
         .popupAlert(prop: $vm.authErrorPopAlertProp)
         .onOpenURL(perform: { url in
-            debugPrint(url)
+            // invited code auto fill
             if let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
                let queryItems = components.queryItems {
                 if let inviteCode = queryItems.first(where: { $0.name == "code" })?.value {
-                    // 招待コードを使って何かする
-                    // 例: サインアップ画面に遷移し、招待コードをセットする
                     if !inviteCode.isEmpty {
                         print("code is \(inviteCode)")
                         vm.signUpOptions.invitedGroupID = inviteCode
@@ -114,9 +118,6 @@ struct AuthView: View {
             
             SignInButton(vm: vm)
                 .disabled(vm.signInValid.isSuccess == false)
-//                .navigationDestination(isPresented: $vm.authComplete) {
-//                    HomeView(vm: .init())
-//                }
         }
         .frame(height: 150)
         .padding()
@@ -152,9 +153,6 @@ struct AuthView: View {
             
             ConfirmSignUpButton(vm: vm)
                 .disabled(vm.codeValid.isSuccess == false)
-//                .navigationDestination(isPresented: $vm.authComplete) {
-//                    HomeView(vm: .init())
-//                }
             ActionFillButton(label: "コード再送", action: vm.resendCode, color: Color(.indigo))
         }
         .frame(height: 150)
@@ -162,13 +160,6 @@ struct AuthView: View {
     }
 }
 
-@ViewBuilder
-func icon() -> some View {
-        Image(.logo)
-            .resizable()
-            .scaledToFit()
-            .frame(width: UIScreen.main.bounds.width / 1.8)
-}
 
 
 //#Preview {

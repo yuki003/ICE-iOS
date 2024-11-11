@@ -14,6 +14,14 @@ final class GroupDetailViewModel: ViewModelBase {
     @Published var groupInfo: Group
     @Published var users: [User] = []
     @Published var selectedUser: User?
+    @Published var navToHostTaskActions: Bool = false
+    @Published var navToHostRewardsActions: Bool = false
+    @Published var navToRewardApply: Bool = false
+    @Published var navToTaskReport: Bool = false
+    @Published var selectedTask: Tasks?
+    @Published var selectedReward: Rewards?
+    @Published var groupPointHistory: GroupPointsHistory?
+    var point: Int = 0
     var invitationBaseText: String { """
 「ICE」アプリのグループ「\(groupInfo.groupName)」からの招待状です！
 グループのミッションを達成してポイントをゲット！
@@ -50,6 +58,8 @@ Link： ice://invite?code=\(groupInfo.id)
             try await getTasks()
             
             try await getRewords()
+            
+            try await getGroupHistory()
         })
     }
     
@@ -96,6 +106,21 @@ Link： ice://invite?code=\(groupInfo.id)
         }
     }
     
+    func getGroupHistory() async throws {
+        if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-user-points") || reload {
+            let pointPredicate = GroupPointsHistory.keys.userID.eq(userID)
+            let pointHistory = try await apiHandler.list(GroupPointsHistory.self, where: pointPredicate, keyName: "\(groupInfo.id)-rewards")
+            if !pointHistory.isEmpty {
+                self.groupPointHistory = pointHistory[0]
+            }
+        } else {
+            self.groupPointHistory = try apiHandler.decodeUserDefault(modelType: GroupPointsHistory.self, key: "\(groupInfo.id)-user-points")
+        }
+        
+        if let pointHistory = self.groupPointHistory {
+            point = pointHistory.amount
+        }
+    }
     @MainActor
     func reloadData() async throws {
         do {

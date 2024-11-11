@@ -20,7 +20,7 @@ dynamodb = boto3.resource('dynamodb')
 user_table = dynamodb.Table(user_table_name)
 group_table = dynamodb.Table(group_table_name)
 
-def lambda_handler(event, context):
+def handler(event, context):
     # DynamoDB Streamからレコードを取得
     for record in event['Records']:
         logger.info(f"Processing record: {record}")

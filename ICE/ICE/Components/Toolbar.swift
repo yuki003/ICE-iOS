@@ -23,7 +23,7 @@ struct DismissToolbar: ToolbarContent {
 }
 
 struct UserToolbar: ToolbarContent {
-    var userName: String?
+    var userName: String
     @Environment(\.dismiss) var dismiss
     var dismissExists: Bool
     var body: some ToolbarContent {
@@ -51,14 +51,11 @@ struct UserToolbar: ToolbarContent {
                     }
                 }
                 Thumbnail(type: ThumbnailType.user, aspect: 30)
+                Text(userName)
+                    .font(.system(size: 15, weight: .heavy))
+                    .frame(maxWidth: 200)
+                    .foregroundStyle(Color.black)
                     .loadingSkeleton(object: userName)
-                if let name = userName {
-                    Text("\(name)")
-                        .font(.system(size: 15, weight: .heavy))
-                        .frame(maxWidth: 200)
-                        .foregroundStyle(Color.black)
-                        .loadingSkeleton(object: userName)
-                }
             }
             .padding(.leading, 5)
         }

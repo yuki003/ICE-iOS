@@ -39,7 +39,7 @@ struct HomeView: View {
                 SignOutButton(auth: auth)
             }
             .popupAlert(prop: $vm.apiErrorPopAlertProp)
-            .userToolbar(userName: vm.userInfo?.userName)
+            .userToolbar(userName: vm.userName)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .task {
@@ -54,7 +54,7 @@ struct HomeView: View {
         .padding(.vertical)
         .padding(.horizontal, 15)
         .frame(maxWidth: screenWidth(), minHeight: 100, maxHeight: .infinity, alignment: .leading)
-        .roundedSection(color: Color(.jade))
+        .roundedBorder(color: Color(.jade))
     }
     @ViewBuilder
     func hostGroupSection() -> some View {
@@ -95,7 +95,7 @@ struct HomeView: View {
                     .foregroundStyle(Color.black.opacity(0.8))
                     .padding(5)
                     .frame(width: screenWidth(), height: 100, alignment: .center)
-                    .roundedSection(color: Color(.jade))
+                    .roundedBorder(color: Color(.jade))
                 /// イカしたスクロールを実装するのでpaddingで暫定対応
                     .padding(.horizontal)
             }
@@ -144,7 +144,7 @@ struct HomeView: View {
                     .foregroundStyle(Color.black.opacity(0.8))
                     .padding(5)
                     .frame(width: screenWidth(), height: 100, alignment: .center)
-                    .roundedSection(color: Color(.jade))
+                    .roundedBorder(color: Color(.jade))
                     .padding(.horizontal)
             }
         }

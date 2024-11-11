@@ -29,9 +29,9 @@ struct DestinationHolderView<Content:View>: View {
                     case .home:
                         HomeView(vm: .init())
                     case .groupDetail(let group):
-                        GroupDetailView(vm: .init(groupInfo: group), taskService: .init())
-                    case .createTask(let groupID):
-                        CreateTaskView(vm: .init(groupID: groupID))
+                        GroupDetailView(vm: .init(groupInfo: group), taskService: .init(), rewardService: .init())
+                    case .createTask(let groupID, let selected):
+                        CreateTaskView(vm: .init(groupID: groupID, selectedTask: selected))
                     case .createGroup:
                         CreateGroupView(vm: .init())
                     case .createReward(groupID: let groupID):
@@ -42,6 +42,8 @@ struct DestinationHolderView<Content:View>: View {
                         TaskReportView(vm: .init(task: task))
                     case .taskApproval(task: let task):
                         TaskApprovalView(vm: .init(task: task))
+                    case .rewardApproval(reward: let reward):
+                        RewardApprovalView(vm: .init(reward: reward), rewardService: .init())
                     }
                 }
         }

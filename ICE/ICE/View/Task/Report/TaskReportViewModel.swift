@@ -63,9 +63,9 @@ final class TaskReportViewModel: ViewModelBase {
     }
     @MainActor
     func repotTask() async throws {
-        isLoading = true
-        defer { isLoading = false }
         asyncOperation({ [self] in
+            isLoading = true
+            defer { isLoading = false }
             submitAlertProp.isPresented = false
             var baseKey = task.id
             var key: String = ""
@@ -160,34 +160,29 @@ final class TaskReportViewModel: ViewModelBase {
     
     @MainActor
     func deleteTaskReport() async throws {
-        isLoading = true
-        defer { isLoading = false }
         asyncOperation({ [self] in
+            isLoading = true
+            defer { isLoading = false }
             deleteAlertProp.isPresented = false
-            var baseKey = task.id
+            let baseKey = task.id
             var key: String = ""
-            var model = TaskReports(taskID: task.id, reportUserID: userID, status: ReportStatus.pending, reportVersion: (taskReports?.reportVersion ?? 0) + 1)
             if let taskReports = taskReports {
                 
                 if images.count > 0, images[0].isNotEmpty() {
-                    let image  = images[0]
                     key = baseKey + "pic1"
                     try await storage.deleteData(key: key)
                 }
                 
                 if images.count > 1, images[1].isNotEmpty() {
-                    let image  = images[1]
                     key = baseKey + "pic2"
                     try await storage.deleteData(key: key)
                 }
                 
                 if images.count > 2, images[2].isNotEmpty() {
-                    let image  = images[2]
                     key = baseKey + "pic3"
                     try await storage.deleteData(key: key)
                 }
-                try await apiHandler.delete(taskReports)
-                apiHandler.deleteUserDefault(keyName: "\(task.id)-report")
+                try await apiHandler.delete(taskReports, keyName: "\(task.id)-report")
                 
                 completedDeleteAlertProp.isPresented = true
                 

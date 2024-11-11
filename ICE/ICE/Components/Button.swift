@@ -8,24 +8,22 @@
 import SwiftUI
 import Amplify
 
-struct ClearButton: View {
+struct TextClearButton: View {
     @Binding var text: String
-    
     var body: some View {
         Button(action: {
             text = ""
         })
         {
-            Image(systemName: "xmark.circle.fill")
+            XMarkCircleFillIcon()
                 .foregroundColor(Color(.jade))
                 .font(.system(size: 12))
         }
     }
 }
-struct ClearIntButton: View {
+struct IntClearButton: View {
     @Binding var num: Int
     @Binding var text: String
-    
     var body: some View {
         Button(action: {
             if num != 0 {
@@ -34,7 +32,7 @@ struct ClearIntButton: View {
             }
         })
         {
-            Image(systemName: "xmark.circle.fill")
+            XMarkCircleFillIcon()
                 .foregroundColor(Color(.jade))
                 .font(.system(size: 12))
         }
@@ -42,7 +40,6 @@ struct ClearIntButton: View {
 }
 struct VisibilityToggleButton: View {
     @Binding var isSecured: Bool
-    
     var body: some View {
         Button(action: {
             isSecured.toggle()
@@ -68,7 +65,7 @@ struct SignInButton: View {
                 .foregroundStyle(Color(.indigo))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.indigo), lineWidth: 2))
+        .roundedBorder(color: Color(.indigo))
         .frame(width: commonButtonWidth())
     }
 }
@@ -87,7 +84,7 @@ struct SignUpButton: View {
                 .foregroundStyle(Color(.jade))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
+        .roundedBorder(color: Color(.jade))
         .frame(width: commonButtonWidth())
     }
 }
@@ -106,7 +103,7 @@ struct ConfirmSignUpButton: View {
                 .foregroundStyle(Color(.jade))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
+        .roundedBorder(color: Color(.jade))
         .frame(width: commonButtonWidth())
     }
 }
@@ -125,7 +122,7 @@ struct SignOutButton: View {
                 .foregroundStyle(Color(.jade))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
+        .roundedBorder(color: Color(.jade))
         .frame(width: commonButtonWidth())
     }
 }
@@ -144,7 +141,7 @@ struct BackButton: View {
                 .foregroundStyle(Color(.gray))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.gray), lineWidth: 2))
+        .roundedBorder(color: Color.gray)
         .frame(width: commonButtonWidth())
     }
 }
@@ -169,7 +166,7 @@ struct HostUserButton: View {
                 .foregroundStyle(Color(.indigo))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.indigo), lineWidth: 2))
+        .roundedBorder(color: Color(.indigo))
         .frame(width: commonButtonWidth())
     }
 }
@@ -193,7 +190,7 @@ struct GuestUserButton: View {
                 .foregroundStyle(Color(.jade))
         }
         .padding(8)
-        .background(RoundedRectangle(cornerRadius: 4).stroke(Color(.jade), lineWidth: 2))
+        .roundedBorder(color: Color(.jade))
         .frame(width: commonButtonWidth())
     }
 }

@@ -10,16 +10,7 @@
     "deploymentBucketName": {
       "Type": "String"
     },
-    "env": {
-      "Type": "String"
-    },
     "s3Key": {
-      "Type": "String"
-    },
-    "tasksTableName": {
-      "Type": "String"
-    },
-    "taskReportsTableName": {
       "Type": "String"
     },
     "apiiceGraphQLAPIIdOutput": {
@@ -33,6 +24,15 @@
     "apiiceGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiiceGraphQLAPIKeyOutput"
+    },
+    "env": {
+      "Type": "String"
+    },
+    "tasksTableName": {
+      "Type": "String"
+    },
+    "taskReportsTableName": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -82,9 +82,6 @@
         },
         "Environment": {
           "Variables": {
-            "ENV": {
-              "Ref": "env"
-            },
             "REGION": {
               "Ref": "AWS::Region"
             },
@@ -96,6 +93,9 @@
             },
             "API_ICE_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiiceGraphQLAPIKeyOutput"
+            },
+            "ENV": {
+              "Ref": "env"
             },
             "TASKS_TABLE_NAME": {
               "Ref": "tasksTableName"

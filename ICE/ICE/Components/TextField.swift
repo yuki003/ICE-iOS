@@ -21,7 +21,7 @@ struct UsernameTextField: View {
             .focused($focused, equals: .username)
             .keyboardType(.default)
             
-            ClearButton(text: $userName)
+            TextClearButton(text: $userName)
         }
         .padding(8)
         .background(RoundedRectangle(cornerRadius: 4).stroke(isFocused ? Color(.indigo) : Color.gray))
@@ -43,7 +43,7 @@ struct EmailTextField: View {
                 .focused($focused, equals: .email)
                 .keyboardType(.emailAddress)
             
-            ClearButton(text: $email)
+            TextClearButton(text: $email)
         }
         .padding(8)
         .background(RoundedRectangle(cornerRadius: 4).stroke(isFocused ? Color(.indigo) : Color.gray))
@@ -65,7 +65,7 @@ struct InvitedGroupTextField: View {
                 .focused($focused, equals: .invitedGroupID)
                 .keyboardType(.emailAddress)
             
-            ClearButton(text: $groupID)
+            TextClearButton(text: $groupID)
         }
         .padding(8)
         .background(RoundedRectangle(cornerRadius: 4).stroke(isFocused ? Color(.indigo) : Color.gray))
@@ -97,7 +97,7 @@ struct PasswordTextField: View {
             
             HStack(spacing: 5) {
                 VisibilityToggleButton(isSecured: $isSecured)
-                ClearButton(text: $password)
+                TextClearButton(text: $password)
             }
         }
         .padding(8)
@@ -121,7 +121,7 @@ struct ConfirmationCodeTextField: View {
                 .autocapitalization(.none)
                 .keyboardType(.emailAddress)
             
-            ClearButton(text: $code)
+            TextClearButton(text: $code)
         }
         .padding(8)
         .background(RoundedRectangle(cornerRadius: 4).stroke(isFocused ? Color(.indigo) : Color.gray))
@@ -153,7 +153,7 @@ struct UnderLineTextField: View {
                     .autocapitalization(.none)
                     .keyboardType(.emailAddress)
                 
-                ClearButton(text: $text)
+                TextClearButton(text: $text)
             }
             .padding(8)
             Rectangle()
@@ -191,7 +191,7 @@ struct UnderLineNumField: View {
                     .autocapitalization(.none)
                     .keyboardType(.emailAddress)
                 
-                ClearIntButton(num: $num, text: $fieldValue)
+                IntClearButton(num: $num, text: $fieldValue)
             }
             .padding(8)
             Rectangle()

@@ -24,40 +24,40 @@
           "userTableName": "User-osqdzys545b2jhvrdngnvdt57i-dev",
           "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateGroup-5666676d7237596f4651-build.zip"
+          "s3Key": "amplify-builds/iceCreateGroup-7979587a6269654e3444-build.zip"
         },
         "iceCreateTasks": {
           "env": "dev",
           "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
           "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateTasks-524842505a324d415135-build.zip"
+          "s3Key": "amplify-builds/iceCreateTasks-725a5344774a6167306b-build.zip"
         },
         "iceCreateMemberUser": {
           "env": "dev",
           "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateMemberUser-31624c75574f70644939-build.zip"
+          "s3Key": "amplify-builds/iceCreateMemberUser-5837666c6a553331385a-build.zip"
         },
         "iceCreateRewards": {
           "env": "dev",
           "groupTableName": "Group-osqdzys545b2jhvrdngnvdt57i-dev",
           "rewardsTableName": "Rewards-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateRewards-75647452596b4a707158-build.zip"
+          "s3Key": "amplify-builds/iceCreateRewards-65366d346f4745383562-build.zip"
         },
         "iceCreateAndUpdateTaskReports": {
           "env": "dev",
           "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
           "taskReportsTableName": "TaskReports-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceCreateAndUpdateTaskReports-7a6b5a694f7677584f6b-build.zip"
+          "s3Key": "amplify-builds/iceCreateAndUpdateTaskReports-454c756736416938634d-build.zip"
         },
         "iceTaskApproval": {
           "env": "dev",
           "tasksTableName": "Tasks-osqdzys545b2jhvrdngnvdt57i-dev",
           "deploymentBucketName": "amplify-ice-dev-165429-deployment",
-          "s3Key": "amplify-builds/iceTaskApproval-4a6b4d416d6766375236-build.zip"
+          "s3Key": "amplify-builds/iceTaskApproval-49585667614e6f41734a-build.zip"
         }
       },
       "storage": {
@@ -93,30 +93,41 @@
           "userTableName": "User-ncesakvf3veofbfk64el5p6sd4-prod",
           "groupTableName": "Group-ncesakvf3veofbfk64el5p6sd4-prod",
           "deploymentBucketName": "amplify-ice-prod-165724-deployment",
-          "s3Key": "amplify-builds/iceCreateGroup-5666676d7237596f4651-build.zip"
+          "s3Key": "amplify-builds/iceCreateGroup-7979587a6269654e3444-build.zip"
         },
         "iceCreateTasks": {
           "env": "prod",
           "groupTableName": "Group-ncesakvf3veofbfk64el5p6sd4-prod",
           "tasksTableName": "Tasks-ncesakvf3veofbfk64el5p6sd4-prod",
           "deploymentBucketName": "amplify-ice-prod-165724-deployment",
-          "s3Key": "amplify-builds/iceCreateTasks-42353657757177464c38-build.zip"
+          "s3Key": "amplify-builds/iceCreateTasks-725a5344774a6167306b-build.zip"
         },
         "iceCreateMemberUser": {
           "env": "prod",
           "groupTableName": "Group-ncesakvf3veofbfk64el5p6sd4-prod",
           "deploymentBucketName": "amplify-ice-prod-165724-deployment",
-          "s3Key": "amplify-builds/iceCreateMemberUser-31624c75574f70644939-build.zip"
+          "s3Key": "amplify-builds/iceCreateMemberUser-5837666c6a553331385a-build.zip"
         },
         "iceCreateRewards": {
           "env": "prod",
           "groupTableName": "Group-ncesakvf3veofbfk64el5p6sd4-prod",
           "rewardsTableName": "Rewards-ncesakvf3veofbfk64el5p6sd4-prod",
           "deploymentBucketName": "amplify-ice-prod-165724-deployment",
-          "s3Key": "amplify-builds/iceCreateRewards-75647452596b4a707158-build.zip"
+          "s3Key": "amplify-builds/iceCreateRewards-65366d346f4745383562-build.zip"
         },
-        "iceCreateAndUpdateTaskReports": {},
-        "iceTaskApproval": {}
+        "iceCreateAndUpdateTaskReports": {
+          "deploymentBucketName": "amplify-ice-prod-165724-deployment",
+          "s3Key": "amplify-builds/iceCreateAndUpdateTaskReports-454c756736416938634d-build.zip",
+          "env": "prod",
+          "tasksTableName": "Tasks-ncesakvf3veofbfk64el5p6sd4-prod",
+          "taskReportsTableName": "TaskReports-ncesakvf3veofbfk64el5p6sd4-prod"
+        },
+        "iceTaskApproval": {
+          "env": "prod",
+          "tasksTableName": "Tasks-ncesakvf3veofbfk64el5p6sd4-prod",
+          "deploymentBucketName": "amplify-ice-prod-165724-deployment",
+          "s3Key": "amplify-builds/iceTaskApproval-49585667614e6f41734a-build.zip"
+        }
       },
       "storage": {
         "iceDev": {}

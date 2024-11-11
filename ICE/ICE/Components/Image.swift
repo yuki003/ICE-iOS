@@ -8,6 +8,15 @@
 import SwiftUI
 import Kingfisher
 
+struct Icon: View {
+    var body: some View {
+        Image(.logo)
+            .resizable()
+            .scaledToFit()
+            .frame(width: UIScreen.main.bounds.width / 1.8)
+    }
+}
+
 struct DefaultUserThumbnail: View {
     let color: Color
     var aspect: CGFloat
@@ -48,10 +57,10 @@ struct DefaultRewardThumbnail: View {
     var body: some View {
         Image(.reward)
             .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(width: aspect, height: aspect)
             .foregroundStyle(Color(.indigo))
-            .padding()
+            .padding(5)
+            .frame(width: aspect, height: aspect)
+            .aspectRatio(contentMode: .fill)
             .background()
             .clipShape(Circle())
             .overlay(Circle().stroke(Color(.indigo), lineWidth: 2))
@@ -215,6 +224,5 @@ struct CameraOnRectangleIcon: View {
 struct XMarkCircleFillIcon: View {
     var body: some View {
         Image(systemName: "xmark.circle.fill")
-            .resizable()
     }
 }

@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 
 extension View {
+    
+    // width
     func deviceWidth() -> CGFloat{
         return UIScreen.main.bounds.width
     }
@@ -29,11 +31,12 @@ extension View {
         return UIScreen.main.bounds.width / 1.7
     }
     
+    // tool bar
     func dismissToolbar<Content: ToolbarContent>(@ToolbarContentBuilder content: @escaping () -> Content) -> some View {
         modifier(DismissToolbarModifier(toolbar: content))
     }
     
-    func userToolbar(userName: String?, dismissExists: Bool = false) -> some View {
+    func userToolbar(userName: String = "ユーザー", dismissExists: Bool = false) -> some View {
         modifier(UserToolbarModifier(userName: userName, dismissExists: dismissExists))
     }
     
@@ -41,16 +44,18 @@ extension View {
         self.modifier(DismissButtonModifier())
     }
     
+    // validation
     func validation(_ publisher: AnyPublisher<Validation, Never>, alignmentCenter: Bool = false) -> some View {
         modifier(ValidationModifier(publisher: publisher, alignmentCenter: alignmentCenter ))
     }
     
+    // loading
     func loading(isLoading: Binding<Bool>) -> some View {
         modifier(LoadingModifier(isLoading: isLoading))
     }
     
-    func roundedSection(color: Color) -> some View {
-        modifier(RoundedSectionModifier(color: color))
+    func roundedBorder(color: Color) -> some View {
+        modifier(RoundedBorderModifier(color: color))
     }
     
     func popupActionAlert(prop: Binding<PopupAlertProperties>, actionLabel: String = "実行") -> some View {

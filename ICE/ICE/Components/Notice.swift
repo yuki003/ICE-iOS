@@ -31,7 +31,7 @@ struct CurrentActivityNotice: View {
             .frame(width: screenWidth())
             .foregroundStyle(Color(.indigo))
             .background()
-            .roundedSection(color: Color(.indigo))
+            .roundedBorder(color: Color(.indigo))
         }
     }
 }

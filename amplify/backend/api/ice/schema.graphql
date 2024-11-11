@@ -80,6 +80,8 @@ type Rewards @model {
   thumbnailKey: String
   frequencyType: FrequencyType!
   whoGetsPaid: WhoGetsPaid!
+  appliedUserIDs: [String]
+  rejectedUserIDs: [String]
   getUserID: [String]
   cost: Int!
   groupID: String!

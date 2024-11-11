@@ -18,6 +18,7 @@ final class TaskListViewModel: ViewModelBase {
     @Published var receiveTaskOrder: Bool = false
     @Published var navToTaskReport: Bool = false
     @Published var navToTaskHistory: Bool = false
+    @Published var navToHostTaskActions: Bool = false
     
     // MARK: Instances
     @Published var tasks: [Tasks]
@@ -35,17 +36,4 @@ final class TaskListViewModel: ViewModelBase {
         asyncOperation({ [self] in
         })
     }
-//    @MainActor
-//    func taskButtonAction(_ status: BelongingTaskStatus, _ task: Tasks) {
-//        selectedTask = task
-//        switch status {
-//        case .accept:
-//            receiveTaskOrder = true
-//        case .receiving:
-//            navToTaskReport = true
-//        case .completed:
-//            navToTaskReport = true
-//        }
-//    }
 }
-

@@ -75,7 +75,7 @@ struct CreateGroupView: View {
         }
         .popupActionAlert(prop: $createGroupAlertProp, actionLabel: "作成")
         .popupAlert(prop: $vm.apiErrorPopAlertProp)
-        .userToolbar(userName: "ユーザー", dismissExists: true)
+        .userToolbar(dismissExists: true)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onTapGesture {
@@ -94,8 +94,3 @@ struct CreateGroupView: View {
         }
     }
 }
-
-
-//#Preview{
-//    HomeView(vm: .init())
-//}

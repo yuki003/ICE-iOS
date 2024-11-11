@@ -70,6 +70,17 @@ extension AmplifyAuthError: LocalizedError {
     }
 }
 
+enum AmplifyStorageError: Error {
+    case uploadFailed
+}
+extension AmplifyStorageError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .uploadFailed:
+            return "画像アップロードに失敗しました。"
+        }
+    }
+}
 enum DeveloperError {
     case userDefaultKeyDuplicated
 }

@@ -17,7 +17,7 @@ struct TaskListView: View {
             VStack {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 10) {
-                        taskService.taskListBuilder(vm.tasks, router)
+                        taskService.taskListBuilder(vm.tasks, $vm.selectedTask, $vm.navToHostTaskActions)
                     }
                     .padding(.vertical)
                     .frame(width: deviceWidth())
@@ -33,7 +33,7 @@ struct TaskListView: View {
                 await vm.loadData()
             }
             .popupAlert(prop: $vm.apiErrorPopAlertProp)
-            .userToolbar(userName: nil, dismissExists: true)
+            .userToolbar(userName: vm.userName, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
         }

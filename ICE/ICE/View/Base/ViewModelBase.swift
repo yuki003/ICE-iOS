@@ -18,11 +18,14 @@ class ViewModelBase: ObservableObject {
     // MARK: Properties
     @Published var formValid: Validation = .failed()
     @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
+    @Published var userName: String = UserDefaults.standard.string(forKey: "userName") ?? ""
     @Published var asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
     @Published var alertMessage: String?
     @Published var apiErrorPopAlertProp: PopupAlertProperties = .init(title: "操作エラー", text: "操作をやり直してください。")
     var publishers = Set<AnyCancellable>()
     let jsonDecoder = JSONDecoder()
+    let rewardsKeys = Rewards.keys
+    let userKeys = User.keys
     
     // MARK: Flags
     @Published var reload = false
@@ -42,7 +45,8 @@ class ViewModelBase: ObservableObject {
     func asyncOperation(_ operation: @escaping () async throws -> Void,
                         apiErrorHandler: @escaping APIErrorHandler = {_ in },
                         errorHandler: @escaping ErrorHandler = {_ in }) {
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             do {
                 if userID.isEmpty {
                     let userInfo = try await Amplify.Auth.getCurrentUser()

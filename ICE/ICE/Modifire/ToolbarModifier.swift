@@ -36,7 +36,7 @@ struct DismissButtonModifier: ViewModifier {
 }
 
 struct UserToolbarModifier: ViewModifier {
-    let userName: String?
+    let userName: String
     var dismissExists: Bool
     func body(content: Content) -> some View {
         content

@@ -66,6 +66,7 @@
 		B65C8E9F2B0870270083080D /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C8E9E2B0870270083080D /* GroupDetailView.swift */; };
 		B65C8EA12B0870480083080D /* GroupDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C8EA02B0870480083080D /* GroupDetailViewModel.swift */; };
 		B6637D9B2C5772FE00E457FB /* LoadingSkeletonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6637D9A2C5772FE00E457FB /* LoadingSkeletonModifier.swift */; };
+		B677F5482CA8324600367577 /* RewardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B677F5472CA8324600367577 /* RewardService.swift */; };
 		B6812E2B2B3964E8007D8C65 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6812E2A2B3964E8007D8C65 /* ActivityViewController.swift */; };
 		B68565BB2AE94CE3002C8413 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68565BA2AE94CE3002C8413 /* Loading.swift */; };
 		B68565BD2AE94EBA002C8413 /* LoadingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68565BC2AE94EBA002C8413 /* LoadingModifier.swift */; };
@@ -105,6 +106,8 @@
 		B6F2C0512ADC225900960084 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F2C04F2ADC225900960084 /* TextField.swift */; };
 		B6F2C0522ADC225900960084 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F2C0502ADC225900960084 /* Button.swift */; };
 		B6F4EC192B3FFC6500BB8575 /* amplifyconfiguration_dev.json in Resources */ = {isa = PBXBuildFile; fileRef = B6F4EC182B3FFC6500BB8575 /* amplifyconfiguration_dev.json */; };
+		B6F504CF2CC67E50007FDB20 /* RewardApprovalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F504CE2CC67E50007FDB20 /* RewardApprovalView.swift */; };
+		B6F504D12CC67E5F007FDB20 /* RewardApprovalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F504D02CC67E5F007FDB20 /* RewardApprovalViewModel.swift */; };
 		B6FEEA262AFC8D5B0040725E /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FEEA252AFC8D5B0040725E /* Label.swift */; };
 		B6FEEA2D2AFCBAF10040725E /* ViewModelBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FEEA2C2AFCBAF10040725E /* ViewModelBase.swift */; };
 /* End PBXBuildFile section */
@@ -186,6 +189,7 @@
 		B65C8E9E2B0870270083080D /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		B65C8EA02B0870480083080D /* GroupDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewModel.swift; sourceTree = "<group>"; };
 		B6637D9A2C5772FE00E457FB /* LoadingSkeletonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSkeletonModifier.swift; sourceTree = "<group>"; };
+		B677F5472CA8324600367577 /* RewardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardService.swift; sourceTree = "<group>"; };
 		B6812E2A2B3964E8007D8C65 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		B68565BA2AE94CE3002C8413 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		B68565BC2AE94EBA002C8413 /* LoadingModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingModifier.swift; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 		B6F2C04F2ADC225900960084 /* TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		B6F2C0502ADC225900960084 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		B6F4EC182B3FFC6500BB8575 /* amplifyconfiguration_dev.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration_dev.json; sourceTree = "<group>"; };
+		B6F504CE2CC67E50007FDB20 /* RewardApprovalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardApprovalView.swift; sourceTree = "<group>"; };
+		B6F504D02CC67E5F007FDB20 /* RewardApprovalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardApprovalViewModel.swift; sourceTree = "<group>"; };
 		B6FEEA252AFC8D5B0040725E /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		B6FEEA2C2AFCBAF10040725E /* ViewModelBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelBase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -261,6 +267,7 @@
 		B611603C2B29583C00489E95 /* Reward */ = {
 			isa = PBXGroup;
 			children = (
+				B6F504CD2CC67E36007FDB20 /* Approval */,
 				B611603D2B29587F00489E95 /* CreateRewards */,
 			);
 			path = Reward;
@@ -291,9 +298,9 @@
 		B61BE9602ADD29C0003BC55B /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				B61BE9612ADD29E0003BC55B /* AmplifyAuthService.swift */,
-				B6B49DAE2AFB2F9F00CF0E6A /* AmplifyStorageService.swift */,
+				B677F5452CA8321100367577 /* Amplify */,
 				B62AAE132B099E19004862F2 /* API */,
+				B677F5462CA8321D00367577 /* Models */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -405,7 +412,6 @@
 		B62AAE132B099E19004862F2 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				B62AAE1C2B09A1E4004862F2 /* TaskService.swift */,
 				B62AAE1E2B09A24E004862F2 /* APIService.swift */,
 			);
 			path = API;
@@ -487,6 +493,24 @@
 			path = GroupDetail;
 			sourceTree = "<group>";
 		};
+		B677F5452CA8321100367577 /* Amplify */ = {
+			isa = PBXGroup;
+			children = (
+				B61BE9612ADD29E0003BC55B /* AmplifyAuthService.swift */,
+				B6B49DAE2AFB2F9F00CF0E6A /* AmplifyStorageService.swift */,
+			);
+			path = Amplify;
+			sourceTree = "<group>";
+		};
+		B677F5462CA8321D00367577 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B62AAE1C2B09A1E4004862F2 /* TaskService.swift */,
+				B677F5472CA8324600367577 /* RewardService.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		B6812E292B3964C5007D8C65 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -498,15 +522,15 @@
 		B6865FAF2AD8258A003C9CFF /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B650B4502B6A486700CF5BF5 /* Camera */,
-				B6FEEA2B2AFCBADE0040725E /* Base */,
 				B62C9C952AE5116E0048A166 /* RootView.swift */,
 				B6B9E7D32AE9F3520056D175 /* NavigationLink.swift */,
 				B6F2C03B2ADC220C00960084 /* Auth */,
-				B61BE9682AE0B67D003BC55B /* Home */,
+				B6FEEA2B2AFCBADE0040725E /* Base */,
+				B650B4502B6A486700CF5BF5 /* Camera */,
 				B6BD49A52AF0F1F500349C7A /* Group */,
-				B6BD49A62AF0F20700349C7A /* Task */,
+				B61BE9682AE0B67D003BC55B /* Home */,
 				B611603C2B29583C00489E95 /* Reward */,
+				B6BD49A62AF0F20700349C7A /* Task */,
 				B6BD49A72AF0F21400349C7A /* Template */,
 			);
 			path = View;
@@ -598,6 +622,15 @@
 				B6F2C03E2ADC221B00960084 /* AuthViewModel.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		B6F504CD2CC67E36007FDB20 /* Approval */ = {
+			isa = PBXGroup;
+			children = (
+				B6F504CE2CC67E50007FDB20 /* RewardApprovalView.swift */,
+				B6F504D02CC67E5F007FDB20 /* RewardApprovalViewModel.swift */,
+			);
+			path = Approval;
 			sourceTree = "<group>";
 		};
 		B6FEEA2B2AFCBADE0040725E /* Base */ = {
@@ -771,6 +804,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6F504D12CC67E5F007FDB20 /* RewardApprovalViewModel.swift in Sources */,
 				B6BD49AE2AF0FAD000349C7A /* CreateGroupView.swift in Sources */,
 				B646BD2C2B59161F002FC9B4 /* Status.swift in Sources */,
 				B6F2C0402ADC221B00960084 /* AuthViewModel.swift in Sources */,
@@ -791,6 +825,7 @@
 				B635F5542B5793F3009F63D1 /* TaskListView.swift in Sources */,
 				B6B9E7EE2AEF37350056D175 /* Group+Schema.swift in Sources */,
 				B635F5562B579405009F63D1 /* TaskListViewModel.swift in Sources */,
+				B677F5482CA8324600367577 /* RewardService.swift in Sources */,
 				B6BD45C92B26EE13000296E4 /* PageRouter.swift in Sources */,
 				B62AAE222B0B4078004862F2 /* CreateTaskView.swift in Sources */,
 				B62AAE1A2B09A161004862F2 /* Tasks.swift in Sources */,
@@ -836,6 +871,7 @@
 				B62AAE2F2B144D39004862F2 /* General.swift in Sources */,
 				B6B49DB12AFB30E900CF0E6A /* Int+.swift in Sources */,
 				B650B4522B6A487700CF5BF5 /* CameraView.swift in Sources */,
+				B6F504CF2CC67E50007FDB20 /* RewardApprovalView.swift in Sources */,
 				B646BD292B590F0F002FC9B4 /* GroupPointsHistory.swift in Sources */,
 				B635F5512B56608A009F63D1 /* Date+.swift in Sources */,
 				B646BD282B590F0F002FC9B4 /* ReportStatus.swift in Sources */,
