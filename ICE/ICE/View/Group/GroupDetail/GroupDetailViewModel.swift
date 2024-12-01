@@ -38,7 +38,7 @@ Link： ice://invite?code=\(groupInfo.id)
     
     @Published var tasks: [Tasks] = []
     var latestTasks: [Tasks] {
-        Array(tasks.sorted(by: { $0.updatedAt?.foundationDate ?? Date() > $1.updatedAt?.foundationDate ?? Date() }).prefix(3))
+        Array(tasks.sorted(by: { $0.updatedAt?.foundationDate ?? Date() > $1.updatedAt?.foundationDate ?? Date()}).prefix(3))
     }
     
     @Published var rewards: [Rewards] = []
@@ -109,7 +109,7 @@ Link： ice://invite?code=\(groupInfo.id)
     func getGroupHistory() async throws {
         if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-user-points") || reload {
             let pointPredicate = GroupPointsHistory.keys.userID.eq(userID)
-            let pointHistory = try await apiHandler.list(GroupPointsHistory.self, where: pointPredicate, keyName: "\(groupInfo.id)-rewards")
+            let pointHistory = try await apiHandler.list(GroupPointsHistory.self, where: pointPredicate, keyName: "\(groupInfo.id)-user-points")
             if !pointHistory.isEmpty {
                 self.groupPointHistory = pointHistory[0]
             }

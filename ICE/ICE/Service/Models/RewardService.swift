@@ -78,11 +78,11 @@ final class RewardService: ViewModelBase {
     
     // MARK: View Builder
     @ViewBuilder
-    func rewardListBuilder(_ rewardList:[Rewards], _ selected: Binding<Rewards?>, _ navTo: Binding<Bool>, _ point: Int) -> some View {
+    func rewardListBuilder(_ rewardList:[Rewards], _ selected: Binding<Rewards?>, _ navTo: Binding<Bool>, _ point: Int, _ reload: Binding<Bool>) -> some View {
         ForEach(rewardList.indices, id: \.self) { index in
             let reward = rewardList[index]
             let status = RewardStatus.init(reward)
-            PendingRewardRow(reward: reward, selected: selected, navTo: navTo,
+            PendingRewardRow(reward: reward, selected: selected, navTo: navTo, reload: reload,
                              action: {
                 // apply action for guest
                 if status == .applied {

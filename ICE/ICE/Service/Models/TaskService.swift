@@ -39,15 +39,15 @@ final class TaskService: ViewModelBase {
     }
     
     @ViewBuilder
-    func taskListBuilder(_ taskList:[Tasks], _ selected: Binding<Tasks?>, _ navTo: Binding<Bool>) -> some View {
+    func taskListBuilder(_ taskList:[Tasks], _ selected: Binding<Tasks?>, _ navTo: Binding<Bool>, _ reload: Binding<Bool>) -> some View {
         ForEach(taskList.indices, id: \.self) { index in
             let task = taskList[index]
             let status = TaskStatus.init(task)
-            TaskRow(task: task, selected: selected, navTo: navTo, action: {
+            TaskRow(task: task, selected: selected, navTo: navTo, reload: reload, action: {
                 self.selectedTask = task
                 self.receiveConfirmAlertProp.action = {Task { await self.receiveTaskOrder(groupID: task.groupID)}}
                 self.receiveConfirmAlertProp.isPresented = true
-            }, asHost: self.asHost, status: status)
+            }, status: status)
             .padding(.leading, 10)
         }
     }

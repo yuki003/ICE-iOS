@@ -41,22 +41,22 @@ struct CreateRewardsView: View {
                         WhoGetsPaidPicker(whoGetsPaid: $vm.whoGetsPaid)
                         
                         //setting frequency
-                        FrequencyPicker(label: "くりかえし", frequencyType: $vm.frequencyType)
-                        
-                        VStack(spacing: 10) {
-                            Toggle(isOn: $vm.isLimited) {
-                                HStack {
-                                    SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
-                                    
-                                    Spacer()}
-                            }
-                            .toggleStyle(SwitchToggleStyle(tint: Color(.indigo)))
-                            .padding(.trailing)
-                            
-                            if vm.isLimited {
-                                PeriodPicker(start: $vm.startDate, end: $vm.endDate)
-                            }
-                        }
+//                        FrequencyPicker(label: "くりかえし", frequencyType: $vm.frequencyType)
+//                        
+//                        VStack(spacing: 10) {
+//                            Toggle(isOn: $vm.isLimited) {
+//                                HStack {
+//                                    SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
+//                                    
+//                                    Spacer()}
+//                            }
+//                            .toggleStyle(SwitchToggleStyle(tint: Color(.indigo)))
+//                            .padding(.trailing)
+//                            
+//                            if vm.isLimited {
+//                                PeriodPicker(start: $vm.startDate, end: $vm.endDate)
+//                            }
+//                        }
                         
                         Spacer()
                         
@@ -76,10 +76,6 @@ struct CreateRewardsView: View {
                             ActionWithFlagFillButton(label: vm.isEdit ? "リワードを編集" : "リワードを作成", action: { vm.confirmRewardAlertProp.action = vm.createReward }, color: Color(vm.isEdit ? .indigo : .jade), flag: $vm.confirmRewardAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
                                 .padding(.vertical)
                             
-                        }
-                        if !vm.confirmRewardAlertProp.isPresented {
-                            ActionWithFlagFillButton(label: "リワードを作成", action: {vm.confirmRewardAlertProp.action = vm.createReward }, color: Color(.jade), flag: $vm.confirmRewardAlertProp.isPresented, condition: vm.formValid.isSuccess == false)
-                                .padding(.vertical)
                         }
                     }
                     .padding(.vertical)
@@ -111,11 +107,6 @@ struct CreateRewardsView: View {
         .popupDismissAndActionAlert(prop: $vm.completeRewardAlertProp, dismissLabel: "戻る", actionLabel: "新規作成")
         .popupAlert(prop: $vm.apiErrorPopAlertProp)
         .loading(isLoading: $vm.isLoading)
-    }
-    @ViewBuilder
-    func hooSection() -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-        }
     }
 }
 

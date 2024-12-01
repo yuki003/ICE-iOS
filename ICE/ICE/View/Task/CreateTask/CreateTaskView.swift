@@ -66,19 +66,19 @@ struct CreateTaskView: View {
                     }
                     
                     //setting frequency
-                    FrequencyPicker(label: "くりかえし", frequencyType: $vm.frequencyType)
-                    
-                    VStack(spacing: 10) {
-                        Toggle(isOn: $vm.isLimited) {
-                            SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
-                        }
-                        .toggleStyle(SwitchToggleStyle(tint: Color(.indigo)))
-                        .padding(.trailing)
-                        
-                        if vm.isLimited {
-                            PeriodPicker(start: $vm.startDate, end: $vm.endDate)
-                        }
-                    }
+//                    FrequencyPicker(label: "くりかえし", frequencyType: $vm.frequencyType)
+//                    
+//                    VStack(spacing: 10) {
+//                        Toggle(isOn: $vm.isLimited) {
+//                            SectionLabel(text: "スケジューリング", font: .callout.bold(), color: Color(.indigo), width: 3)
+//                        }
+//                        .toggleStyle(SwitchToggleStyle(tint: Color(.indigo)))
+//                        .padding(.trailing)
+//                        
+//                        if vm.isLimited {
+//                            PeriodPicker(start: $vm.startDate, end: $vm.endDate)
+//                        }
+//                    }
                     Spacer()
                     HStack(spacing: 10) {
                         if vm.isEdit {

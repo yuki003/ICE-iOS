@@ -17,7 +17,7 @@ struct TaskListView: View {
             VStack {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 10) {
-                        taskService.taskListBuilder(vm.tasks, $vm.selectedTask, $vm.navToHostTaskActions)
+                        taskService.taskListBuilder(vm.tasks, $vm.selectedTask, $vm.navToHostTaskActions, $vm.reload)
                     }
                     .padding(.vertical)
                     .frame(width: deviceWidth())

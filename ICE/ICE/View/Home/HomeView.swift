@@ -18,9 +18,6 @@ struct HomeView: View {
             VStack {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 10) {
-                        CurrentActivityNotice(message: "test notice", isShowNotice: $vm.isShowNotice, nav: $vm.navNotice)
-                            .padding(.top)
-                        currentActivitySection()
                         if vm.asHost {
                             hostGroupSection()
                                 .padding(.top, 10)
@@ -47,15 +44,7 @@ struct HomeView: View {
             }
         }
     }
-    @ViewBuilder
-    func currentActivitySection() -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-        }
-        .padding(.vertical)
-        .padding(.horizontal, 15)
-        .frame(maxWidth: screenWidth(), minHeight: 100, maxHeight: .infinity, alignment: .leading)
-        .roundedBorder(color: Color(.jade))
-    }
+    
     @ViewBuilder
     func hostGroupSection() -> some View {
         VStack(alignment: .leading, spacing: 10) {

@@ -80,6 +80,7 @@ struct TaskReportView: View {
             .popupActionAlert(prop: $vm.submitAlertProp, actionLabel: "報告")
             .popupActionAlert(prop: $vm.deleteAlertProp, actionLabel: "取り消す")
             .popupActionAlert(prop: $imageDeleteAlertProp, actionLabel: "削除")
+            .popupAlert(prop: $vm.completedDeleteAlertProp)
             .popupDismissAlert(prop: $vm.completedSubmitAlertProp)
             .popupAlert(prop: $vm.apiErrorPopAlertProp)
             .confirmationDialog("", isPresented: $isShowConfirmation) {

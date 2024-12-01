@@ -145,12 +145,13 @@ struct GroupDetailView: View {
                     SectionLabel(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
+                        vm.selectedTask = nil
                         vm.navToHostTaskActions = true
                     })
                 }
             }
             if vm.latestTasks.count > 0 {
-                taskService.taskListBuilder(vm.latestTasks, $vm.selectedTask, vm.asHost ? $vm.navToHostTaskActions : $vm.navToTaskReport)
+                taskService.taskListBuilder(vm.latestTasks, $vm.selectedTask, vm.asHost ? $vm.navToHostTaskActions : $vm.navToTaskReport, $vm.reload)
             } else {
                 Text("タスクを設定しましょう！")
                     .font(.callout.bold())
@@ -184,12 +185,13 @@ struct GroupDetailView: View {
                     SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
+                        vm.selectedReward = nil
                         vm.navToHostRewardsActions = true
                     })
                 }
             }
             if vm.latestRewards.count > 0 {
-                rewardService.rewardListBuilder(vm.latestRewards, $vm.selectedReward, vm.asHost ? $vm.navToHostRewardsActions : $vm.navToRewardApply, vm.point)
+                rewardService.rewardListBuilder(vm.latestRewards, $vm.selectedReward, vm.asHost ? $vm.navToHostRewardsActions : $vm.navToRewardApply, vm.point, $vm.reload)
             } else {
                 Text("リワードを設定しましょう！")
                     .font(.callout.bold())

@@ -13,8 +13,9 @@ struct TaskRow: View {
     @Binding var selected: Tasks?
     @State var isOpen: Bool = false
     @Binding var navTo: Bool
+    @Binding var reload: Bool
     let action: () async throws -> Void
-    let asHost: Bool
+    let asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
     var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
     var status: TaskStatus
     @EnvironmentObject var router: PageRouter
@@ -85,10 +86,14 @@ struct TaskRow: View {
                     if asHost {
                         HStack(spacing: 20) {
                             if task.hasPendingReport {
-                                ActionFillButton(label: "レポート確認", action: {router.path.append(NavigationPathType.taskApproval(task: task))}, color: Color(.indigo))
+                                ActionFillButton(label: "レポート確認", action: {
+                                    isOpen = false
+                                    router.path.append(NavigationPathType.taskApproval(task: task))}, color: Color(.indigo))
                                     .frame(width: (screenWidth() - 84) / 2)
                             } else if status == .accept {
-                                ActionFillButton(label: "編集する", action:{ rowNavigation() }, color: Color(.indigo))
+                                ActionFillButton(label: "編集する", action:{
+                                    isOpen = false
+                                    rowNavigation() }, color: Color(.indigo))
                                     .frame(width: (screenWidth() - 84) / 2)
                             }
                             ActionFillButton(label: "インサイト", action:{
@@ -244,6 +249,7 @@ struct PendingRewardRow: View {
     @Binding var selected: Rewards?
     @State var isOpen: Bool = false
     @Binding var navTo: Bool
+    @Binding var reload: Bool
     let action: () async throws -> Void
     let asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
     let userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
@@ -306,10 +312,15 @@ struct PendingRewardRow: View {
                     if asHost {
                         HStack(spacing: 20) {
                             if status == .applied {
-                                ActionFillButton(label: "申請確認", action:{ router.path.append(NavigationPathType.rewardApproval(reward: reward)) }, color: Color(.indigo))
+                                ActionFillButton(label: "申請確認", action:{
+                                    isOpen = false
+                                    router.path.append(NavigationPathType.rewardApproval(reward: reward)) }, color: Color(.indigo))
                                     .frame(width: (screenWidth() - 84) / 2)
                             } else if status == .none {
-                                ActionFillButton(label: "編集する", action:{ rowNavigation() }, color: Color(.indigo))
+                                ActionFillButton(label: "編集する", action:{
+                                    isOpen = false
+                                    rowNavigation()
+                                }, color: Color(.indigo))
                                     .frame(width: (screenWidth() - 84) / 2)
                             }
                             ActionFillButton(label: "インサイト", action:{

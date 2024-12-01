@@ -184,6 +184,10 @@ final class TaskReportViewModel: ViewModelBase {
                 }
                 try await apiHandler.delete(taskReports, keyName: "\(task.id)-report")
                 
+                task.hasPendingReport = false
+                task.receivingUserIDs!.removeAll(where: { $0 == userID })
+                try await apiHandler.update(task, keyName: "\(task.groupID)-tasks")
+                
                 completedDeleteAlertProp.isPresented = true
                 
             }
