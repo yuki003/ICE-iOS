@@ -70,6 +70,7 @@
 		B6812E2B2B3964E8007D8C65 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6812E2A2B3964E8007D8C65 /* ActivityViewController.swift */; };
 		B68565BB2AE94CE3002C8413 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68565BA2AE94CE3002C8413 /* Loading.swift */; };
 		B68565BD2AE94EBA002C8413 /* LoadingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68565BC2AE94EBA002C8413 /* LoadingModifier.swift */; };
+		B696E8AD2CFCA16800FA8090 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B696E8AC2CFCA16800FA8090 /* FirebaseFirestore */; };
 		B69A76C32AE3B6EF009228EC /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69A76C22AE3B6EF009228EC /* Validation.swift */; };
 		B6A2F26C2B02216800F779CC /* GroupComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A2F26B2B02216800F779CC /* GroupComponent.swift */; };
 		B6A71B512B25965200B9E938 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B6A71B502B25965200B9E938 /* Kingfisher */; };
@@ -244,6 +245,7 @@
 				B64E1CD32AD38CC500A876CC /* Amplify in Frameworks */,
 				B64E1CCF2AD38CC500A876CC /* AWSCognitoAuthPlugin in Frameworks */,
 				B64E1CD12AD38CC500A876CC /* AWSPluginsCore in Frameworks */,
+				B696E8AD2CFCA16800FA8090 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +685,7 @@
 				B64E1CD22AD38CC500A876CC /* Amplify */,
 				B6B49DAA2AFB2BD700CF0E6A /* AWSS3StoragePlugin */,
 				B6A71B502B25965200B9E938 /* Kingfisher */,
+				B696E8AC2CFCA16800FA8090 /* FirebaseFirestore */,
 			);
 			productName = ICE;
 			productReference = B61E20662AC9247000EF3CEB /* ICE.app */;
@@ -759,6 +762,7 @@
 			packageReferences = (
 				B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */,
 				B6A71B4F2B25965200B9E938 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				B696E8AB2CFCA16800FA8090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = B61E20672AC9247000EF3CEB /* Products */;
 			projectDirPath = "";
@@ -1383,6 +1387,14 @@
 				minimumVersion = 2.19.0;
 			};
 		};
+		B696E8AB2CFCA16800FA8090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.5.0;
+			};
+		};
 		B6A71B4F2B25965200B9E938 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1413,6 +1425,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B64E1CCB2AD38CC500A876CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
 			productName = Amplify;
+		};
+		B696E8AC2CFCA16800FA8090 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B696E8AB2CFCA16800FA8090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 		B6A71B502B25965200B9E938 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
