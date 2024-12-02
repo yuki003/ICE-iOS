@@ -26,8 +26,6 @@ class AmplifyStorageService: ObservableObject {
             }
         }
         let value = try await uploadTask.value
-        
-//        appendImageUserDefault(image: image, keyName: "")
         print("Completed: \(value)")
         
         let publicURL = try await getPublicURLForKey(key)
@@ -106,55 +104,4 @@ class AmplifyStorageService: ObservableObject {
             throw error
         }
     }
-//
-//    func appendImageUserDefault(image: UIImage, keyName: String) {
-//        // 新しい画像をDataに変換
-//        guard let imageData = image.jpegData(compressionQuality: 1.0) else {
-//            print("Failed to convert image to Data")
-//            return
-//        }
-//
-//        // UserDefaultsから既存の画像データ配列を取得
-//        var imageDataArray: [Data]
-//        if let existingImageDataArray = defaults.object(forKey: keyName) as? [Data] {
-//            imageDataArray = existingImageDataArray
-//        } else {
-//            imageDataArray = []
-//        }
-//
-//        // 新しい画像データを配列に追加
-//        imageDataArray.append(imageData)
-//
-//        // 更新された画像データ配列をUserDefaultsに保存
-//        defaults.set(imageDataArray, forKey: keyName)
-//        if !userDefaultKeys.contains(where: { value in
-//            value == keyName
-//        }) {
-//            userDefaultKeys.append(keyName)
-//        }
-//    }
-//    
-//    func setImagesUserDefault(images: [UIImage], keyName: String) {
-//        let imageDataArray = images.compactMap { $0.jpegData(compressionQuality: 1.0) ?? nil }
-//        
-//        defaults.set(imageDataArray, forKey: keyName)
-//        if !userDefaultKeys.contains(where: { value in
-//            value == keyName
-//        }) {
-//            userDefaultKeys.append(keyName)
-//        }
-//    }
-//    
-//    func decodeImagesUserDefaults(keyName: String) -> [UIImage]? {
-//        guard let imageDataArray = defaults.object(forKey: keyName) as? [Data] else {
-//            return nil
-//        }
-//        
-//        return imageDataArray.compactMap { UIImage(data: $0) }
-//    }
-//    
-//    func isRunFetchImage(userDefaultKey: String) -> Bool {
-//        print(userDefaultKeys)
-//        return !userDefaultKeys.contains(userDefaultKey)
-//    }
 }

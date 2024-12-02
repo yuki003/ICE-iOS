@@ -16,19 +16,22 @@ typealias APIErrorHandler = (APIError) -> Void
 
 class ViewModelBase: ObservableObject {
     // MARK: Properties
-    @Published var state: LoadingState = .idle
     @Published var formValid: Validation = .failed()
     @Published var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
+    @Published var userName: String = UserDefaults.standard.string(forKey: "userName") ?? ""
     @Published var asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
     @Published var alertMessage: String?
+    @Published var apiErrorPopAlertProp: PopupAlertProperties = .init(title: "操作エラー", text: "操作をやり直してください。")
     var publishers = Set<AnyCancellable>()
     let jsonDecoder = JSONDecoder()
+    let rewardsKeys = Rewards.keys
+    let userKeys = User.keys
     
     // MARK: Flags
     @Published var reload = false
     @Published var isLoading = false
     @Published var showAlert: Bool = false
-    @Published var alert: Bool = false
+    @Published var ErrorAlert: Bool = false
     
     // MARK: Services
     @ObservedObject var apiHandler = APIHandler.shared
@@ -40,12 +43,11 @@ class ViewModelBase: ObservableObject {
     // 非同期処理を行う共通関数
     @MainActor
     func asyncOperation(_ operation: @escaping () async throws -> Void,
-                               apiErrorHandler: @escaping APIErrorHandler,
-                               errorHandler: @escaping ErrorHandler) {
-        Task {
+                        apiErrorHandler: @escaping APIErrorHandler = {_ in },
+                        errorHandler: @escaping ErrorHandler = {_ in }) {
+        Task { [weak self] in
+            guard let self = self else { return }
             do {
-                isLoading = true
-                defer { isLoading = false }
                 if userID.isEmpty {
                     let userInfo = try await Amplify.Auth.getCurrentUser()
                     userID = userInfo.userId
@@ -56,26 +58,32 @@ class ViewModelBase: ObservableObject {
                 if reload {
                     reload = false
                 }
-                
-                withAnimation(.linear) {
-                    state = .loaded
-                }
+            } catch let error as StorageError {
+                errorHandler(error)
+                apiErrorPopAlertProp.text = error.localizedDescription
+                apiErrorPopAlertProp.isPresented = true
             } catch let error as APIError {
                 apiErrorHandler(error)
-//                withAnimation(.linear) {
-//                    state = .failed(error)
-//                }
+                apiErrorPopAlertProp.text = error.localizedDescription
+                apiErrorPopAlertProp.isPresented = true
             } catch {
                 errorHandler(error)
-//                withAnimation(.linear) {
-//                    state = .failed(error)
-//                }
+                apiErrorPopAlertProp.text = error.localizedDescription
+                apiErrorPopAlertProp.isPresented = true
             }
+        }
+    }
+    
+    func fetchData(userDefaultKey: String, trueAction: () async throws -> Void, falseAction: () async throws -> Void) async throws {
+        if apiHandler.isRunFetch(userDefaultKey: userDefaultKey) || reload {
+            try await trueAction()
+        } else {
+            try await falseAction()
         }
     }
     
     func setErrorMessage(_ error: Error) {
         alertMessage = error.localizedDescription
-        alert = true
+        ErrorAlert = true
     }
 }

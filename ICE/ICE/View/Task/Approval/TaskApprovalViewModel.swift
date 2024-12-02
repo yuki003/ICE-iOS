@@ -19,16 +19,14 @@ final class TaskApprovalViewModel: ViewModelBase {
     let keys = TaskReports.keys
     
     // MARK: Flags
-    @Published var approve: Bool = false
-    @Published var reject: Bool = false
-    @Published var approveComplete: Bool = false
-    @Published var rejectComplete: Bool = false
     @Published var showImage: Bool = false
     
     // MARK: Instances
     @Published var task: Tasks
     @Published var reportsWithUsers: [ReportWithUserInfo] = []
     @Published var selectedReport: TaskReports?
+    @Published var approvedAlertProp: PopupAlertProperties = .init(title: "承認完了！", text: "ポイントがユーザーに付与されました。")
+    @Published var rejectedAlertProp: PopupAlertProperties = .init(title: "却下しました", text: "レポートを却下しました。次の報告を待ちましょう。")
     
     // MARK: Validations
     
@@ -38,7 +36,7 @@ final class TaskApprovalViewModel: ViewModelBase {
         self.task = task
     }
     @MainActor
-    func loadData() async throws {
+    func loadData() async {
         asyncOperation({ [self] in
             let reportPredicate = keys.taskID.eq(task.id)
             let reportList = try await apiHandler.list(TaskReports.self, where: reportPredicate, keyName: "\(task.id)-reports")
@@ -53,25 +51,19 @@ final class TaskApprovalViewModel: ViewModelBase {
                     }
                 }
             }
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
         })
     }
     @MainActor
     func reportApprove() async {
         asyncOperation({ [self] in
+            isLoading = true
+            defer { isLoading = false }
             if let selectedReport = selectedReport  {
                 try await updateGroupPointHistory(selectedReport: selectedReport)
                 try await updateTaskReport(selectedReport: selectedReport)
                 
             }
-            approveComplete = true
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+            approvedAlertProp.isPresented = true
         })
     }
     
@@ -90,8 +82,6 @@ final class TaskApprovalViewModel: ViewModelBase {
             } else {
                 pointHistory[0].completedTaskID = [task.id]
             }
-            var newList = try self.apiHandler.decodeUserDefault(modelType: [GroupPointsHistory].self, key: "\(task.id)-\(selectedReport.reportUserID)-point")?.filter({$0.id != pointHistory[0].id})
-            apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
             try await apiHandler.update(pointHistory[0], keyName: "\(task.id)-\(selectedReport.reportUserID)-point")
         }
     }
@@ -103,14 +93,14 @@ final class TaskApprovalViewModel: ViewModelBase {
         }
         selectedReport.status = .approved
         selectedReport.reportVersion = selectedReport.reportVersion! + 1
-        var newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-reports")?.filter({$0.id != selectedReport.id})
-        apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-reports")
         try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
     }
     
     @MainActor
     func reportReject() async {
         asyncOperation({ [self] in
+            isLoading = true
+            defer { isLoading = false }
             if let selectedReport = selectedReport  {
                 var selectedReport = selectedReport
                 if comment.isNotEmpty {
@@ -121,8 +111,6 @@ final class TaskApprovalViewModel: ViewModelBase {
                     }
                 }
                 selectedReport.status = .rejected
-                var newList = try self.apiHandler.decodeUserDefault(modelType: [TaskReports].self, key: "\(task.id)-reports")?.filter({$0.id != selectedReport.id})
-                apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.id)-reports")
                 try await self.apiHandler.update(selectedReport, keyName: "\(task.id)-reports")
                 
                 if let receivingUserIDs = task.receivingUserIDs, receivingUserIDs.contains(selectedReport.reportUserID) {
@@ -134,16 +122,10 @@ final class TaskApprovalViewModel: ViewModelBase {
                     } else {
                         task.rejectedUserIDs = [selectedReport.reportUserID]
                     }
-                    var newList = try self.apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(task.groupID)-tasks")?.filter({$0.id != task.id})
-                    apiHandler.replaceUserDefault(models: newList ?? [], keyName: "\(task.groupID)-tasks")
                     try await self.apiHandler.update(task, keyName: "\(task.groupID)-tasks")
                 }
             }
-            rejectComplete = true
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+            rejectedAlertProp.isPresented = true
         })
     }
     func fetchImages(_ urlList: String?...) -> [UIImage] {

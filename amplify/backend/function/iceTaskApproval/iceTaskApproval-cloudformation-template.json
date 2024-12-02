@@ -10,9 +10,6 @@
     "deploymentBucketName": {
       "Type": "String"
     },
-    "env": {
-      "Type": "String"
-    },
     "s3Key": {
       "Type": "String"
     },
@@ -30,6 +27,9 @@
     "apiiceGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiiceGraphQLAPIKeyOutput"
+    },
+    "env": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -79,9 +79,6 @@
         },
         "Environment": {
           "Variables": {
-            "ENV": {
-              "Ref": "env"
-            },
             "REGION": {
               "Ref": "AWS::Region"
             },
@@ -96,6 +93,9 @@
             },
             "TASKS_TABLE_NAME": {
               "Ref": "tasksTableName"
+            },
+            "ENV": {
+              "Ref": "env"
             }
           }
         },

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RootView: View {
+    
     @ObservedObject var auth = AmplifyAuthService.shared
     var body: some View {
         ZStack {

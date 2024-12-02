@@ -16,73 +16,35 @@ struct HomeView: View {
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
-                switch vm.state {
-                case .idle:
-                    Color.clear.onAppear { vm.state = .loading }
-                case .loading:
-                    LoadingView().onAppear{
-                        Task{
-                            try await vm.loadData()
-                        }
-                    }
-                case let .failed(error):
-                    Text(error.localizedDescription)
-                case .loaded:
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 10) {
-                            CurrentActivityNotice(message: "test notice", isShowNotice: $vm.isShowNotice, nav: $vm.navNotice)
-                                .padding(.top)
-                            currentActivitySection()
-                            if vm.asHost {
-                                hostGroupSection()
-                                    .padding(.top, 10)
-                            }
-                            belongingGroupSection()
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 10) {
+                        if vm.asHost {
+                            hostGroupSection()
                                 .padding(.top, 10)
                         }
-                        .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.alert) {
-                            Alert(
-                                title: Text(
-                                    "エラー"
-                                ),
-                                message: Text(
-                                    vm.alertMessage ?? "操作をやり直してください。"
-                                ),
-                                dismissButton: .default(
-                                    Text(
-                                        "閉じる"
-                                    )
-                                )
-                            )
-                        }
+                        belongingGroupSection()
+                            .padding(.top, 10)
                     }
-                    .refreshable {
-                        Task{
-                            vm.reload = true
-                            try await vm.loadData()
-                        }
+                    .frame(width: deviceWidth())
+                }
+                .refreshable {
+                    Task{
+                        vm.reload = true
+                        await vm.loadData()
                     }
                 }
                 SignOutButton(auth: auth)
             }
-            .userToolbar(state: vm.state, userName: vm.userInfo?.userName ?? "ユーザー")
+            .popupAlert(prop: $vm.apiErrorPopAlertProp)
+            .userToolbar(userName: vm.userName)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .onAppear {
-                vm.state = .idle
+            .task {
+                await vm.loadData()
             }
         }
     }
-    @ViewBuilder
-    func currentActivitySection() -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-        }
-        .padding(.vertical)
-        .padding(.horizontal, 15)
-        .frame(maxWidth: screenWidth(), minHeight: 100, maxHeight: .infinity, alignment: .leading)
-        .roundedSection(color: Color(.jade))
-    }
+    
     @ViewBuilder
     func hostGroupSection() -> some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -98,11 +60,11 @@ struct HomeView: View {
             .padding(.leading)
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
-            if !vm.hostGroups.isEmpty {
+            if let hostGroups = vm.hostGroups, !hostGroups.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(vm.hostGroups.indices, id: \.self) { index in
-                            let group = vm.hostGroups[index]
+                        ForEach(hostGroups.indices, id: \.self) { index in
+                            let group = hostGroups[index]
                             Button(action: {
                                 vm.selectedGroup = group
                                 router.path.append(NavigationPathType.groupDetail(group: group))
@@ -122,12 +84,13 @@ struct HomeView: View {
                     .foregroundStyle(Color.black.opacity(0.8))
                     .padding(5)
                     .frame(width: screenWidth(), height: 100, alignment: .center)
-                    .roundedSection(color: Color(.jade))
+                    .roundedBorder(color: Color(.jade))
                 /// イカしたスクロールを実装するのでpaddingで暫定対応
                     .padding(.horizontal)
             }
         }
         .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
+        .loadingSkeleton(object: vm.hostGroups)
     }
     
     @ViewBuilder
@@ -146,11 +109,11 @@ struct HomeView: View {
             .font(.callout.bold())
             .foregroundStyle(Color(.indigo))
             // group switchable
-            if !vm.belongingGroups.isEmpty {
+            if let belongingGroups = vm.belongingGroups, !belongingGroups.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(vm.belongingGroups.indices, id: \.self) { index in
-                            let group = vm.belongingGroups[index]
+                        ForEach(belongingGroups.indices, id: \.self) { index in
+                            let group = belongingGroups[index]
                             Button(action: {
                                 vm.selectedGroup = group
                                 router.path.append(NavigationPathType.groupDetail(group: group))
@@ -170,11 +133,12 @@ struct HomeView: View {
                     .foregroundStyle(Color.black.opacity(0.8))
                     .padding(5)
                     .frame(width: screenWidth(), height: 100, alignment: .center)
-                    .roundedSection(color: Color(.jade))
+                    .roundedBorder(color: Color(.jade))
                     .padding(.horizontal)
             }
         }
         .frame(maxWidth: deviceWidth(), minHeight: 150, maxHeight: .infinity, alignment: .leading)
+        .loadingSkeleton(object: vm.belongingGroups)
     }
 }
 //#Preview{

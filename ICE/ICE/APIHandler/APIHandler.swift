@@ -110,6 +110,7 @@ class APIHandler: ObservableObject {
             switch result {
             case .success(let updatedModel):
                 print("Successfully updated model: \(updatedModel)")
+                deleteElementUserDefault(model: updatedModel, keyName: keyName)
                 appendUserDefault(model: updatedModel, keyName: keyName)
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
@@ -124,11 +125,17 @@ class APIHandler: ObservableObject {
         }
     }
     
-    func delete<ModelType: Model>(_ model: ModelType) async throws {
+    func delete<ModelType: Model>(_ model: ModelType, keyName: String = "") async throws {
         do {
             let result = try await Amplify.API.mutate(request: .delete(model))
             switch result {
             case .success:
+                if let savedData = defaults.data(forKey: keyName),
+                   let structArray = try? jsonDecoder.decode([ModelType].self, from: savedData), structArray.count > 1 {
+                    deleteElementUserDefault(model: model, keyName: keyName)
+                } else {
+                    deleteObjectUserDefault(keyName: keyName)
+                }
                 print("Successfully delete")
             case .failure(let error):
                 print("Got failed result with \(error.errorDescription)")
@@ -151,6 +158,7 @@ class APIHandler: ObservableObject {
             
             // 配列を再度エンコードし、UserDefaultsに保存
             if let encodedData = try? jsonEncoder.encode(structArray) {
+                UserDefaults.standard.removeObject(forKey: keyName)
                 defaults.set(encodedData, forKey: keyName)
             } else {
                 print("Failed to encode data")
@@ -169,16 +177,26 @@ class APIHandler: ObservableObject {
         }) {
             userDefaultKeys.append(keyName)
         }
+        print("append:\(userDefaultKeys)")
+        print("key:\(keyName)")
     }
     
     func replaceUserDefault<M: Model>(models: [M], keyName: String) {
-        if let savedData = defaults.data(forKey: keyName) {
+        print("replaceBefore:\(userDefaultKeys)")
+        if defaults.data(forKey: keyName) != nil {
             UserDefaults.standard.removeObject(forKey: keyName)
             
             guard let data = try? jsonEncoder.encode(models) else {
                 return
             }
             defaults.set(data, forKey: "\(keyName)")
+            if !userDefaultKeys.contains(where: { value in
+                value == keyName
+            }) {
+                userDefaultKeys.append(keyName)
+            }
+            print("replaceAfter:\(userDefaultKeys)")
+            print("key:\(keyName)")
         }
     }
     
@@ -192,23 +210,51 @@ class APIHandler: ObservableObject {
         }) {
             userDefaultKeys.append(keyName)
         }
+        print("set:\(userDefaultKeys)")
+        print("key:\(keyName)")
+    }
+    
+    func deleteObjectUserDefault(keyName: String) {
+        UserDefaults.standard.removeObject(forKey: keyName)
+    }
+    
+    func deleteElementUserDefault<ModelType: Model>(model: ModelType, keyName: String) {
+        if let savedData = defaults.data(forKey: keyName),
+           var structArray = try? jsonDecoder.decode([ModelType].self, from: savedData) {
+            print("before:\(structArray)")
+            let element = AppModelType(type: model.modelName)
+            if let index = element.findTargetIndex(structArray, model) {
+                structArray.remove(at: index)
+            }
+            
+            // 配列を再度エンコードし、UserDefaultsに保存
+            if let encodedData = try? jsonEncoder.encode(structArray) {
+                UserDefaults.standard.removeObject(forKey: keyName)
+                defaults.set(encodedData, forKey: keyName)
+            } else {
+                print("Failed to encode data")
+            }
+            
+            print("after:\(structArray)")
+        }
     }
     
     func decodeUserDefault<T: Decodable>(modelType: T.Type, key: String) throws -> T? {
         let keyList = userDefaultKeys.filter({ $0.elementsEqual(key)})
-        if !(keyList.count == 1) {
+        if keyList.count > 1 {
             throw DeveloperError.userDefaultKeyDuplicated
         }
-        let key = keyList[0]
-        guard let data = UserDefaults.standard.data(forKey: key),
+        guard !keyList.isEmpty else { return nil }
+        guard let data = UserDefaults.standard.data(forKey: keyList[0]),
               let dataModel = try? jsonDecoder.decode(modelType, from: data) else {
             return nil
         }
+        print("decode:\(userDefaultKeys)")
+        print("key:\(key)")
         return dataModel
     }
     
     func isRunFetch(userDefaultKey: String) -> Bool {
-        print(userDefaultKeys)
         return !userDefaultKeys.contains(userDefaultKey)
     }
 }

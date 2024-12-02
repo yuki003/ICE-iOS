@@ -10,78 +10,93 @@ import Amplify
 struct GroupDetailView: View {
     @StateObject var vm: GroupDetailViewModel
     @StateObject var taskService: TaskService
+    @StateObject var rewardService: RewardService
     @EnvironmentObject var router: PageRouter
     
     @State var inviteFlag: Bool = false
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
-                switch vm.state {
-                case .idle, .loading:
-                    LoadingView().onAppear{
-                        Task {
-                            try await vm.loadData()
-                        }
-                    }
-                case let .failed(error):
-                    Text(error.localizedDescription)
-                case .loaded:
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 20) {
-                            VStack(alignment: .center, spacing: 15) {
-                                Text(vm.groupInfo.groupName)
-                                    .font(.headline.bold())
-                                    .foregroundStyle(Color(.indigo))
-                                
-                                Thumbnail(type: ThumbnailType.group, url: vm.groupInfo.thumbnailKey ?? "", aspect: 70)
-                                
-                                GroupDescription(description: vm.groupInfo.description)
-                                
-                                Divider()
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 20) {
+                        VStack(alignment: .leading, spacing: 15) {
+                            HStack(spacing: 50) {
+                                VStack(alignment: .center, spacing: 10) {
+                                    Text(vm.groupInfo.groupName)
+                                        .font(.headline.bold())
+                                        .foregroundStyle(Color(.indigo))
+                                    
+                                    Thumbnail(type: ThumbnailType.group, url: vm.groupInfo.thumbnailKey ?? "", aspect: 70)
+                                }
+                                VStack(alignment: .center, spacing: 20) {
+                                    Text("ポイント")
+                                        .font(.title2.bold())
+                                    Text("\(vm.point)pt")
+                                        .font(.title2.bold())
+                                }
                             }
-                            makeMemberList()
-                            makeTaskList()
-                            makeRewardList()
+                            
+                            GroupDescription(description: vm.groupInfo.description)
+                            
+                            Divider()
                         }
-                        .padding()
-                        .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.alert) {
-                            Alert(
-                                title: Text("エラー"),
-                                message: Text(vm.alertMessage ?? "操作をやり直してください。"),
-                                dismissButton: .default(Text("閉じる"))
-                            )
-                        }
-                        .popupActionAlert(isPresented: $taskService.receiveConfirmation,
-                                          title:"このタスクに挑戦しますか？",
-                                          text: "",
-                                          action: { Task {
-                                                            try await taskService.receiveTaskOrder(groupID: vm.groupInfo.id)
-                                                         }
-                                                    },
-                                          actionLabel: "挑戦する")
+                        makeMemberList()
+                        makeTaskList()
+                        makeRewardList()
                     }
-                    .popupAlert(isPresented: $taskService.taskReceived, title: "タスクを受注しました！", text: "タスクを完了してポイントをもらおう！", action: {
-                        vm.state = .idle
-                    })
-                    .sheet(isPresented: $inviteFlag) {
-                        ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
+                    .padding()
+                    .frame(width: deviceWidth())
+                }
+                .sheet(isPresented: $inviteFlag) {
+                    ActivityViewController(activityItems: [vm.invitationBaseText], applicationActivities: nil)
+                }
+                .sheet(isPresented: $vm.navToHostTaskActions, onDismiss: {
+                    Task {
+                        await vm.loadData()
                     }
-                    .refreshable {
-                        Task {
-                            vm.reload = true
-                            try await vm.reloadData()
-                        }
+                }) {
+                    CreateTaskView(vm: .init(groupID: vm.groupInfo.id, selectedTask: vm.selectedTask))
+                }
+                .sheet(isPresented: $vm.navToHostRewardsActions, onDismiss: {
+                    Task {
+                        await vm.loadData()
+                    }
+                }) {
+                    CreateRewardsView(vm: .init(groupID: vm.groupInfo.id, selectedReward: vm.selectedReward))
+                }
+                .sheet(isPresented: $vm.navToTaskReport, onDismiss: {
+                    Task {
+                        await vm.loadData()
+                    }
+                }) {
+                    if let selected = vm.selectedTask {
+                        TaskReportView(vm: .init(task: selected))
+                    }
+                }
+                .refreshable {
+                    Task {
+                        vm.reload = true
+                        try await vm.reloadData()
                     }
                 }
             }
             .loading(isLoading: $vm.isLoading)
             .loading(isLoading: $taskService.isLoading)
-            .userToolbar(state: vm.state, userName: nil, dismissExists: true)
+            .userToolbar(userName: vm.userName, dismissExists: true)
+            .popupActionAlert(prop: $taskService.receiveConfirmAlertProp,
+                              actionLabel: "挑戦する")
+            .popupActionAlert(prop: $rewardService.applyConfirmAlertProp,
+                              actionLabel: "申請する")
+            .popupActionAlert(prop: $rewardService.applyCancelAlertProp,
+                              actionLabel: "取り消す")
+            .popupAlert(prop: $rewardService.applyRejectAlertProp)
+            .popupAlert(prop: $taskService.taskReceivedAlertProp)
+            .popupAlert(prop: $rewardService.rewardAppliedAlertProp)
+            .popupAlert(prop: $rewardService.rewardCanceledAlertProp)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .onAppear {
-                vm.state = .idle
+            .task {
+                await vm.loadData()
             }
         }
     }
@@ -130,12 +145,13 @@ struct GroupDetailView: View {
                     SectionLabel(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "タスク", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
-                        router.path.append(NavigationPathType.createTask(groupID: vm.groupInfo.id))
+                        vm.selectedTask = nil
+                        vm.navToHostTaskActions = true
                     })
                 }
             }
             if vm.latestTasks.count > 0 {
-                taskService.taskListBuilder(vm.latestTasks, router)
+                taskService.taskListBuilder(vm.latestTasks, $vm.selectedTask, vm.asHost ? $vm.navToHostTaskActions : $vm.navToTaskReport, $vm.reload)
             } else {
                 Text("タスクを設定しましょう！")
                     .font(.callout.bold())
@@ -169,20 +185,13 @@ struct GroupDetailView: View {
                     SectionLabel(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0)
                 } else {
                     SectionLabelWithAdd(text: "リワード", font: .callout.bold(), color: Color(.indigo), width: 5.0, action:{
-                        router.path.append(NavigationPathType.createReward(groupID: vm.groupInfo.id))
+                        vm.selectedReward = nil
+                        vm.navToHostRewardsActions = true
                     })
                 }
             }
             if vm.latestRewards.count > 0 {
-                ForEach(vm.latestRewards.indices, id: \.self) { index in
-                    let reward = vm.latestRewards[index]
-                    Button(action: {
-                        // タスク詳細に遷移、ポップアップで詳細表示でも可
-                    }) {
-                        PendingRewardRow(rewardName: reward.rewardName, status: "申請中")
-                    }
-                    .padding(.leading, 10)
-                }
+                rewardService.rewardListBuilder(vm.latestRewards, $vm.selectedReward, vm.asHost ? $vm.navToHostRewardsActions : $vm.navToRewardApply, vm.point, $vm.reload)
             } else {
                 Text("リワードを設定しましょう！")
                     .font(.callout.bold())

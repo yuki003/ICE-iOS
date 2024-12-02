@@ -15,6 +15,7 @@ class AmplifyAuthService: ObservableObject {
     static let shared = AmplifyAuthService()
     @AppStorage("isSignedIn") var isSignedIn = false
     
+    @MainActor
     func checkSessionStatus() async {
         do {
             let result = try await Amplify.Auth.fetchAuthSession()
@@ -43,11 +44,9 @@ class AmplifyAuthService: ObservableObject {
 
     func webSignIn() async throws {
         do {
-//            let options = AuthWebUISignInRequest.Options(scopes: ["ja"])
             let result = try await Amplify.Auth.signInWithWebUI(presentationAnchor: window)
             if result.isSignedIn {
                 print("Signed in")
-//                router.move(to: .home)
             } else {
                 print("Failure")
             }
@@ -55,6 +54,7 @@ class AmplifyAuthService: ObservableObject {
             print(error)
         }
     }
+    
     func observeAuthEvents() {
         _ = Amplify.Hub.listen(to: .auth) { [weak self] result in
             switch result.eventName {
@@ -160,9 +160,11 @@ class AmplifyAuthService: ObservableObject {
             case .validation(_, _, _, _):
                 print("validation exception")
                 print(error)
-            case .notAuthorized(_, _, _):
-                print("notAuthorized exception")
-                print(error)
+            case .notAuthorized(let description, _, _):
+                /// 認証コード2回目打鍵した時もここ
+                if description.contains("Invalid verification code"){
+                    throw AmplifyAuthError.notAuthorized
+                }
             case .invalidState(_, _, _):
                 print("invalidState exception")
                 print(error)
@@ -196,6 +198,9 @@ class AmplifyAuthService: ObservableObject {
                 print("service exception")
                 print(error)
                 if description.contains("Invalid verification code"){
+                    throw AmplifyAuthError.invalidVerificationCode
+                }
+                if description.contains("User is already confirmed"){
                     throw AmplifyAuthError.invalidVerificationCode
                 }
             case .unknown(_, _):
@@ -238,9 +243,12 @@ class AmplifyAuthService: ObservableObject {
             case .configuration(_, _, _):
                 print("configuration exception")
                 print(error)
-            case .service(_, _, _):
+            case .service(let description, _, _):
                 print("service exception")
                 print(error)
+                if description.contains("User does not exist"){
+                    throw AmplifyAuthError.notAuthorized
+                }
             case .unknown(_, _):
                 print("unknown exception")
                 print(error)

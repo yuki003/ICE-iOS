@@ -10,11 +10,14 @@ import Kingfisher
 
 struct TaskRow: View {
     let task: Tasks
+    @Binding var selected: Tasks?
     @State var isOpen: Bool = false
+    @Binding var navTo: Bool
+    @Binding var reload: Bool
     let action: () async throws -> Void
-    let asHost: Bool
+    let asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
     var userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
-    var status: BelongingTaskStatus
+    var status: TaskStatus
     @EnvironmentObject var router: PageRouter
     var body: some View {
         Button(action: {
@@ -83,13 +86,20 @@ struct TaskRow: View {
                     if asHost {
                         HStack(spacing: 20) {
                             if task.hasPendingReport {
-                                ActionFillButton(label: "レポート確認", action: {router.path.append(NavigationPathType.taskApproval(task: task))}, color: Color(.indigo))
+                                ActionFillButton(label: "レポート確認", action: {
+                                    isOpen = false
+                                    router.path.append(NavigationPathType.taskApproval(task: task))}, color: Color(.indigo))
                                     .frame(width: (screenWidth() - 84) / 2)
                             } else if status == .accept {
-                                ActionFillButton(label: "編集する", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.indigo))
+                                ActionFillButton(label: "編集する", action:{
+                                    isOpen = false
+                                    rowNavigation() }, color: Color(.indigo))
                                     .frame(width: (screenWidth() - 84) / 2)
                             }
-                            ActionFillButton(label: "インサイト", action: {router.path.append(NavigationPathType.createGroup)}, color: Color(.jade))
+                            ActionFillButton(label: "インサイト", action:{
+                                isOpen = false
+                                // TODO: インサイト画面
+                            }, color: Color(.jade))
                                 .frame(width: (screenWidth() - 84) / 2)
                         }
                         .frame(width: (screenWidth() - 84))
@@ -98,11 +108,11 @@ struct TaskRow: View {
                         case .accept:
                             ActionFillButton(label: "挑戦する", action: action, color: Color(.indigo))
                         case .receiving:
-                            ActionFillButton(label: "報告する", action: {router.path.append(NavigationPathType.taskReport(task: task))}, color: Color(.jade))
+                            ActionFillButton(label: "報告する", action: { rowNavigation() }, color: Color(.jade))
                         case .rejected:
-                            ActionFillButton(label: "再報告する", action: {router.path.append(NavigationPathType.taskReport(task: task))}, color: Color(.jade))
+                            ActionFillButton(label: "コメントを見る", action: { rowNavigation() }, color: Color(.jade))
                         case .completed:
-                            ActionFillButton(label: "記録を見る", action: {router.path.append(NavigationPathType.taskReport(task: task))}, color: Color(.indigo))
+                            ActionFillButton(label: "記録を見る", action: { rowNavigation() }, color: Color(.indigo))
                         }
                     }
                 }
@@ -112,6 +122,12 @@ struct TaskRow: View {
         .padding(.horizontal)
         .overlay(RoundedRectangle(cornerRadius: 10).stroke(status.color, lineWidth: 2))
         .frame(maxWidth: screenWidth(), maxHeight: 1000)
+    }
+    
+    func rowNavigation() {
+        isOpen = false
+        selected = task
+        navTo = true
     }
 }
 
@@ -229,35 +245,116 @@ struct ApprovalReportRow: View {
     }
 }
 struct PendingRewardRow: View {
-    let rewardName: String
-    var status: String
+    let reward: Rewards
+    @Binding var selected: Rewards?
+    @State var isOpen: Bool = false
+    @Binding var navTo: Bool
+    @Binding var reload: Bool
+    let action: () async throws -> Void
+    let asHost: Bool = UserDefaults.standard.bool(forKey: "asHost")
+    let userID: String = UserDefaults.standard.string(forKey: "userID") ?? ""
+    var status: RewardStatus
+    @EnvironmentObject var router: PageRouter
     var body: some View {
         Button(action: {
-            print("Push Pending Reward Row")
+            withAnimation(.easeOut(duration: 0.3)){
+                isOpen.toggle()
+            }
         })
         {
-            HStack(alignment: .center, spacing: 5) {
-                Rectangle()
-                    .frame(width: 5, height: 30)
-                    .foregroundStyle(Color(.jade))
-                Text(rewardName)
-                    .font(.footnote.bold())
-                    .foregroundStyle(Color.black)
-                Spacer()
-                
-                Text(status)
-                    .font(.caption.bold())
-                    .foregroundStyle(Color(.indigo))
-                    .padding(.vertical, 3)
-                    .padding(.horizontal, 8)
-                    .overlay(RoundedRectangle(cornerRadius: 20.0).stroke(Color(.indigo), lineWidth: 2))
-                    .padding(.trailing, 5)
-                
-                
+            VStack(alignment: .center, spacing: 10) {
+                HStack(alignment: .center, spacing: 10) {
+                    if let thumbnail = reward.thumbnailKey, thumbnail.isNotEmpty {
+                        TaskIcon(thumbnail: UIImage(url: thumbnail), aspect: 30, selected: true)
+                    } else {
+                        Thumbnail(type: ThumbnailType.rewards, image: UIImage(), aspect: 30)
+                    }
+                    Text(reward.rewardName)
+                        .font(.callout.bold())
+                        .foregroundStyle(Color.black)
+                    Spacer()
+                    
+                        if asHost, status == .applied {
+                            StatusLabel(label: "申請あり", color: Color(.indigo), font: .callout.bold())
+                        } else if !asHost, status != .none {
+                            StatusLabel(label: status.rawValue, color: status.color, font: .callout.bold())
+                        }
+                    Text("\(reward.cost.comma())pt")
+                        .font(.callout.bold())
+                        .foregroundStyle(Color(.indigo))
+                        .padding(.trailing, 10)
+                }
+                if isOpen {
+                    if let description = reward.description {
+                        HStack {
+                            Text(description)
+                                .font(.footnote.bold())
+                                .foregroundStyle(Color.black)
+                        Spacer()
+                        }
+                    }
+                    Divider()
+                    if reward.startDate != nil || reward.frequencyType != .onlyOnce {
+                        VStack(alignment: .leading, spacing: 5) {
+                            SectionLabel(text: "情報", font: .footnote.bold(), color: Color(.jade), width: 3)
+                            if let end = reward.endDate {
+                                Text("\(reward.startDate!.foundationDate.toFormat("yyyy/MM/dd"))から\(end.foundationDate.toFormat("yyyy/MM/dd"))まで")
+                                    .font(.footnote.bold())
+                                    .foregroundStyle(Color.black)
+                            }
+                            if reward.frequencyType != .onlyOnce {
+                                Text("\(EnumUtility().translateFrequencyType(frequency: reward.frequencyType))ゲットできます")
+                                    .font(.footnote.bold())
+                                    .foregroundStyle(Color.black)
+                            }
+                        }
+                    }
+                    if asHost {
+                        HStack(spacing: 20) {
+                            if status == .applied {
+                                ActionFillButton(label: "申請確認", action:{
+                                    isOpen = false
+                                    router.path.append(NavigationPathType.rewardApproval(reward: reward)) }, color: Color(.indigo))
+                                    .frame(width: (screenWidth() - 84) / 2)
+                            } else if status == .none {
+                                ActionFillButton(label: "編集する", action:{
+                                    isOpen = false
+                                    rowNavigation()
+                                }, color: Color(.indigo))
+                                    .frame(width: (screenWidth() - 84) / 2)
+                            }
+                            ActionFillButton(label: "インサイト", action:{
+                                isOpen = false
+                                // TODO: インサイト画面
+                            }, color: Color(.jade))
+                                .frame(width: (screenWidth() - 84) / 2)
+                        }
+                        .frame(width: (screenWidth() - 84))
+                    } else {
+                        switch status {
+                        case .none:
+                            ActionFillButton(label: "申請する", action: action, color: Color(.indigo))
+                        case .applied:
+                            ActionFillButton(label: "申請取消し", action: action , color: Color.red)
+                        case .rejected:
+                            ActionFillButton(label: "再申請する", action: action, color: Color(.jade))
+                        case .earned:
+                            ActionFillButton(label: "記録を見る", action: { rowNavigation() }, color: Color(.indigo))
+                        }
+                    }
+                }
             }
-            .frame(width: 300, height: 30, alignment: .leading)
-            .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
         }
+        .padding(.vertical, 10)
+        .padding(.horizontal)
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(status.color, lineWidth: 2))
+        .frame(maxWidth: screenWidth(), maxHeight: 1000)
+    }
+    
+    func rowNavigation() {
+        isOpen = false
+        selected = reward
+        navTo = true
     }
 }
 
@@ -286,5 +383,45 @@ struct ItemizedRow: View {
         }
         .frame(width: textFieldWidth())
 
+    }
+}
+
+struct UserRow: View {
+    let user: User
+    @Binding var selectedUserID: String
+    @State var isOpen: Bool = false
+    let forwardAction: () async throws -> Void
+    let rejectAction: () async throws -> Void
+    var body: some View {
+        Button(action: {
+            withAnimation(.easeOut(duration: 0.3)){
+                isOpen.toggle()
+                selectedUserID = user.userID
+            }
+        })
+        {
+            VStack(alignment: .center, spacing: 10) {
+                HStack(alignment: .center, spacing: 10) {
+                    Thumbnail(type: ThumbnailType.user, aspect: 30)
+                    Text(user.userName)
+                        .font(.callout.bold())
+                        .foregroundStyle(Color.black)
+                    Spacer()
+                }
+                if isOpen {
+                    HStack(spacing: 10) {
+                        ActionFillButton(label: "却下",
+                                         action: rejectAction,
+                                         color: Color.red)
+                        ActionFillButton(label: "承認", action: forwardAction, color: Color(.indigo))
+                        
+                    }
+                }
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal)
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(.indigo), lineWidth: 2))
+        .frame(maxWidth: screenWidth(), maxHeight: 1000)
     }
 }

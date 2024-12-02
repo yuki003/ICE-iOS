@@ -14,6 +14,14 @@ final class GroupDetailViewModel: ViewModelBase {
     @Published var groupInfo: Group
     @Published var users: [User] = []
     @Published var selectedUser: User?
+    @Published var navToHostTaskActions: Bool = false
+    @Published var navToHostRewardsActions: Bool = false
+    @Published var navToRewardApply: Bool = false
+    @Published var navToTaskReport: Bool = false
+    @Published var selectedTask: Tasks?
+    @Published var selectedReward: Rewards?
+    @Published var groupPointHistory: GroupPointsHistory?
+    var point: Int = 0
     var invitationBaseText: String { """
 「ICE」アプリのグループ「\(groupInfo.groupName)」からの招待状です！
 グループのミッションを達成してポイントをゲット！
@@ -30,7 +38,7 @@ Link： ice://invite?code=\(groupInfo.id)
     
     @Published var tasks: [Tasks] = []
     var latestTasks: [Tasks] {
-        Array(tasks.sorted(by: { $0.updatedAt?.foundationDate ?? Date() > $1.updatedAt?.foundationDate ?? Date() }).prefix(3))
+        Array(tasks.sorted(by: { $0.updatedAt?.foundationDate ?? Date() > $1.updatedAt?.foundationDate ?? Date()}).prefix(3))
     }
     
     @Published var rewards: [Rewards] = []
@@ -43,61 +51,86 @@ Link： ice://invite?code=\(groupInfo.id)
     }
     
     @MainActor
-    func loadData() async throws {
+    func loadData() async {
         asyncOperation({ [self] in
-            if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-users") || reload {
-                var userIDs:[String?] = []
-                if let hostUserIDs = groupInfo.hostUserIDs {
-                    userIDs.append(contentsOf: hostUserIDs)
-                }
-                if let belongingUserIDs = groupInfo.belongingUserIDs {
-                    userIDs.append(contentsOf: belongingUserIDs)
-                }
-                let userPredicate = apiService.orPredicateGroupByID(ids: userIDs, model: User.keys.userID)
-                if let predicate = userPredicate {
-                    let users = try await apiHandler.list(User.self, where: predicate, keyName: "\(groupInfo.id)-users")
-                    self.users = users.sorted(by: {$0.createdAt! > $1.createdAt!})
-                }
-            } else {
-                self.users = try apiHandler.decodeUserDefault(modelType: [User].self, key: "\(groupInfo.id)-users") ?? []
-            }
+            try await getGroupUsers()
             
-            if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-tasks") || reload {
-                let tasksPredicate = apiService.orPredicateGroupByID(ids: groupInfo.taskIDs ?? [], model: Tasks.keys.id)
-                if let predicate = tasksPredicate {
-                    let tasks = try await apiHandler.list(Tasks.self, where: predicate, keyName: "\(groupInfo.id)-tasks")
-                    self.tasks = tasks.sorted(by: {$0.createdAt! > $1.createdAt!})
-                }
-            } else {
-                self.tasks = try apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(groupInfo.id)-tasks") ?? []
-            }
+            try await getTasks()
             
-            if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-rewards") || reload {
-                let rewardsPredicate = apiService.orPredicateGroupByID(ids: groupInfo.rewardIDs ?? [], model: Rewards.keys.id)
-                if let predicate = rewardsPredicate {
-                    let rewards = try await apiHandler.list(Rewards.self, where: predicate, keyName: "\(groupInfo.id)-rewards")
-                    self.rewards = rewards.sorted(by: {$0.createdAt! > $1.createdAt!})
-                }
-            } else {
-                self.rewards = try apiHandler.decodeUserDefault(modelType: [Rewards].self, key: "\(groupInfo.id)-rewards") ?? []
-            }
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+            try await getRewords()
+            
+            try await getGroupHistory()
         })
     }
     
+    func getGroupUsers() async throws {
+        if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-users") || reload {
+            var userIDs:[String?] = []
+            if let hostUserIDs = groupInfo.hostUserIDs {
+                userIDs.append(contentsOf: hostUserIDs)
+            }
+            if let belongingUserIDs = groupInfo.belongingUserIDs {
+                userIDs.append(contentsOf: belongingUserIDs)
+            }
+            let userPredicate = apiService.orPredicateGroupByID(ids: userIDs, model: User.keys.userID)
+            if let predicate = userPredicate {
+                let users = try await apiHandler.list(User.self, where: predicate, keyName: "\(groupInfo.id)-users")
+                self.users = users.sorted(by: {$0.createdAt! > $1.createdAt!})
+            }
+        } else {
+            users = try apiHandler.decodeUserDefault(modelType: [User].self, key: "\(groupInfo.id)-users") ?? []
+        }
+    }
+    
+    func getTasks() async throws {
+        if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-tasks") || reload {
+            let tasksPredicate = apiService.orPredicateGroupByID(ids: groupInfo.taskIDs ?? [], model: Tasks.keys.id)
+            if let predicate = tasksPredicate {
+                let tasks = try await apiHandler.list(Tasks.self, where: predicate, keyName: "\(groupInfo.id)-tasks")
+                self.tasks = tasks.sorted(by: {$0.createdAt! > $1.createdAt!})
+            }
+        } else {
+            self.tasks = try apiHandler.decodeUserDefault(modelType: [Tasks].self, key: "\(groupInfo.id)-tasks") ?? []
+        }
+    }
+    
+    func getRewords() async throws {
+        if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-rewards") || reload {
+            let rewardsPredicate = apiService.orPredicateGroupByID(ids: groupInfo.rewardIDs ?? [], model: Rewards.keys.id)
+            if let predicate = rewardsPredicate {
+                let rewards = try await apiHandler.list(Rewards.self, where: predicate, keyName: "\(groupInfo.id)-rewards")
+                self.rewards = rewards.sorted(by: {$0.createdAt! > $1.createdAt!})
+            }
+        } else {
+            self.rewards = try apiHandler.decodeUserDefault(modelType: [Rewards].self, key: "\(groupInfo.id)-rewards") ?? []
+        }
+    }
+    
+    func getGroupHistory() async throws {
+        if apiHandler.isRunFetch(userDefaultKey: "\(groupInfo.id)-user-points") || reload {
+            let pointPredicate = GroupPointsHistory.keys.userID.eq(userID)
+            let pointHistory = try await apiHandler.list(GroupPointsHistory.self, where: pointPredicate, keyName: "\(groupInfo.id)-user-points")
+            if !pointHistory.isEmpty {
+                self.groupPointHistory = pointHistory[0]
+            }
+        } else {
+            self.groupPointHistory = try apiHandler.decodeUserDefault(modelType: GroupPointsHistory.self, key: "\(groupInfo.id)-user-points")
+        }
+        
+        if let pointHistory = self.groupPointHistory {
+            point = pointHistory.amount
+        }
+    }
     @MainActor
     func reloadData() async throws {
         do {
             let predicate = Group.keys.id.eq(groupInfo.id)
             let groupInfo = try await apiHandler.list(Group.self, where: predicate, keyName: "belongingGroups")
             self.groupInfo = groupInfo[0]
-            try await loadData()
+            await loadData()
         } catch {
             alertMessage = error.localizedDescription
-            alert = true
+            ErrorAlert = true
         }
     }
 }

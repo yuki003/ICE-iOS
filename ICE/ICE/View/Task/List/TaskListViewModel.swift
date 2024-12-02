@@ -18,6 +18,7 @@ final class TaskListViewModel: ViewModelBase {
     @Published var receiveTaskOrder: Bool = false
     @Published var navToTaskReport: Bool = false
     @Published var navToTaskHistory: Bool = false
+    @Published var navToHostTaskActions: Bool = false
     
     // MARK: Instances
     @Published var tasks: [Tasks]
@@ -31,25 +32,8 @@ final class TaskListViewModel: ViewModelBase {
         self.tasks = tasks
     }
     @MainActor
-    func loadData() async throws {
-        asyncOperation({
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+    func loadData() async {
+        asyncOperation({ [self] in
         })
     }
-//    @MainActor
-//    func taskButtonAction(_ status: BelongingTaskStatus, _ task: Tasks) {
-//        selectedTask = task
-//        switch status {
-//        case .accept:
-//            receiveTaskOrder = true
-//        case .receiving:
-//            navToTaskReport = true
-//        case .completed:
-//            navToTaskReport = true
-//        }
-//    }
 }
-

@@ -15,7 +15,7 @@ group_table_name = os.environ.get('GROUP_TABLE_NAME')
 dynamodb = boto3.resource('dynamodb')
 group_table = dynamodb.Table(group_table_name)
 
-def lambda_handler(event, context):
+def handler(event, context):
     # イベントの内容をログに記録
     logger.info(f"Received event: {json.dumps(event)}")
 

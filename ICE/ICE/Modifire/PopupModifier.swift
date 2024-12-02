@@ -9,36 +9,32 @@ import SwiftUI
 import Kingfisher
 
 struct PopupActionAlertModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    var title: String?
-    let text: String
-    let action: () async throws -> Void
+    @Binding var prop: PopupAlertProperties
     var actionLabel: String
-    var color: Color
     func body(content: Content) -> some View {
         content
             .overlay {
-                if isPresented {
+                if prop.isPresented {
                     GrayBackgroundView()
                         .ignoresSafeArea()
 
                     VStack(spacing: 15) {
-                        if let titleText = title {
-                            Text(titleText)
+                        if prop.title.isNotEmpty {
+                            Text(prop.title)
                                 .foregroundColor(Color.black)
                                 .font(.callout.bold())
                                 .padding(.top)
                         }
 
-                        Text(text)
+                        Text(prop.text)
                             .foregroundColor(Color.black)
                             .font(.footnote.bold())
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.bottom, 15)
 
                         HStack (alignment: .center, spacing: 10) {
-                            FlagFillButton(label: "キャンセル", color: Color.red, flag: $isPresented)
-                            ActionWithFlagFillButton(label: actionLabel, action: action, color: color, flag: $isPresented)
+                            FlagFillButton(label: "キャンセル", color: Color.red, flag: $prop.isPresented)
+                            ActionWithFlagFillButton(label: actionLabel, action: prop.action, color: prop.color, flag: $prop.isPresented)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -51,33 +47,30 @@ struct PopupActionAlertModifier: ViewModifier {
 }
 
 struct PopupDismissAlertModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    var title: String?
-    let text: String
-    var color: Color
+    @Binding var prop: PopupAlertProperties
     var buttonLabel: String
     func body(content: Content) -> some View {
         content
             .overlay {
-                if isPresented {
+                if prop.isPresented {
                     GrayBackgroundView()
 
                     VStack(spacing: 15) {
-                        if let titleText = title {
-                            Text(titleText)
+                        if prop.title.isNotEmpty {
+                            Text(prop.title)
                                 .foregroundColor(Color.black)
                                 .font(.callout.bold())
                                 .padding(.top)
                         }
 
-                        Text(text)
+                        Text(prop.text)
                             .foregroundColor(Color.black)
                             .font(.footnote.bold())
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.bottom, 15)
 
                         HStack (alignment: .center, spacing: 10) {
-                            DismissRoundedButton(label: buttonLabel, color: color)
+                            DismissRoundedButton(label: buttonLabel, color: prop.color)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -90,27 +83,24 @@ struct PopupDismissAlertModifier: ViewModifier {
 }
 
 struct PopupDismissAndActionAlertModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    var title: String?
-    let text: String
+    @Binding var prop: PopupAlertProperties
     var dismissLabel: String
     var actionLabel: String
-    let action: () async throws -> Void
     func body(content: Content) -> some View {
         content
             .overlay {
-                if isPresented {
+                if prop.isPresented {
                     GrayBackgroundView()
 
                     VStack(spacing: 15) {
-                        if let titleText = title {
-                            Text(titleText)
+                        if prop.title.isNotEmpty {
+                            Text(prop.title)
                                 .foregroundColor(Color.black)
                                 .font(.callout.bold())
                                 .padding(.top)
                         }
 
-                        Text(text)
+                        Text(prop.text)
                             .foregroundColor(Color.black)
                             .font(.footnote.bold())
                             .fixedSize(horizontal: false, vertical: true)
@@ -118,7 +108,7 @@ struct PopupDismissAndActionAlertModifier: ViewModifier {
 
                         HStack (alignment: .center, spacing: 10) {
                             DismissRoundedButton(label: dismissLabel, color: Color(.indigo))
-                            ActionWithFlagFillButton(label: actionLabel, action: action, color: Color(.jade), flag: $isPresented)
+                            ActionWithFlagFillButton(label: actionLabel, action: prop.action, color: Color(.jade), flag: $prop.isPresented)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -131,34 +121,30 @@ struct PopupDismissAndActionAlertModifier: ViewModifier {
 }
 
 struct PopupAlertModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    var title: String?
-    let text: String
-    var color: Color
+    @Binding var prop: PopupAlertProperties
     var buttonLabel: String
-    let action: () async throws -> Void
     func body(content: Content) -> some View {
         content
             .overlay {
-                if isPresented {
+                if prop.isPresented {
                     GrayBackgroundView()
 
                     VStack(spacing: 15) {
-                        if let titleText = title {
-                            Text(titleText)
+                        if prop.title.isNotEmpty {
+                            Text(prop.title)
                                 .foregroundColor(Color.black)
                                 .font(.callout.bold())
                                 .padding(.top)
                         }
 
-                        Text(text)
+                        Text(prop.text)
                             .foregroundColor(Color.black)
                             .font(.footnote.bold())
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.bottom, 15)
 
                         HStack (alignment: .center, spacing: 10) {
-                            ActionWithFlagFillButton(label: buttonLabel, action: action, color: Color(.jade), flag: $isPresented)
+                            ActionWithFlagFillButton(label: buttonLabel, action: prop.action, color: prop.color, flag: $prop.isPresented)
                         }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width / 1.2)
@@ -245,6 +231,13 @@ struct PopupImageModifier: ViewModifier {
                 }
             }
     }
+}
+struct PopupAlertProperties {
+    var isPresented = false
+    var title: String = ""
+    var text: String = ""
+    var color: Color = Color(.indigo)
+    var action: () async throws -> Void = {}
 }
 struct GrayBackgroundView: View {
     var body: some View {

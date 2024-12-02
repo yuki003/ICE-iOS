@@ -10,6 +10,8 @@ public struct Rewards: Model {
   public var thumbnailKey: String?
   public var frequencyType: FrequencyType
   public var whoGetsPaid: WhoGetsPaid
+  public var appliedUserIDs: [String?]?
+  public var rejectedUserIDs: [String?]?
   public var getUserID: [String?]?
   public var cost: Int
   public var groupID: String
@@ -25,6 +27,8 @@ public struct Rewards: Model {
       thumbnailKey: String? = nil,
       frequencyType: FrequencyType,
       whoGetsPaid: WhoGetsPaid,
+      appliedUserIDs: [String?]? = nil,
+      rejectedUserIDs: [String?]? = nil,
       getUserID: [String?]? = nil,
       cost: Int,
       groupID: String,
@@ -37,6 +41,8 @@ public struct Rewards: Model {
       thumbnailKey: thumbnailKey,
       frequencyType: frequencyType,
       whoGetsPaid: whoGetsPaid,
+      appliedUserIDs: appliedUserIDs,
+      rejectedUserIDs: rejectedUserIDs,
       getUserID: getUserID,
       cost: cost,
       groupID: groupID,
@@ -52,6 +58,8 @@ public struct Rewards: Model {
       thumbnailKey: String? = nil,
       frequencyType: FrequencyType,
       whoGetsPaid: WhoGetsPaid,
+      appliedUserIDs: [String?]? = nil,
+      rejectedUserIDs: [String?]? = nil,
       getUserID: [String?]? = nil,
       cost: Int,
       groupID: String,
@@ -66,6 +74,8 @@ public struct Rewards: Model {
       self.thumbnailKey = thumbnailKey
       self.frequencyType = frequencyType
       self.whoGetsPaid = whoGetsPaid
+      self.appliedUserIDs = appliedUserIDs
+      self.rejectedUserIDs = rejectedUserIDs
       self.getUserID = getUserID
       self.cost = cost
       self.groupID = groupID

@@ -7,9 +7,9 @@
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDate": "2023-11-13T08:01:43.267Z",
-              "apiKeyExpirationDays": 30,
-              "description": "amplify"
+              "apiKeyExpirationDate": "2025-10-07T02:16:47.528Z",
+              "apiKeyExpirationDays": 365,
+              "description": "ice api key"
             },
             "authenticationType": "API_KEY"
           }

@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 
 extension View {
+    
+    // width
     func deviceWidth() -> CGFloat{
         return UIScreen.main.bounds.width
     }
@@ -29,44 +31,47 @@ extension View {
         return UIScreen.main.bounds.width / 1.7
     }
     
+    // tool bar
     func dismissToolbar<Content: ToolbarContent>(@ToolbarContentBuilder content: @escaping () -> Content) -> some View {
         modifier(DismissToolbarModifier(toolbar: content))
     }
     
-    func userToolbar(state: LoadingState, userName: String?, dismissExists: Bool = false) -> some View {
-        modifier(UserToolbarModifier(state: state, userName: userName, dismissExists: dismissExists))
+    func userToolbar(userName: String = "ユーザー", dismissExists: Bool = false) -> some View {
+        modifier(UserToolbarModifier(userName: userName, dismissExists: dismissExists))
     }
     
     func dismissButton() -> some View {
         self.modifier(DismissButtonModifier())
     }
     
+    // validation
     func validation(_ publisher: AnyPublisher<Validation, Never>, alignmentCenter: Bool = false) -> some View {
         modifier(ValidationModifier(publisher: publisher, alignmentCenter: alignmentCenter ))
     }
     
+    // loading
     func loading(isLoading: Binding<Bool>) -> some View {
         modifier(LoadingModifier(isLoading: isLoading))
     }
     
-    func roundedSection(color: Color) -> some View {
-        modifier(RoundedSectionModifier(color: color))
+    func roundedBorder(color: Color) -> some View {
+        modifier(RoundedBorderModifier(color: color))
     }
     
-    func popupActionAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, action: @escaping () async throws -> Void, actionLabel: String = "実行", color: Color = Color(.indigo)) -> some View {
-        modifier(PopupActionAlertModifier(isPresented: isPresented, title: title, text: text, action: action, actionLabel: actionLabel, color: color))
+    func popupActionAlert(prop: Binding<PopupAlertProperties>, actionLabel: String = "実行") -> some View {
+        modifier(PopupActionAlertModifier(prop: prop, actionLabel: actionLabel))
     }
     
-    func popupDismissAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, color: Color = Color(.indigo), buttonLabel: String = "戻る") -> some View {
-        modifier(PopupDismissAlertModifier(isPresented: isPresented, title: title, text: text, color: color, buttonLabel: buttonLabel))
+    func popupDismissAlert(prop: Binding<PopupAlertProperties>, buttonLabel: String = "戻る") -> some View {
+        modifier(PopupDismissAlertModifier(prop: prop, buttonLabel: buttonLabel))
     }
     
-    func popupDismissAndActionAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, dismissLabel: String = "戻る", actionLabel: String = "実行", action: @escaping () async throws -> Void) -> some View {
-        modifier(PopupDismissAndActionAlertModifier(isPresented: isPresented, title: title, text: text, dismissLabel: dismissLabel, actionLabel: actionLabel, action: action))
+    func popupDismissAndActionAlert(prop: Binding<PopupAlertProperties>, dismissLabel: String = "戻る", actionLabel: String = "実行") -> some View {
+        modifier(PopupDismissAndActionAlertModifier(prop: prop, dismissLabel: dismissLabel, actionLabel: actionLabel))
     }
     
-    func popupAlert(isPresented: Binding<Bool>, title: String? = nil, text: String, color: Color = Color(.indigo), dismissLabel: String = "閉じる", action: @escaping () async throws -> Void) -> some View {
-        modifier(PopupAlertModifier(isPresented: isPresented, title: title, text: text, color: color, buttonLabel: dismissLabel, action: action))
+    func popupAlert(prop: Binding<PopupAlertProperties>, dismissLabel: String = "閉じる") -> some View {
+        modifier(PopupAlertModifier(prop:prop, buttonLabel: dismissLabel))
     }
     
     func popupTaskIconSelector(isPresented: Binding<Bool>, taskType: Binding<TaskType>, color: Color = Color(.indigo), buttonLabel: String = "決定") -> some View {
@@ -82,6 +87,10 @@ extension View {
             EmptyView().alert(isPresented: isPresented, content: content),
             alignment: .bottomTrailing
         )
+    }
+    
+    func loadingSkeleton<T>(object: T?) -> some View {
+        modifier(LoadingSkeletonModifier(object: object))
     }
 }
 

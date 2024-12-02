@@ -10,6 +10,10 @@
   "lambdaLayers": [],
   "environmentVariableList": [
     {
+      "cloudFormationParameterName": "tasksTableName",
+      "environmentVariableName": "TASKS_TABLE_NAME"
+    },
+    {
       "cloudFormationParameterName": "env",
       "environmentVariableName": "ENV"
     },

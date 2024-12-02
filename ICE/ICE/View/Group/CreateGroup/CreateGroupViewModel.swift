@@ -16,10 +16,17 @@ final class CreateGroupViewModel: ViewModelBase {
     @Published var createGroup: Bool = false
     @Published var belongGroup: Bool = false
     @Published var showImagePicker: Bool = false
-    @Published var createComplete: Bool = false
     @Published var image = UIImage()
     @Published var groupName: String = ""
     @Published var groupDescription: String = ""
+    @Published var selectedGroup: Group?
+    
+    init(selectedGroup: Group? = nil){
+        super.init()
+        self.selectedGroup = selectedGroup
+        self.setGroupProperties()
+        
+    }
     
     var groupNameValidation: AnyPublisher<Validation, Never> {
         $groupName
@@ -44,29 +51,36 @@ final class CreateGroupViewModel: ViewModelBase {
     }
     
     @MainActor
-    func loadData() async throws {
-        asyncOperation({
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+    func reLoadData() async {
+        asyncOperation({ [self] in
+            if let groupID = selectedGroup?.id {
+                selectedGroup = try await self.apiHandler.get(Group.self, byId: groupID)
+                setGroupProperties()
+            }
         })
     }
     
     @MainActor
     func createGroup() async throws {
-        asyncOperation({
-            self.showAlert = false
-            var group = Group(groupName: self.groupName, description: self.groupDescription.isEmpty ? nil : self.groupDescription , thumbnailKey: "", hostUserIDs: [self.userID])
-            let key = self.userID + group.id
-            let url = try await self.storage.uploadData(self.image, key: key)
+        asyncOperation({ [self] in
+            isLoading = true
+            defer { isLoading = false }
+            showAlert = false
+            var group = Group(groupName: self.groupName, description: groupDescription.isEmpty ? nil : groupDescription , thumbnailKey: "", hostUserIDs: [userID])
+            let key = userID + group.id
+            let url = try await storage.uploadData(image, key: key)
             group.thumbnailKey = url
-            try await self.apiHandler.create(group, keyName: "hostGroups")
-            self.createComplete = true
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
+            try await apiHandler.create(group, keyName: "hostGroups")
         })
+    }
+    
+    func setGroupProperties() {
+        if let group = selectedGroup {
+            groupName = group.groupName
+            groupDescription = group.description ?? ""
+            if let thumbnailKey = group.thumbnailKey {
+                image = UIImage(url: thumbnailKey)
+            }
+        }
     }
 }

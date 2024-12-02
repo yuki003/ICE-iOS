@@ -15,7 +15,7 @@ tasks_table_name = os.environ.get('TASKS_TABLE_NAME')
 dynamodb = boto3.resource('dynamodb')
 tasks_table = dynamodb.Table(tasks_table_name)
 
-def lambda_handler(event, context):
+def handler(event, context):
     # DynamoDB Streamからレコードを取得
     for record in event['Records']:
         logger.info(f"Processing record: {record}")

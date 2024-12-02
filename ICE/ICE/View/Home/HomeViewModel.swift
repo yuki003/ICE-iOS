@@ -7,11 +7,12 @@
 
 import SwiftUI
 import Amplify
+import AWSPluginsCore
 
 final class HomeViewModel: ViewModelBase {
     @Published var userInfo: User?
-    @Published var hostGroups: [Group] = []
-    @Published var belongingGroups: [Group] = []
+    @Published var hostGroups: [Group]?
+    @Published var belongingGroups: [Group]?
     @Published var selectedGroup: Group?
     
     @Published var isShowNotice: Bool = true // 本来false
@@ -19,57 +20,83 @@ final class HomeViewModel: ViewModelBase {
     @Published var navGroupDetail: Bool = false
     
     @Published var createGroup: Bool = false
-    @Published var belongGroup: Bool = false
     
     
     @MainActor
-    func loadData() async throws {
-        asyncOperation({
-            if self.apiHandler.isRunFetch(userDefaultKey: User.modelName) || self.reload {
-                let userPredicate = User.keys.userID.eq(self.userID)
-                let userInfo = try await self.apiHandler.list(User.self, where: userPredicate, keyName: "User")
+    func loadData() async {
+        propertiesInitialize()
+        asyncOperation({ [self] in
+            if !asHost, userInfo?.accountType == .host {
+                asHost = true
+                UserDefaults.standard.set(asHost, forKey: "asHost")
+            }
+            if apiHandler.isRunFetch(userDefaultKey: User.modelName) || reload {
+                let userPredicate = User.keys.userID.eq(userID)
+                let userInfo = try await apiHandler.list(User.self, where: userPredicate, keyName: "User")
                 guard !userInfo.isEmpty else {
                     throw APIError.notFound
                 }
                 self.userInfo = userInfo[0]
             } else {
-                let userList = try self.apiHandler.decodeUserDefault(modelType: [User].self, key: "User")
+                let userList = try apiHandler.decodeUserDefault(modelType: [User].self, key: "User")
                 if let list = userList, !list.isEmpty {
-                    self.userInfo = list[0]
-                } else {
-                    // エラー
+                    userInfo = list[0]
                 }
             }
-            
-            if !self.asHost, self.userInfo?.accountType == .host {
-                self.asHost = true
-                UserDefaults.standard.set(self.asHost, forKey: "asHost")
+            if let userName = userInfo?.userName {
+                UserDefaults.standard.set(userName, forKey: "userName")
             }
-            if self.asHost {
-                if self.apiHandler.isRunFetch(userDefaultKey: "hostGroups") || self.reload  {
-                    if let hostGroupIDs = self.userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {
-                        let hostGroupPredicate = self.apiService.orPredicateGroupByID(ids: hostGroupIDs, model: Group.keys.id)
-                        let hostGroups = try await self.apiHandler.list(Group.self, where: hostGroupPredicate, keyName: "hostGroups")
+            if asHost {
+                if apiHandler.isRunFetch(userDefaultKey: "hostGroups") || reload  {
+                    if let hostGroupIDs = userInfo?.hostGroupIDs, !hostGroupIDs.isEmpty {
+                        let hostGroupPredicate = apiService.orPredicateGroupByID(ids: hostGroupIDs, model: Group.keys.id)
+                        let hostGroups = try await apiHandler.list(Group.self, where: hostGroupPredicate, keyName: "hostGroups")
                         self.hostGroups = hostGroups.sorted(by: {$0.createdAt! > $1.createdAt!})
-                        
+                    } else {
+                        hostGroups = []
                     }
                 } else {
-                    self.hostGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "hostGroups") ?? []
+                    hostGroups = try apiHandler.decodeUserDefault(modelType: [Group].self, key: "hostGroups") ?? []
                 }
             }
-            if self.apiHandler.isRunFetch(userDefaultKey: "belongingGroups") || self.reload  {
-                if let belongingGroupIDs = self.userInfo?.belongingGroupIDs, !belongingGroupIDs.isEmpty {
-                    let belongingGroupPredicate = self.apiService.orPredicateGroupByID(ids: belongingGroupIDs, model: Group.keys.id)
-                    let belongingGroups = try await self.apiHandler.list(Group.self, where: belongingGroupPredicate, keyName: "belongingGroups")
+            if apiHandler.isRunFetch(userDefaultKey: "belongingGroups") || reload  {
+                if let belongingGroupIDs = userInfo?.belongingGroupIDs, !belongingGroupIDs.isEmpty {
+                    let belongingGroupPredicate = apiService.orPredicateGroupByID(ids: belongingGroupIDs, model: Group.keys.id)
+                    let belongingGroups = try await apiHandler.list(Group.self, where: belongingGroupPredicate, keyName: "belongingGroups")
                     self.belongingGroups = belongingGroups
+                } else {
+                    belongingGroups = []
                 }
             } else {
-                self.belongingGroups = try self.apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups") ?? []
+                belongingGroups = try apiHandler.decodeUserDefault(modelType: [Group].self, key: "belongingGroups") ?? []
             }
-        }, apiErrorHandler: { apiError in
-            self.setErrorMessage(apiError)
-        }, errorHandler: { error in
-            self.setErrorMessage(error)
         })
     }
+    
+    func propertiesInitialize() {
+        userInfo = nil
+        hostGroups = nil
+        belongingGroups = nil
+    }
+    
+//    func confirmSession() async throws {
+//        let session = try await Amplify.Auth.fetchAuthSession()
+//        if session.isSignedIn {
+//            print("セッションは有効です")
+//        } else {
+//            print("セッションが無効です")
+//        }
+//    }
+//    
+//    func reConnectSession() async throws {
+//        let options = AuthFetchSessionRequest.Options(forceRefresh: true)
+//        let session = try await Amplify.Auth.fetchAuthSession(options: options)
+//        guard let awsCredentialsProvider = session as? AuthAWSCredentialsProvider else {
+//            print("Failed to retrieve AWS credentials.")
+//            return
+//        }
+//        
+//        let credentials = try awsCredentialsProvider.getAWSCredentials().get()
+//        print("AWS Credentials: \(credentials)")
+//    }
 }

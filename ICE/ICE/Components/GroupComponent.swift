@@ -68,13 +68,10 @@ struct GroupDescription: View {
     var description: String?
     var body: some View {
         if let description = description {
-            HStack {
-                Text(description)
-                    .font(.footnote)
-                    .foregroundStyle(Color.black)
-                    .frame(maxWidth: textFieldWidth(), minHeight: 30, maxHeight: 30, alignment: .topLeading)
-            Spacer()
-            }
+            Text(description)
+                .font(.footnote)
+                .foregroundStyle(Color.black)
+                .frame(maxWidth: textFieldWidth(), minHeight: 30, maxHeight: 30, alignment: .topLeading)
         }
     }
 }

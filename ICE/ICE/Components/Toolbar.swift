@@ -23,8 +23,7 @@ struct DismissToolbar: ToolbarContent {
 }
 
 struct UserToolbar: ToolbarContent {
-    var state: LoadingState
-    var userName: String?
+    var userName: String
     @Environment(\.dismiss) var dismiss
     var dismissExists: Bool
     var body: some ToolbarContent {
@@ -41,27 +40,24 @@ struct UserToolbar: ToolbarContent {
             }
         }
         ToolbarItem(placement: .navigationBarLeading) {
-            if state == .loaded {
-                HStack(alignment: .center, spacing: 5) {
-                    if dismissExists {
-                        Button(action: {
-                            self.dismiss.callAsFunction()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.callout)
-                                .foregroundStyle(Color(.indigo))
-                        }
-                    }
-                    Thumbnail(type: ThumbnailType.user, aspect: 30)
-                    if let name = userName {
-                        Text("\(name)")
-                            .font(.system(size: 15, weight: .heavy))
-                            .frame(maxWidth: 200)
-                            .foregroundStyle(Color.black)
+            HStack(alignment: .center, spacing: 5) {
+                if dismissExists {
+                    Button(action: {
+                        self.dismiss.callAsFunction()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.callout)
+                            .foregroundStyle(Color(.indigo))
                     }
                 }
-                .padding(.leading, 5)
+                Thumbnail(type: ThumbnailType.user, aspect: 30)
+                Text(userName)
+                    .font(.system(size: 15, weight: .heavy))
+                    .frame(maxWidth: 200)
+                    .foregroundStyle(Color.black)
+                    .loadingSkeleton(object: userName)
             }
+            .padding(.leading, 5)
         }
         
         ToolbarItem(placement: .navigationBarTrailing) {

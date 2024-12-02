@@ -15,57 +15,27 @@ struct TaskListView: View {
     var body: some View {
         DestinationHolderView(router: router) {
             VStack {
-                switch vm.state {
-                case .idle:
-                    Color.clear.onAppear { vm.state = .loading }
-                case .loading:
-                    LoadingView().onAppear{
-                        Task {
-                            try await vm.loadData()
-                        }
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 10) {
+                        taskService.taskListBuilder(vm.tasks, $vm.selectedTask, $vm.navToHostTaskActions, $vm.reload)
                     }
-                case let .failed(error):
-                    Text(error.localizedDescription)
-                case .loaded:
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 10) {
-                            taskService.taskListBuilder(vm.tasks, router)
-                        }
-                        .padding(.vertical)
-                        .frame(width: deviceWidth())
-                        .alert(isPresented: $vm.alert) {
-                            Alert(
-                                title: Text(
-                                    "エラー"
-                                ),
-                                message: Text(
-                                    vm.alertMessage ?? "操作をやり直してください。"
-                                ),
-                                dismissButton: .default(
-                                    Text(
-                                        "閉じる"
-                                    )
-                                )
-                            )
-                        }
-                    }
-                    .refreshable {
-                        Task {
-                            vm.reload = true
-//                            try await vm.reloadData()
-                        }
+                    .padding(.vertical)
+                    .frame(width: deviceWidth())
+                }
+                .refreshable {
+                    Task {
+                        vm.reload = true
+                        await vm.loadData()
                     }
                 }
             }
-            .userToolbar(state: vm.state, userName: nil, dismissExists: true)
+            .task {
+                await vm.loadData()
+            }
+            .popupAlert(prop: $vm.apiErrorPopAlertProp)
+            .userToolbar(userName: vm.userName, dismissExists: true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-        }
-    }
-    
-    @ViewBuilder
-    func hooSection() -> some View {
-        VStack(alignment: .leading, spacing: 10) {
         }
     }
 }

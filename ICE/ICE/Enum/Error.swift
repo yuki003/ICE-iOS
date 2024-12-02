@@ -38,9 +38,11 @@ enum AmplifyAuthError {
     case confirmError
     case signInFailed
     case signOutFailed
+    case userDoesNotExists
     case userAlreadyExists
     case notAuthorized
     case invalidVerificationCode
+    case alreadyConfirmed
 }
 
 extension AmplifyAuthError: LocalizedError {
@@ -56,14 +58,29 @@ extension AmplifyAuthError: LocalizedError {
             return "ログアウトに失敗しました。"
         case .userAlreadyExists:
             return "指定のユーザーはすでに存在しています。"
+        case .userDoesNotExists:
+            return "指定のユーザーが見つかりません。"
         case .notAuthorized:
             return "認証できませんでした。入力内容をお確かめください。"
         case .invalidVerificationCode:
             return "認証コードが間違っています。"
+        case .alreadyConfirmed:
+            return "ユーザーはすでに認証済みです。ログイン操作を行なってください。"
         }
     }
 }
 
+enum AmplifyStorageError: Error {
+    case uploadFailed
+}
+extension AmplifyStorageError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .uploadFailed:
+            return "画像アップロードに失敗しました。"
+        }
+    }
+}
 enum DeveloperError {
     case userDefaultKeyDuplicated
 }
